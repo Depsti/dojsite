@@ -4,9 +4,10 @@
   "private": true,
   "scripts": {
     "start": "node server.mjs",
-    "test": "node --test tests/store.test.mjs tests/access.test.mjs tests/new-features.test.mjs tests/navigation.test.mjs tests/case-wizard.test.mjs tests/case-print.test.mjs tests/organization.test.mjs",
+    "test": "node --test tests/store.test.mjs tests/access.test.mjs tests/new-features.test.mjs tests/navigation.test.mjs tests/case-wizard.test.mjs tests/case-print.test.mjs tests/organization.test.mjs tests/accounts.test.mjs",
     "db:check": "node scripts/check-supabase.mjs",
-    "db:import": "node scripts/import-supabase.mjs"
+    "db:import": "node scripts/import-supabase.mjs",
+    "master:setup": "node scripts/setup-master.mjs"
   },
   "engines": {
     "node": ">=20"

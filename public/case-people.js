@@ -56,6 +56,6 @@ function confirmDiscord(record){
 const originalAccessUI=applyAccessUI;
 applyAccessUI=function(){originalAccessUI();if(route==='settings'){
  const info=state.integrations?.discord||{},panel=document.createElement('section');panel.className='panel';
- panel.innerHTML=`<div class="panel-head"><h2>Discord-Fallübertragung</h2></div><div class="panel-body"><p>Versand in einen Kanal: ${badge(info.outboundConfigured?'Eingerichtet':'Nicht konfiguriert')}</p><p>Import vom Bot: ${badge(info.inboundConfigured?'Eingerichtet':'Nicht konfiguriert')}</p><p class="subtitle">Die Webhook-URL und der Import-Schlüssel werden ausschließlich in der Serverkonfiguration hinterlegt. Fälle werden über die Aktion in der Fallakte gesendet.</p>${state.user.role==='Leitung'?`<p class="subtitle">Deine Mitarbeiter-ID für den Importverantwortlichen: <code>${esc(state.user.id)}</code></p>`:''}</div>`;
+ panel.innerHTML=`<div class="panel-head"><h2>Discord-Fallübertragung</h2></div><div class="panel-body"><p>Versand in einen Kanal: ${badge(info.outboundConfigured?'Eingerichtet':'Nicht konfiguriert')}</p><p>Import vom Bot: ${badge(info.inboundConfigured?'Eingerichtet':'Nicht konfiguriert')}</p><p class="subtitle">Die Webhook-URL und der Import-Schlüssel werden ausschließlich in der Serverkonfiguration hinterlegt. Fälle werden über die Aktion in der Fallakte gesendet.</p>${['Master','Leitung'].includes(state.user.role)?`<p class="subtitle">Deine Mitarbeiter-ID für den Importverantwortlichen: <code>${esc(state.user.id)}</code></p>`:''}</div>`;
  $('.content').append(panel);
 }};

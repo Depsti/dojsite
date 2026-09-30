@@ -44,8 +44,8 @@ test('API: Personen mehrfach verknüpfen, Sichtbarkeit, Import und Discord-Versa
  let server;
  try{
    ({server}=await import('../lib/http-server.mjs'));if(!server.listening)await once(server,'listening');const base=`http://127.0.0.1:${server.address().port}/api/`;
-   let cookie='';
-   async function req(p,method='GET',data,auth=cookie){const res=await realFetch(base+p,{method,headers:{'Content-Type':'application/json',Cookie:auth},body:data===undefined?undefined:JSON.stringify(data)});return {status:res.status,data:await res.json(),cookie:res.headers.get('set-cookie')?.split(';')[0]};}
+   let cookie='';const temporaryPasswords=new Map();
+   async function req(p,method='GET',data,auth=cookie){const desiredPassword=data?.password;const body=p==='login'&&temporaryPasswords.has(data?.name)?{...data,password:temporaryPasswords.get(data.name)}:data;const res=await realFetch(base+p,{method,headers:{'Content-Type':'application/json',Cookie:auth},body:body===undefined?undefined:JSON.stringify(body)});let result={status:res.status,data:await res.json(),cookie:res.headers.get('set-cookie')?.split(';')[0]};if(p==='users'&&result.status===201)temporaryPasswords.set(result.data.name,result.data.temporaryPassword);if(p==='login'&&result.status===200&&result.data.user.requiresPasswordChange){const changed=await req('password/change','POST',{password:desiredPassword},result.cookie);temporaryPasswords.delete(data.name);result={...result,cookie:changed.cookie};}return result;}
    await req('setup','POST',{name:'Lead',password:'OnlyForTest123!'});cookie=(await req('login','POST',{name:'Lead',password:'OnlyForTest123!'})).cookie;
    const lead=(await req('state')).data.user;process.env.DOJ_DISCORD_IMPORT_USER_ID=lead.id;
    const staff=(await req('users','POST',{name:'Lawyer',role:'Staatsanwalt',password:'OnlyForTest456!'})).data;
@@ -111,6 +111,33 @@ test('API: Personen mehrfach verknüpfen, Sichtbarkeit, Import und Discord-Versa
    assert.equal((await req('records/'+draft.id,'PUT',{title:'Überarbeiteter Entwurf'})).status,200);
    assert.equal((await req('records/'+draft.id+'/review','POST',{status:'In Prüfung'})).status,200);
    const approved=await req('records/'+draft.id+'/review','POST',{status:'Freigegeben',reason:'Vollständig'});assert.equal(approved.status,200);assert.equal(approved.data.reviewHistory.length,5);
+
+
+   const leadAccount=(await req('users','POST',{name:'Department Head',role:'Leitung'})).data;
+   const leadLogin=(await req('login','POST',{name:leadAccount.name,password:'HeadPass8'})).cookie;
+   assert.equal((await req('users/'+lead.id,'PUT',{role:'Leitung'},leadLogin)).status,403);
+   assert.equal((await req('users/'+leadAccount.id,'PUT',{active:false})).status,200);
+   assert.equal((await req('users/'+leadAccount.id,'PUT',{active:true})).status,200);
+   const trainee=(await req('users','POST',{name:'Student Test',role:'Student'})).data;
+   const otp=trainee.temporaryPassword;assert.ok(otp.length>=8);
+   const firstLogin=await realFetch(base+'login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:trainee.name,password:otp})});
+   assert.equal(firstLogin.status,200);const restrictedSession=firstLogin.headers.get('set-cookie').split(';')[0];
+   assert.equal((await req('state','GET',undefined,restrictedSession)).status,403);
+   assert.equal((await realFetch(base+'login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:trainee.name,password:otp})})).status,401);
+   assert.equal((await req('password/change','POST',{password:'short'},restrictedSession)).status,400);
+   const changed=await req('password/change','POST',{password:'NewPass8'},restrictedSession);assert.equal(changed.status,200);const traineeCookie=changed.cookie;
+   assert.equal((await req('state','GET',undefined,restrictedSession)).status,401);
+   assert.equal((await req('records/'+c1.id,'PUT',{title:'Nicht ändern'},traineeCookie)).status,403);
+   const submitted=await req('cases/bundle','POST',{case:{title:'Studentenakte',hearingExpected:true},people:[{title:'Neue Studentenperson',role:'Zeuge'}],documents:[{title:'Studentendokument'}]},traineeCookie);
+   assert.equal(submitted.status,201);assert.equal(submitted.data.status,'Vorgelegt');
+   assert.ok(!(await req('state','GET',undefined,staffCookie)).data.records.some(r=>r.id===submitted.data.id));
+   assert.ok(!(await req('state')).data.records.some(r=>r.type==='hearings'&&r.caseId===submitted.data.id));
+   assert.equal((await req('records/'+submitted.data.id+'/submission','POST',{status:'Übernommen'},traineeCookie)).status,403);
+   assert.equal((await req('records/'+submitted.data.id+'/submission','POST',{status:'Übernommen',reason:'Geprüft'})).status,200);
+   const acceptedState=(await req('state','GET',undefined,staffCookie)).data;assert.ok(acceptedState.records.some(r=>r.id===submitted.data.id));assert.ok(acceptedState.records.some(r=>r.type==='hearings'&&r.caseId===submitted.data.id));
+   assert.equal((await req('records/'+submitted.data.id,'PUT',{title:'Auch danach nicht ändern'},traineeCookie)).status,403);
+   const reset=await req('users/'+trainee.id+'/password-reset','POST',{});assert.equal(reset.status,200);assert.ok(reset.data.temporaryPassword);assert.equal((await req('state','GET',undefined,traineeCookie)).status,401);
+   const cleanState=JSON.stringify((await req('state')).data);assert.ok(!cleanState.includes(otp));assert.ok(!cleanState.includes(reset.data.temporaryPassword));
 
  }finally{if(server)await new Promise(resolve=>server.close(resolve));globalThis.fetch=realFetch;}
 });
