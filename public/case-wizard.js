@@ -1,0 +1,62 @@
+const regularEditor=editor;
+editor=function(type,existing){if(type==='cases'&&!existing)return caseWizard();return regularEditor(type,existing);};
+function caseWizard(){
+ const draft={requestId:crypto.randomUUID(),case:{title:'',description:'',owner:state.user.id,priority:'Normal',date:'',confidential:false,status:'Offen'},people:[],evidence:[],documents:[]};
+ const steps=['Grundakte','Relevante Personen','Beweismittel','Dokumente'];let step=0,busy=false;
+ const opt=(id,title)=>`<option value="${esc(id)}">${esc(title)}</option>`;
+ const field=(label,name,value='',textarea=false)=>`<label class="field">${label}${textarea?`<textarea name="${name}" rows="4">${esc(value)}</textarea>`:`<input name="${name}" value="${esc(value)}" maxlength="300">`}</label>`;
+ const editableTypes={people:'Person',evidence:'Beweismittel',documents:'Dokument'};
+ const errors=err=>{$('#wizard-error').textContent=err.message;};
+ function available(type){return records(type).filter(r=>type==='people'?!draft.people.some(p=>p.personId===r.id):!r.caseId&&r.capabilities?.manage&&!draft[type].some(p=>p.recordId===r.id));}
+ function show(){
+  const type=['','people','evidence','documents'][step];
+  let content;
+  if(step===0){content=`${field('Titel der Fallakte','title',draft.case.title)}${field('Sachverhalt / Beschreibung','description',draft.case.description,true)}<div class="form-grid"><label class="field">Federführung<select name="owner"><option value="">Nicht zugewiesen</option>${state.users.filter(u=>u.active!==false).map(u=>`<option value="${esc(u.id)}" ${u.id===draft.case.owner?'selected':''}>${esc(u.name)}</option>`).join('')}</select></label><label class="field">Priorität<select name="priority">${['Normal','Hoch','Dringend'].map(p=>`<option ${p===draft.case.priority?'selected':''}>${p}</option>`).join('')}</select></label><label class="field">Termin / Frist<input type="datetime-local" name="date" value="${esc(draft.case.date)}"></label></div><label class="check"><input type="checkbox" name="confidential" ${draft.case.confidential?'checked':''}>Vertrauliche Fallakte</label>`;}
+  else{
+   content=`<p class="subtitle">${type==='people'?'Wähle vorhandene Personen oder erfasse neue. Rollen und Vermerke gelten für diese Fallakte.':'Wähle noch keiner Fallakte zugeordnete Einträge oder erfasse neue.'} Dieser Schritt ist optional.</p><div class="wizard-items">${draft[type].map((item,i)=>{const r=state.records.find(x=>x.id===(item.personId||item.recordId));return `<article class="wizard-item"><div><strong>${esc(item.title||r?.title)}</strong>${!item.personId&&!item.recordId?`<label class="field">${type==='people'?'Name':'Titel'}<input data-draft-title="${i}" value="${esc(item.title)}" maxlength="300"></label><label class="field">${type==='documents'?'Dokumentinhalt':'Beschreibung'}<textarea data-draft-description="${i}" rows="3">${esc(item.description)}</textarea></label>`:''}${type==='people'?`<label class="field">Rolle<select data-draft-role="${i}">${roleOptions(item.role)}</select></label><label class="field">Fallbezogener Vermerk<input data-draft-note="${i}" value="${esc(item.note)}" maxlength="2000"></label>`:`<p class="subtitle">${item.recordId?'Vorhandener Eintrag':esc(item.attachmentName||'Neuer Eintrag')}</p>`}</div><button type="button" data-remove-draft="${i}">Entfernen</button></article>`;}).join('')||'<p class="subtitle">Noch keine Einträge hinzugefügt.</p>'}</div>`;
+   if(canModule(type))content+=`<label class="field">Vorhandene ${type==='people'?'Person':editableTypes[type]} auswählen<select id="wizard-existing"><option value="">Bitte auswählen …</option>${available(type).map(r=>opt(r.id,r.title)).join('')}</select></label>${type==='people'?'<label class="field">Personen suchen<input id="wizard-search" type="search" placeholder="Name suchen …"></label>':''}<button type="button" id="wizard-add-existing">Auswahl hinzufügen</button>`;
+   if(canModule(type,'create'))content+=`<fieldset class="wizard-new"><legend>${type==='people'?'Neue Person erfassen':type==='evidence'?'Neues Beweismittel erfassen':'Neues Dokument erstellen'}</legend>${field(type==='people'?'Name':type==='evidence'?'Bezeichnung':'Dokumenttitel','newTitle')}${type==='people'?`<label class="field">Rolle im Verfahren<select name="newRole">${roleOptions('Sonstige')}</select></label>`:''}${type==='documents'?`<label class="field">Vorlage<select id="wizard-template"><option value="">Eigener Text</option>${records('knowledge').map(k=>opt(k.id,k.title)).join('')}<option value="indictment">Anklageschrift</option></select></label>`:''}${field(type==='documents'?'Dokumentinhalt':type==='people'?'Personenbeschreibung':'Beschreibung / Herkunft','newDescription','',true)}${type==='evidence'?`${field('Quellenlink (optional)','newUrl')}<label class="field">Dateianhang (max. 5 MB)<input type="file" id="wizard-file"></label>`:''}<button type="button" id="wizard-add-new">Zum Entwurf hinzufügen</button></fieldset>`;
+   if(!canModule(type))content+='<div class="notice">Für diesen Bereich fehlt das Leserecht. Du kannst den Schritt überspringen.</div>';
+  }
+  modal('Neue Fallakte erstellen',`<ol class="wizard-steps">${steps.map((s,i)=>`<li ${i===step?'aria-current="step"':''}>${i+1}. ${s}</li>`).join('')}</ol><p class="subtitle">Schritt ${step+1} von 4 · Gespeichert wird erst mit „Fallakte erstellen“.</p><form id="case-wizard-form">${content}${step===3?`<div class="notice"><strong>${esc(draft.case.title)}</strong><br>${draft.people.length} Personen · ${draft.evidence.length} Beweismittel · ${draft.documents.length} Dokumente</div>`:''}<p class="form-error" id="wizard-error" role="alert"></p><div class="actions"><button type="button" data-close>Abbrechen</button>${step?'<button type="button" id="wizard-back">Zurück</button>':''}<button class="primary">${step===3?'Fallakte erstellen':'Weiter'}</button></div></form>`);
+  $('#case-wizard-form').onsubmit=async e=>{
+   e.preventDefault();if(busy)return;busy=true;const button=e.target.querySelector('.actions .primary');button.disabled=true;
+   try{
+    if(step===0){const f=new FormData(e.target);draft.case={...draft.case,...Object.fromEntries(f),confidential:e.target.elements.confidential.checked};if(!draft.case.title.trim())throw Error('Bitte gib einen Titel für die Fallakte ein.');}
+    else{captureRows(type);await captureNew(type);captureExisting(type);}
+    if(step<3){step++;show();}else{
+     const payload=JSON.stringify(draft);if(new TextEncoder().encode(payload).length>8*1024*1024)throw Error('Der gesamte Entwurf ist zu groß. Bitte weniger oder kleinere Anhänge hinzufügen.');
+     const result=await api('cases/bundle','POST',draft);$('#modal').close();await refresh();detail(result.id);toast('Fallakte mit allen zugeordneten Einträgen erstellt.');
+    }
+   }catch(err){errors(err);button.disabled=false;}finally{busy=false;}
+  };
+  if($('#wizard-back'))$('#wizard-back').onclick=async()=>{if(busy)return;busy=true;try{captureRows(type);await captureNew(type);captureExisting(type);step--;show();}catch(err){errors(err);}finally{busy=false;}};
+  document.querySelectorAll('[data-remove-draft]').forEach(b=>b.onclick=async()=>{if(busy)return;busy=true;try{captureRows(type);await captureNew(type);captureExisting(type);draft[type].splice(Number(b.dataset.removeDraft),1);show();}catch(err){errors(err);}finally{busy=false;}});
+  if($('#wizard-add-existing'))$('#wizard-add-existing').onclick=async()=>{if(busy)return;busy=true;try{captureRows(type);await captureNew(type);captureExisting(type,true);show();}catch(err){errors(err);}finally{busy=false;}};
+  if($('#wizard-search'))$('#wizard-search').oninput=e=>{$('#wizard-existing').innerHTML='<option value="">Bitte auswählen …</option>'+available(type).filter(r=>r.title.toLowerCase().includes(e.target.value.toLowerCase())).map(r=>opt(r.id,r.title)).join('');};
+  if($('#wizard-add-new'))$('#wizard-add-new').onclick=async()=>{if(busy)return;busy=true;try{captureRows(type);await captureNew(type,true);captureExisting(type);show();}catch(err){errors(err);}finally{busy=false;}};
+  if($('#wizard-template'))$('#wizard-template').onchange=e=>{const value=e.target.value;if(value)$('#case-wizard-form').elements.newDescription.value=value==='indictment'?'ANKLAGESCHRIFT\n\nBeschuldigte Person:\n\nTatvorwürfe:\n\nSachverhalt:\n\nBeweismittel:\n\nBeantragtes Strafmaß:':state.records.find(r=>r.id===value)?.description||'';};
+ }
+ function captureRows(type){document.querySelectorAll('[data-draft-title]').forEach(el=>draft[type][Number(el.dataset.draftTitle)].title=el.value);document.querySelectorAll('[data-draft-description]').forEach(el=>draft[type][Number(el.dataset.draftDescription)].description=el.value);if(type!=='people')return;document.querySelectorAll('[data-draft-role]').forEach(el=>draft.people[Number(el.dataset.draftRole)].role=el.value);document.querySelectorAll('[data-draft-note]').forEach(el=>draft.people[Number(el.dataset.draftNote)].note=el.value);}
+ function captureExisting(type,required=false){const value=$('#wizard-existing')?.value;if(!value){if(required)throw Error('Bitte wähle einen vorhandenen Eintrag.');return;}if(!available(type).some(r=>r.id===value))throw Error('Dieser Eintrag ist nicht mehr verfügbar.');draft[type].push(type==='people'?{personId:value,role:'Sonstige',note:''}:{recordId:value});$('#wizard-existing').value='';}
+ async function captureNew(type,required=false){
+  const form=$('#case-wizard-form'),title=form.elements.newTitle?.value.trim();if(!title){if(required||form.elements.newDescription?.value.trim()||$('#wizard-file')?.files.length)throw Error('Bitte gib einen Namen oder Titel für den neuen Eintrag ein.');return;}
+  const item={title,description:form.elements.newDescription.value,owner:draft.case.owner||state.user.id,confidential:!!draft.case.confidential};
+  if(type==='people'){item.role=form.elements.newRole.value;item.note='';}
+  if(type==='evidence'){
+   item.url=form.elements.newUrl.value;if(item.url){let url;try{url=new URL(item.url);}catch{throw Error('Bitte einen gültigen Quellenlink eingeben.');}if(!['https:','http:'].includes(url.protocol))throw Error('Quellenlinks müssen mit http oder https beginnen.');}
+   const file=$('#wizard-file').files[0];if(file){if(file.size>5*1024*1024)throw Error('Dateianhänge dürfen maximal 5 MB groß sein.');item.attachment=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=()=>reject(Error('Datei konnte nicht gelesen werden.'));reader.readAsDataURL(file);});item.attachmentName=file.name;}
+  }
+  draft[type].push(item);form.elements.newTitle.value='';form.elements.newDescription.value='';if(form.elements.newUrl)form.elements.newUrl.value='';if($('#wizard-file'))$('#wizard-file').value='';
+ }
+ show();
+}
+const previousWizardDetail=applyDetailAccess;
+applyDetailAccess=function(record){
+ previousWizardDetail(record);if(record.type!=='cases')return;
+ const section=document.createElement('section');section.className='case-person-section';
+ section.innerHTML=`<div class="panel-head"><h2>Beweismittel & Dokumente</h2></div><div class="panel-body">${state.records.filter(r=>r.caseId===record.id&&['evidence','documents'].includes(r.type)).map(r=>`<p><button data-wizard-open="${esc(r.id)}">${esc(modules[r.type][0])} · ${esc(r.title)}</button></p>`).join('')||'<p class="subtitle">Noch keine Beweismittel oder Dokumente zugeordnet.</p>'}${record.capabilities?.edit?['evidence','documents'].filter(t=>canModule(t)&&canModule(t,'create')).map(t=>`<button data-wizard-create="${t}">${t==='evidence'?'Beweismittel hinzufügen':'Dokument hinzufügen'}</button>`).join(''):''}</div>`;
+ $('#modal .prose').after(section);
+ section.querySelectorAll('[data-wizard-open]').forEach(b=>b.onclick=()=>detail(b.dataset.wizardOpen));
+ section.querySelectorAll('[data-wizard-create]').forEach(b=>b.onclick=()=>{regularEditor(b.dataset.wizardCreate);const select=$('#record-form').elements.caseId;if(select){select.value=record.id;select.required=true;select.onchange=()=>{select.value=record.id;};}});
+};

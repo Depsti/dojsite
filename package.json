@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node server.mjs",
-    "test": "node --test tests/store.test.mjs tests/access.test.mjs tests/new-features.test.mjs tests/navigation.test.mjs",
+    "test": "node --test tests/store.test.mjs tests/access.test.mjs tests/new-features.test.mjs tests/navigation.test.mjs tests/case-wizard.test.mjs",
     "db:check": "node scripts/check-supabase.mjs",
     "db:import": "node scripts/import-supabase.mjs"
   },
