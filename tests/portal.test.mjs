@@ -1,0 +1,74 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {spawn} from 'node:child_process';
+import {mkdtemp,rm,readFile} from 'node:fs/promises';
+import os from 'node:os';
+import path from 'node:path';
+test('DOJ: Anmeldung, Akten, Rollen, Vertraulichkeit und Speicherung',async()=>{
+ const dir=await mkdtemp(path.join(os.tmpdir(),'doj-test-'));
+ const child=spawn(process.execPath,['server.mjs'],{env:{...process.env,HOST:'127.0.0.1',PORT:'3097',DOJ_STORAGE:'local',DOJ_DATA_DIR:dir},stdio:['ignore','pipe','pipe']});
+ try{
+ await new Promise((resolve,reject)=>{child.stdout.once('data',resolve);child.once('error',reject);child.once('exit',code=>reject(Error('Server beendet: '+code)));});
+ let cookie='';
+ async function req(endpoint,method='GET',data,session=cookie){const r=await fetch('http://127.0.0.1:3097/api/'+endpoint,{method,headers:{'Content-Type':'application/json',Cookie:session},body:data?JSON.stringify(data):undefined});return {status:r.status,data:await r.json(),cookie:r.headers.get('set-cookie')?.split(';')[0]};}
+ assert.equal((await req('state')).status,401);
+ assert.equal((await req('setup','POST',{name:'Leitung',password:'SehrSicher123!'})).status,201);
+ assert.equal((await req('setup','POST',{name:'Andere',password:'SehrSicher123!'})).status,409);
+ assert.equal((await req('login','POST',{name:'Leitung',password:'falsch'})).status,401);
+ cookie=(await req('login','POST',{name:'Leitung',password:'SehrSicher123!'})).cookie;
+ const u=await req('users','POST',{name:'Anwalt',password:'SehrSicher456!',role:'Staatsanwalt'});assert.equal(u.status,201);
+ const record=await req('records','POST',{type:'cases',title:'Testverfahren',description:'Sachverhalt',confidential:true});assert.equal(record.status,201);assert.match(record.data.reference,/DOJ-\d{4}-0001/);
+ assert.equal((await req('records/'+record.data.id+'/comments','POST',{text:'Aktenvermerk'})).status,200);
+ assert.equal((await req('records','POST',{type:'laws',title:'RP-Paragraph',fine:500,months:10})).status,201);
+ const staff=(await req('login','POST',{name:'Anwalt',password:'SehrSicher456!'})).cookie;
+ const staffState=await req('state','GET',undefined,staff);assert.equal(staffState.data.records.some(r=>r.id===record.data.id),false);
+ assert.equal((await req('records/'+record.data.id,'PUT',{title:'Unzulässig'},staff)).status,404);
+ assert.equal((await req('records','POST',{type:'laws',title:'Unzulässig'},staff)).status,403);
+ assert.equal((await req('records','POST',{type:'requests',title:'Antrag',status:'Freigegeben'},staff)).status,403);
+ assert.equal((await req('users','POST',{name:'Dritter',password:'SehrSicher789!',role:'Leitung'},staff)).status,403);
+ assert.equal((await req('records/'+record.data.id,'PUT',{title:'Bearbeitet',owner:u.data.id,status:'Archiviert'})).status,200);
+ assert.equal((await req('state','GET',undefined,staff)).data.records.some(r=>r.id===record.data.id),true);
+ const stored=JSON.parse(await readFile(path.join(dir,'database.json'),'utf8'));assert.equal(stored.records.find(r=>r.id===record.data.id).comments.length,1);assert.ok(!JSON.stringify(stored).includes('SehrSicher'));
+ const html=await fetch('http://127.0.0.1:3097/');assert.equal(html.status,200);assert.match(await html.text(),/app.js/);
+ assert.equal((await fetch('http://127.0.0.1:3097/data/database.json')).status,404);
+ // A creator controls their own case, while collaborators cannot grant access.
+ const reader=await req('users','POST',{name:'Leser',password:'WeiterSicher123!',role:'Staatsanwalt'});
+ const readerSession=(await req('login','POST',{name:'Leser',password:'WeiterSicher123!'})).cookie;
+ const owned=await req('records','POST',{type:'cases',title:'Eigener Fall',confidential:true},staff);
+ assert.equal(owned.status,201);
+ const childRecord=await req('records','POST',{type:'evidence',title:'Geschützter Beweis',caseId:owned.data.id},staff);
+ assert.equal(childRecord.status,201);
+ const access={confidential:true,access:{[reader.data.id]:'read'}};
+ assert.equal((await req('records/'+owned.data.id+'/access','PUT',access,staff)).status,200);
+ const readable=(await req('state','GET',undefined,readerSession)).data;
+ assert.ok(readable.records.some(r=>r.id===childRecord.data.id));
+ assert.equal(readable.records.find(r=>r.id===owned.data.id).capabilities.edit,false);
+ assert.equal((await req('records/'+owned.data.id,'PUT',{title:'Unzulässige Änderung'},readerSession)).status,403);
+ assert.equal((await req('records/'+owned.data.id+'/comments','POST',{text:'Unzulässiger Kommentar'},readerSession)).status,403);
+ assert.equal((await req('records/'+owned.data.id+'/access','PUT',access,readerSession)).status,403);
+ assert.equal((await req('records','POST',{type:'evidence',title:'Unzulässiger Beweis',caseId:owned.data.id},readerSession)).status,403);
+ access.access[reader.data.id]='comment';
+ await req('records/'+owned.data.id+'/access','PUT',access,staff);
+ assert.equal((await req('records/'+owned.data.id+'/comments','POST',{text:'Zulässiger Kommentar'},readerSession)).status,200);
+ access.access[reader.data.id]='edit';
+ await req('records/'+owned.data.id+'/access','PUT',access,staff);
+ assert.equal((await req('records/'+childRecord.data.id,'PUT',{title:'Bearbeiteter Beweis'},readerSession)).status,200);
+ assert.equal((await req('records/'+owned.data.id,'PUT',{title:'Eigener Fall',owner:reader.data.id},readerSession)).status,403);
+ assert.equal((await req('records/'+childRecord.data.id,'PUT',{title:'Beweis',caseId:''},readerSession)).status,403);
+ // Revoking a module overrides an individual edit share immediately.
+ assert.equal((await req('users/'+reader.data.id,'PUT',{permissions:{modules:{evidence:{read:false,create:false,edit:false}}}})).status,200);
+ assert.equal((await req('state','GET',undefined,readerSession)).data.records.some(r=>r.id===childRecord.data.id),false);
+ assert.equal((await req('users/'+reader.data.id,'PUT',{role:'Leitung'},staff)).status,403);
+ access.access={};await req('records/'+owned.data.id+'/access','PUT',access,staff);
+ const revoked=(await req('state','GET',undefined,readerSession)).data;
+ assert.equal(revoked.records.some(r=>r.id===owned.data.id||r.id===childRecord.data.id),false);
+ assert.equal(revoked.audit.some(a=>a.recordId===owned.data.id),false);
+ const lead=(await req('state')).data.user;
+ assert.equal((await req('users/'+lead.id,'PUT',{active:false})).status,409);
+ assert.equal((await req('users/'+lead.id,'PUT',{role:'Referendar'})).status,409);
+ assert.equal((await req('users/'+reader.data.id,'PUT',{active:false})).status,200);
+ assert.equal((await req('state','GET',undefined,readerSession)).status,401);
+ assert.equal((await req('login','POST',{name:'Leser',password:'WeiterSicher123!'})).status,401);
+ assert.equal((await req('logout','POST')).status,200);assert.equal((await req('state')).status,401);
+ }finally{child.kill();await new Promise(r=>child.once('exit',r));await rm(dir,{recursive:true,force:true});}
+});
