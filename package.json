@@ -1,0 +1,1 @@
+{"name":"doj-intern","version":"1.0.0","private":true,"scripts":{"start":"node server.mjs","test":"node --test tests/store.test.mjs","db:check":"node scripts/check-supabase.mjs","db:import":"node scripts/import-supabase.mjs"},"engines":{"node":">=20"}}
