@@ -6,3 +6,7 @@ node_modules/
 backups/
 .supabase/
 *.log
+*.bak
+_backup-doj-update-*/
+artifacts/
+DOJ-Update-*.zip

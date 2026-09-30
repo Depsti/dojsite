@@ -2,7 +2,7 @@
 
 ## Starten
 
-1. Node.js ab Version 20 installieren, falls noch nicht vorhanden.
+1. Node.js ab Version 20 installieren, falls noch nicht vorhanden, und Supabase gemäß `docs/SUPABASE.md` konfigurieren.
 2. `start.cmd` doppelt anklicken (alternativ `npm start`).
 3. http://localhost:3000 im Browser öffnen.
 4. Beim ersten Aufruf einen Leitungszugang mit mindestens 12 Passwortzeichen erstellen.
@@ -13,29 +13,30 @@ Das Serverfenster muss geöffnet bleiben. Keine Installation zusätzlicher Paket
 
 - Dashboard mit aktuellen Akten, Aufgaben, Freigaben und Terminen
 - Fallakten mit automatischen Aktenzeichen, Zuständigkeit und Vertraulichkeit
-- Personen, Beweise mit Datei-Anhang (max. 5 MB) und Quellenlinks
+- Personen in mehreren Verfahren mit fallbezogener Rolle und Vermerken, Beweise mit Datei-Anhang (max. 5 MB) und Quellenlinks
 - Dokumente, Anträge, Vergleiche, Kommentare und PDF-Ausgabe über den Browserdruck
 - Anklage-, Haftbefehls- und Einstellungsvorlagen; eigene Vorlagen im Wissensbereich
 - Editierbares RP-Gesetzbuch und Strafmaßrechner mit Milderung und Haftobergrenze
 - Termine, Aufgaben, Wissensbereich, Charakterverzeichnis und Archiv
 - Mitarbeiterzugänge, Leitungsfreigaben, Änderungsprotokoll und Einstellungen
 - Suche und Statusfilter; responsive Darstellung
+- Fallversand nach Discord und geschützter Bot-Import mit Duplikatschutz; Einrichtung in [docs/PERSONEN-DISCORD.md](docs/PERSONEN-DISCORD.md)
 
 Neue Einträge werden über „Eintrag erstellen“ angelegt. Ein Klick auf einen Eintrag öffnet die Details. Über „Bearbeiten“ können Status, Frist und Zuordnung geändert werden. Zum Archivieren den Status „Archiviert“ wählen, zur Wiederaufnahme einen anderen Status. Dokumente lassen sich über „Als PDF drucken“ als PDF speichern.
 
 ## Zugriffsmodell
 
-Die erste Person erhält die Rolle Leitung und kann weitere Zugänge anlegen. Leitung pflegt Gesetze und Einstellungen und erteilt Freigaben. Staatsanwälte und Referendare können die übrigen sichtbaren Einträge bearbeiten. Vertrauliche Einträge sind nur für Ersteller, zuständige Person und Leitung sichtbar. Vertraulichkeit gilt pro Eintrag: verknüpfte Beweise und Dokumente müssen bei Bedarf ebenfalls als vertraulich markiert werden. Charaktere sind Verzeichniseinträge, keine getrennten Anmeldesitzungen.
+Die erste Person erhält die Rolle Leitung. Unter Mitarbeiter kann die Leitung Zugänge, Dienstrollen, Bereichsrechte und Sonderrechte verwalten. Fallersteller und Leitung verwalten unter Fallzugriffe das Fallteam; Federführung und freigegebene Mitarbeiter können im Rahmen ihrer Bereichsrechte bearbeiten. Verknüpfte Einträge erfordern ebenfalls den Fallzugriff; zusätzliche Vertraulichkeit bleibt bestehen. Personenverknüpfungen werden nur für zugängliche Personen und Fälle angezeigt. Charaktere sind Verzeichniseinträge, keine getrennten Anmeldesitzungen.
 
 ## Datenspeicherung
 
-Die Speicherung ist über `DOJ_STORAGE=local` oder `DOJ_STORAGE=supabase` wählbar. Standard bleibt lokal. Einrichtung, Datenübernahme und Grenzen stehen in [docs/SUPABASE.md](docs/SUPABASE.md). Die Vorlage `.env.example` enthält keine Zugangsdaten. `.env` und `data/` werden durch Git ignoriert.
+Die Speicherung erfolgt ausschließlich in Supabase. Einrichtung und Datenübernahme stehen in [docs/SUPABASE.md](docs/SUPABASE.md). Die Vorlage `.env.example` enthält keine Zugangsdaten. `.env` und alte lokale Daten werden durch Git ignoriert.
 
-Alle Daten einschließlich Anhängen liegen in `data/database.json`. Passwörter werden mit Salt und scrypt gehasht. Sitzungen laufen nach acht Stunden ab und werden bei einem Serverneustart beendet. Für Backups den Server stoppen und den gesamten `data`-Ordner kopieren. Diese Version ist für einen einzelnen Serverprozess ausgelegt; kein paralleler Betrieb mehrerer Instanzen auf derselben Datei.
+Der Bestand einschließlich Anhängen liegt als JSONB in `doj_portal_state`; gemeinsame Sitzungen und Anmeldesperren liegen in eigenen Supabase-Tabellen. Passwörter werden mit Salt und scrypt gehasht, Sitzungs-Cookies nur als Hash gespeichert. Sitzungen laufen nach acht Stunden ab und überleben Serverneustarts. Revisionsprüfungen verhindern verlorene Änderungen zwischen Instanzen. Für größere Bestände sind separate Fach-Tabellen und Dateispeicher der nächste Ausbauschritt.
 
 ## Noch nicht angebunden
 
-Discord OAuth, automatischer Rollenabgleich, Discord-Benachrichtigungen und die Übernahme aus einem Gameserver sind nicht implementiert. Discord-IDs lassen sich vorbereitend speichern. Erinnerungen werden im Portal angezeigt, es gibt keinen Hintergrundversand. Das Portal enthält absichtlich keine erfundenen Gesetze oder echten Personendaten. Das Regelwerk des RP-Servers wird durch die Leitung eingetragen.
+Discord OAuth, automatischer Rollenabgleich und automatische Gameserver-Übernahme sind nicht implementiert. Der Fallversand erfolgt ausdrücklich per Aktion in der Akte; der Gegenweg über den geschützten API-Endpunkt erfordert einen Discord-Bot oder eine Automation. Erinnerungen werden im Portal angezeigt, es gibt keinen Hintergrundversand. Das Regelwerk des RP-Servers wird durch die Leitung eingetragen.
 
 ## Hosting
 
@@ -43,4 +44,4 @@ Standardmäßig ist das Portal ausschließlich auf diesem Computer erreichbar (`
 
 ## Prüfung
 
-`npm test` prüft Einrichtung, Anmeldung, Zugriffsschutz, Akten, Kommentare, Rollen und Speicherung mit einem temporären Datenverzeichnis. Zusätzliche Tests simulieren Supabase-Antworten, Schreibkonflikte und Datenbankfehler. Ein tatsächlicher Supabase-Verbindungstest muss nach der Projektkonfiguration separat erfolgen.
+`npm test` führt die aktuellen Speicher-, Rechte- und API-Tests für Personenverknüpfungen und Discord aus. Supabase und Discord werden im Test simuliert; Produktionsdaten werden nicht verändert und keine Nachrichten versendet. Der alte lokale Portaltest wird nicht ausgeführt. `npm run db:check` prüft die tatsächliche konfigurierte Supabase-Verbindung lesend.
