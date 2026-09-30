@@ -89,5 +89,28 @@ test('API: Personen mehrfach verknüpfen, Sichtbarkeit, Import und Discord-Versa
    assert.equal(tables.doj_portal_state[0].payload.records.filter(r=>r.externalId===payload.externalId).length,1);
    assert.equal((await req(`records/${c1.id}/participants`,'PUT',{participants:[]})).status,200);
    assert.equal((await req('state')).data.records.find(r=>r.id===c1.id).participants.length,0);
+
+   const planned=(await req('records','POST',{type:'cases',title:'Fall mit Verhandlung',hearingExpected:true,confidential:true})).data;
+   let orgState=(await req('state')).data;
+   const pending=orgState.records.find(r=>r.type==='hearings'&&r.caseId===planned.id);assert.ok(pending);assert.equal(pending.date,'');
+   assert.equal((await req('records/'+planned.id+'/assignment','PUT',{assignedProsecutors:[],openForClaim:true})).status,200);
+   const offered=(await req('state','GET',undefined,staffCookie)).data;
+   assert.ok(offered.assignmentOffers.some(r=>r.id===planned.id));assert.ok(!offered.records.some(r=>r.id===planned.id));
+   const concurrent=await Promise.all([req('records/'+planned.id+'/claim','POST',{},staffCookie),req('records/'+planned.id+'/claim','POST',{},restrictedCookie)]);
+   assert.deepEqual(concurrent.map(r=>r.status).sort(),[200,409]);
+   const winnerCookie=concurrent[0].status===200?staffCookie:restrictedCookie;
+   const claimed=(await req('state','GET',undefined,winnerCookie)).data.records.find(r=>r.id===planned.id);assert.ok(claimed.capabilities.edit);
+   assert.equal((await req('records/'+pending.id,'PUT',{title:pending.title,date:'2026-10-01T14:00'})).status,200);
+   assert.equal((await req('records/'+planned.id,'PUT',{title:planned.title,hearingExpected:false})).status,200);
+   assert.ok((await req('state')).data.records.some(r=>r.id===pending.id));
+   const draft=(await req('records','POST',{type:'knowledge',title:'Freigabeentwurf'})).data;
+   assert.equal((await req('records/'+draft.id+'/review','POST',{status:'In Prüfung',reason:'Bitte prüfen'},staffCookie)).status,200);
+   assert.equal((await req('records/'+draft.id,'PUT',{title:'Unzulässige Änderung'})).status,400);
+   assert.equal((await req('records/'+draft.id+'/review','POST',{status:'Freigegeben',reason:'Geprüft'},staffCookie)).status,403);
+   assert.equal((await req('records/'+draft.id+'/review','POST',{status:'Zurückgegeben',reason:'Bitte ergänzen'})).status,200);
+   assert.equal((await req('records/'+draft.id,'PUT',{title:'Überarbeiteter Entwurf'})).status,200);
+   assert.equal((await req('records/'+draft.id+'/review','POST',{status:'In Prüfung'})).status,200);
+   const approved=await req('records/'+draft.id+'/review','POST',{status:'Freigegeben',reason:'Vollständig'});assert.equal(approved.status,200);assert.equal(approved.data.reviewHistory.length,5);
+
  }finally{if(server)await new Promise(resolve=>server.close(resolve));globalThis.fetch=realFetch;}
 });
