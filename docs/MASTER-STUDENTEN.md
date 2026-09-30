@@ -8,7 +8,7 @@ Bei einem leeren Portal ist der erste eingerichtete Zugang automatisch Master. F
 npm run master:setup -- Master
 ```
 
-Ein bestehender aktiver Leitungszugang namens Master wird hochgestuft; sein Passwort bleibt erhalten. Falls der Name noch nicht existiert, wird ein neuer Master mit einem einmalig ausgegebenen Einmalpasswort erstellt. Ein bereits vorhandener anderer Master verhindert die Einrichtung. Der Master kann alle Leitungen und Mitarbeiter verwalten. Leitungen können reguläre Mitarbeiter verwalten, aber keine anderen Leitungen und keinen Master. Der Master kann nicht über die Personalverwaltung gesperrt oder herabgestuft werden.
+Ein bestehender aktiver Zugang namens Master wird durch diesen ausschließlich serverseitigen Administrationsbefehl hochgestuft; sein Passwort bleibt erhalten. Falls der Name noch nicht existiert, wird ein neuer Master mit einem einmalig ausgegebenen Einmalpasswort erstellt. Ein bereits vorhandener anderer Master verhindert die Einrichtung. Der Master kann alle Leitungen und Mitarbeiter verwalten. Leitungen können reguläre Mitarbeiter verwalten, aber keine anderen Leitungen und keinen Master. Der Master kann nicht über die Personalverwaltung gesperrt oder herabgestuft werden.
 
 Die Einrichtung wurde nicht in der produktiven Datenbank ausgeführt: Im lokalen Projekt liegt keine .env vor. Das Skript muss mit der Serverkonfiguration ausgeführt werden. Keine Supabase-Schlüssel im Browser hinterlegen.
 
