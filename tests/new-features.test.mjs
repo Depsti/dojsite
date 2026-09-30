@@ -139,5 +139,18 @@ test('API: Personen mehrfach verknüpfen, Sichtbarkeit, Import und Discord-Versa
    const reset=await req('users/'+trainee.id+'/password-reset','POST',{});assert.equal(reset.status,200);assert.ok(reset.data.temporaryPassword);assert.equal((await req('state','GET',undefined,traineeCookie)).status,401);
    const cleanState=JSON.stringify((await req('state')).data);assert.ok(!cleanState.includes(otp));assert.ok(!cleanState.includes(reset.data.temporaryPassword));
 
+
+   const currentHeadCookie=(await req('login','POST',{name:leadAccount.name,password:'HeadPass8'})).cookie;
+   assert.equal((await req('users/'+leadAccount.id,'PUT',{permissions:{modules:{cases:{read:false,create:false,edit:false}},approve:false}})).status,200);
+   const limited=(await req('state','GET',undefined,currentHeadCookie)).data;assert.equal(limited.user.permissions.modules.cases.read,false);assert.equal(limited.user.permissions.approve,false);
+   assert.equal((await req('users/'+staff.id,'PUT',{role:'Master'},currentHeadCookie)).status,403);
+   assert.equal((await req('users/'+leadAccount.id+'/password','PUT',{password:'HeadNew8',mustChange:false},staffCookie)).status,403);
+   assert.equal((await req('users/'+leadAccount.id+'/password','PUT',{password:'HeadNew8',mustChange:false})).status,200);
+   assert.equal((await req('state','GET',undefined,currentHeadCookie)).status,401);
+   const headAgain=await req('login','POST',{name:leadAccount.name,password:'HeadNew8'});assert.equal(headAgain.status,200);
+   assert.equal((await req('users/'+lead.id,'PUT',{active:false})).status,409);
+   assert.equal((await req('users/'+leadAccount.id,'PUT',{role:'Staatsanwalt'})).status,200);
+   assert.equal((await req('users/'+leadAccount.id,'PUT',{role:'Leitung'})).status,200);
+
  }finally{if(server)await new Promise(resolve=>server.close(resolve));globalThis.fetch=realFetch;}
 });

@@ -17,8 +17,8 @@ test('Fallrechte: Standard, Vererbung und zusätzliche Vertraulichkeit',()=>{
 test('Rollenstandards und validierte individuelle Rechte',()=>{
  assert.equal(defaults('Referendar').modules.cases.create,false);
  assert.equal(defaults('Staatsanwalt').modules.laws.edit,false);
- assert.equal(permissions({...lead,permissions:{approve:false}}).approve,true);
+ assert.equal(permissions({...lead,permissions:{approve:false}}).approve,false);
  assert.throws(()=>validatePermissions({modules:{invalid:{read:true}}}));
  assert.throws(()=>validatePermissions({modules:{cases:{read:'false'}}}));
- assert.throws(()=>validatePermissions({superadmin:true}));
+ assert.throws(()=>validatePermissions({superadmin:true}));assert.equal(permissions({...lead,role:'Master',permissions:{approve:false}}).approve,true);
 });
