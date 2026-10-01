@@ -11,6 +11,7 @@ test('PDF-Aktenlayout enthält sichtbare Falldaten ohne Bedienoberfläche oder A
  const html=vm.runInContext('casePrintHTML(record)',context);
  for(const text of ['DEPARTMENT OF JUSTICE','DOJ-2026-0001','Staat gegen &lt;Test&gt;','Sichtbare Person','Beweistext','Dokumenttext','Aktenvermerk','Beweis.png','signature-name','Exporteur','Automatisch aus dem Namen erzeugte Unterschrift'])assert.ok(html.includes(text),text);
  for(const text of ['Nicht exportieren','PRIVATE','data:image','<button','<form','Zugehörige Fallakte'])assert.ok(!html.includes(text),text);
+ assert.doesNotMatch(html,/Rollenspiel|RP-Dokument|RP-Justizportal|Fiktion|Keine amtliche Urkunde/i);
  assert.match(html,/case-print\.css/);
  const css=readFileSync(new URL('../public/case-print.css',import.meta.url),'utf8');assert.match(css,/size:A4/);assert.match(css,/counter\(page\)/);assert.match(css,/table-header-group/);
 });

@@ -11,7 +11,7 @@ test('DOCX enthält Signatur, Seitennummern und nur zugängliche Fallinhalte',as
  const zip=await JSZip.loadAsync(buffer);
  const xml=await zip.file('word/document.xml').async('string');
  assert.match(xml,/Alex &amp; Miller/);assert.match(xml,/Segoe Script/);assert.match(xml,/DOJ-Stempel/);assert.ok(Object.keys(zip.files).some(path=>path.startsWith('word/media/')&&path.endsWith('.png')));assert.match(xml,/Taylor Brooks/);assert.match(xml,/Sichtbarer Beleg/);assert.match(xml,/Sachverhalt mit &lt;Text&gt;/);assert.doesNotMatch(xml,/VERBORGENE_INFORMATION/);
- const footer=await zip.file('word/footer1.xml').async('string');assert.match(footer,/NUMPAGES/);assert.match(footer,/PAGE/);
+ const footer=await zip.file('word/footer1.xml').async('string');assert.doesNotMatch(xml+footer,/Rollenspiel|RP-Dokument|State RP|Fiktion/i);assert.match(footer,/NUMPAGES/);assert.match(footer,/PAGE/);
  await assert.rejects(exportDocx({...record,confidential:true},user,db),e=>e.status===404);
 });
 test('DOCX kennzeichnet vorgelegte Studentendokumente ohne Freigabe',async()=>{
