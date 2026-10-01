@@ -53,6 +53,11 @@ test('API: Personen mehrfach verknüpfen, Sichtbarkeit, Import und Discord-Versa
    const person=(await req('records','POST',{type:'people',title:'Alex Doe'})).data;
    const c1=(await req('records','POST',{type:'cases',title:'Erster Fall',confidential:false})).data;
    const c2=(await req('records','POST',{type:'cases',title:'Vertraulicher Fall',confidential:true})).data;
+   const word=await realFetch(base+`records/${c1.id}/docx`,{headers:{Cookie:staffCookie}});
+   assert.equal(word.status,200);assert.equal(word.headers.get('content-type'),'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+   assert.equal(Buffer.from(await word.arrayBuffer()).subarray(0,2).toString(),'PK');
+   assert.equal((await realFetch(base+`records/${c2.id}/docx`,{headers:{Cookie:staffCookie}})).status,404);
+   assert.equal((await realFetch(base+`records/${c1.id}/docx`)).status,401);
    const looseEvidence=(await req('records','POST',{type:'evidence',title:'Vorhandene Kameraaufnahme'})).data;
    const beforeBundle=(await req('state')).data.records.length;
    const bundle={requestId:'test-wizard-request-1234',case:{title:'Assistenten-Fall',confidential:true},people:[{personId:person.id,role:'Zeuge',note:'Vor Ort'},{title:'Neue Person',role:'Beschuldigter'}],evidence:[{recordId:looseEvidence.id},{title:'Neuer Beweis',description:'Fundort'}],documents:[{title:'Anklage',description:'Dokumenttext'}]};
