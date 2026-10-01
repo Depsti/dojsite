@@ -33,5 +33,20 @@ function printCaseRecord(record){
  frame.onload=async()=>{try{await frame.contentDocument.fonts.ready;frame.contentWindow.onafterprint=()=>frame.remove();frame.contentWindow.focus();frame.contentWindow.print();}catch{frame.remove();toast('Druckansicht konnte nicht geöffnet werden. Bitte erneut versuchen.');}};
  frame.srcdoc=casePrintHTML(record);document.body.append(frame);
 }
+
+async function previewWordRecord(record){
+ document.getElementById('docx-preview-dialog')?.remove();
+ const dialog=document.createElement('dialog');dialog.id='docx-preview-dialog';dialog.className='word-preview-dialog';
+ dialog.innerHTML='<div class="modal-header"><h2>DOCX-Vorschau</h2><button type="button" data-close aria-label="Schließen">✕</button></div><div class="word-preview-toolbar"><p>Ansicht des Word-Dokuments. In Word können Schrift und Seitenumbrüche leicht abweichen.</p><button class="primary" id="word-download" disabled>DOCX herunterladen</button></div><p class="word-preview-status" role="status">Dokument wird vorbereitet …</p><div class="word-preview-pages"></div>';
+ document.body.append(dialog);dialog.showModal();dialog.querySelector('[data-close]').onclick=()=>dialog.close();dialog.addEventListener('close',()=>dialog.remove(),{once:true});
+ const status=dialog.querySelector('.word-preview-status'),download=dialog.querySelector('#word-download');
+ try{
+  const response=await fetch('/api/records/'+record.id+'/docx');
+  if(!response.ok){const error=await response.json();throw Error(error.error||'Export fehlgeschlagen.');}
+  const blob=await response.blob();if(!dialog.isConnected)return;
+  download.disabled=false;download.onclick=()=>{const url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download=(record.reference||record.title||'DOJ-Dokument').replace(/[^a-zA-Z0-9_-]/g,'_').slice(0,100)+'.docx';link.click();setTimeout(()=>URL.revokeObjectURL(url),30000);};
+  try{await docx.renderAsync(blob,dialog.querySelector('.word-preview-pages'),undefined,{className:'word-page',inWrapper:true,breakPages:true,renderHeaders:true,renderFooters:true,renderFootnotes:true,useBase64URL:true});status.textContent='';}catch{status.textContent='Die Vorschau konnte nicht angezeigt werden. Du kannst die DOCX-Datei trotzdem herunterladen.';}
+ }catch(err){status.textContent=err.message;}
+}
 const originalPrintDetail=applyDetailAccess;
-applyDetailAccess=function(record){originalPrintDetail(record);const button=$('#print-record');if(button)button.onclick=()=>printCaseRecord(record);const word=document.createElement('button');word.textContent='Als DOCX exportieren';word.onclick=async()=>{word.disabled=true;try{const response=await fetch('/api/records/'+record.id+'/docx');if(!response.ok){const error=await response.json();throw Error(error.error||'Export fehlgeschlagen.');}const blob=await response.blob(),url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download=(record.reference||record.title||'DOJ-Dokument').replace(/[^a-zA-Z0-9_-]/g,'_')+'.docx';link.click();setTimeout(()=>URL.revokeObjectURL(url),30000);}catch(err){toast(err.message);}finally{word.disabled=false;}};$('#modal .actions').append(word);};
+applyDetailAccess=function(record){originalPrintDetail(record);const button=$('#print-record');if(button)button.onclick=()=>printCaseRecord(record);const word=document.createElement('button');word.textContent='DOCX-Vorschau & Export';word.onclick=()=>previewWordRecord(record);$('#modal .actions').append(word);};
