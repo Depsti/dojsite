@@ -58,6 +58,12 @@ test('API: Personen mehrfach verknüpfen, Sichtbarkeit, Import und Discord-Versa
    assert.equal(Buffer.from(await word.arrayBuffer()).subarray(0,2).toString(),'PK');
    assert.equal((await realFetch(base+`records/${c2.id}/docx`,{headers:{Cookie:staffCookie}})).status,404);
    assert.equal((await realFetch(base+`records/${c1.id}/docx`)).status,401);
+   const application=(await req('records','POST',{type:'requests',title:'Durchsuchungsantrag',caseId:c1.id,description:'Antragstext',requestData:{kind:'Durchsuchung',attachmentIds:[]}})).data;
+   assert.equal(application.requestData.kind,'Durchsuchung');
+   assert.equal((await req('records/'+application.id+'/court','POST',{status:'Genehmigt',judge:'Richter',reason:'Geprüft'})).status,400);
+   await req('records/'+application.id+'/review','POST',{status:'In Prüfung'});await req('records/'+application.id+'/review','POST',{status:'Freigegeben',reason:'Intern geprüft'});
+   assert.equal((await req('records/'+application.id+'/court','POST',{status:'Genehmigt',judge:'Richter',reason:'Geprüft'},staffCookie)).status,403);
+   assert.equal((await req('records/'+application.id+'/court','POST',{status:'Genehmigt',judge:'Richter',reason:'Geprüft'})).data.courtDecision.status,'Genehmigt');
    const looseEvidence=(await req('records','POST',{type:'evidence',title:'Vorhandene Kameraaufnahme'})).data;
    const beforeBundle=(await req('state')).data.records.length;
    const bundle={requestId:'test-wizard-request-1234',case:{title:'Assistenten-Fall',confidential:true},people:[{personId:person.id,role:'Zeuge',note:'Vor Ort'},{title:'Neue Person',role:'Beschuldigter'}],evidence:[{recordId:looseEvidence.id},{title:'Neuer Beweis',description:'Fundort'}],documents:[{title:'Anklage',description:'Dokumenttext'}]};
