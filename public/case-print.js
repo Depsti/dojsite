@@ -1,3 +1,6 @@
+function documentSectionHTML(value){
+ return String(value||'—').split(/\r?\n/).map(line=>/^[IVXLCDM]+\.\s+\S/.test(line.trim())?'<h3 class="document-section-heading">'+esc(line.trim().toUpperCase())+'</h3>':'<div class="document-section-line">'+(line?esc(line):'&nbsp;')+'</div>').join('');
+}
 function casePrintHTML(record){
  const text=v=>esc(v||'—');
  const stamp=v=>v?new Date(v).toLocaleString('de-DE',{dateStyle:'medium',timeStyle:'short'}):'—';
@@ -5,7 +8,7 @@ function casePrintHTML(record){
  const children=state.records.filter(r=>r.caseId===record.id&&r.type!=='people');
  let section=0;
  const block=(title,body)=>`<section class="report-section"><h2><span>${String(++section).padStart(2,'0')}</span> ${esc(title)}</h2>${body}</section>`;
- const prose=v=>`<div class="report-text">${text(v)}</div>`;
+ const prose=v=>`<div class="report-text">${documentSectionHTML(v)}</div>`;
  const meta=(label,value)=>`<div><dt>${esc(label)}</dt><dd>${text(value)}</dd></div>`;
  let content=block(['documents','requests','knowledge'].includes(record.type)?'Dokumentinhalt':'Sachverhalt / Beschreibung',prose(record.description));
  if(record.type==='cases'){

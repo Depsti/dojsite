@@ -6,7 +6,7 @@ import vm from 'node:vm';
 test('Bereichswechsel zeigt die jeweiligen Einträge und setzt Filter zurück',()=>{
  const app={innerHTML:''},notifications={textContent:'',style:{}};
  const context=vm.createContext({location:{hash:''},window:{addEventListener(){}},document:{querySelector:s=>s==='#app'?app:notifications},setTimeout:()=>0,clearTimeout(){}});
- const source=readFileSync(new URL('../public/app.js',import.meta.url),'utf8').replace(/boot\(\);\s*$/,'');
+ const source=readFileSync(new URL('../public/app.js',import.meta.url),'utf8').replace(/^if\(document\.readyState[^\n]*$/m,'');
  vm.runInContext(source,context);
  vm.runInContext(readFileSync(new URL('../public/permissions.js',import.meta.url),'utf8'),context);
  vm.runInContext(`bind=()=>{};state={user:{name:'Test Leitung',role:'Leitung',permissions:{modules:Object.fromEntries(['people','evidence','documents','requests'].map(k=>[k,{read:true}]))}},users:[],settings:{serverName:'Test'},records:['people','evidence','documents','requests'].map(type=>({id:type,type,title:'Testeintrag '+type,status:'Offen'}))};`,context);
