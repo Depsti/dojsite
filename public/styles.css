@@ -6,3 +6,5 @@
 .request-formatting{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 7px}.request-formatting button{font-size:12px;padding:6px 10px}
 
 .request-field-heading{display:block;font-size:18px;font-weight:700;text-transform:uppercase;border-top:1px solid #a9b2bf;padding-top:16px;margin-top:14px;margin-bottom:6px}.request-document-body{white-space:normal}.request-document-body .document-section-heading{font-size:20px;font-weight:700;text-transform:uppercase;border-top:1px solid #a9b2bf;padding-top:18px;margin:26px 0 14px}.request-document-body .document-section-line{white-space:pre-wrap;overflow-wrap:anywhere}
+
+#case-request-form .request-field-heading{margin-top:24px;margin-bottom:20px;padding-top:20px;line-height:1.4}#modal .request-document-body .document-section-heading{margin:24px 0 20px;padding:20px 0 0;line-height:1.4;border-top:1px solid #a9b2bf}
