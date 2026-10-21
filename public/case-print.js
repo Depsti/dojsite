@@ -22,7 +22,8 @@ function casePrintHTML(record){
   if(other.length)content+=block('Weitere zugeordnete Einträge',other.map(r=>`<article class="report-entry"><h3>${text(modules[r.type]?.[0])} · ${text(r.title)}</h3>${prose(r.description)}</article>`).join(''));
  }else{
   if(record.personRole)content+=block('Beteiligung',prose(record.personRole));
-  if(record.type==='laws')content+=block('Strafrahmen',`<p>Geldstrafe: ${text(money(record.fine))} · Haft: ${Number(record.months||0)} HE</p>`);
+  if(record.type==='laws'&&record.penaltyUnspecified)content+=block('Strafrahmen','<p>Kein festes Strafmaß hinterlegt. Maßgeblich ist der Gesetzestext.</p>');
+  if(record.type==='laws'&&!record.penaltyUnspecified)content+=block('Strafrahmen',`<p>Geldstrafe: ${text(money(record.fine))} · Haft: ${Number(record.months||0)} HE</p>`);
   if(record.url&&/^https?:\/\//i.test(record.url))content+=block('Quelle',prose(record.url));
   if(record.attachmentName)content+=block('Anlage',`<p>${text(record.attachmentName)} (separate Datei; nicht in diesem PDF enthalten)</p>`);
  }
