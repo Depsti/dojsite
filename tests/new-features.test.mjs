@@ -52,6 +52,10 @@ test('API: Personen mehrfach verknüpfen, Sichtbarkeit, Import und Discord-Versa
    const staffCookie=(await req('login','POST',{name:'Lawyer',password:'OnlyForTest456!'})).cookie;
    const person=(await req('records','POST',{type:'people',title:'Alex Doe'})).data;
    const c1=(await req('records','POST',{type:'cases',title:'Erster Fall',confidential:false})).data;
+   const initialStamp=c1.updatedAt;
+   const updatedCase=await req('records/'+c1.id,'PUT',{title:c1.title,description:'Parallel gespeichert',expectedUpdatedAt:initialStamp});assert.equal(updatedCase.status,200);
+   const conflict=await req('records/'+c1.id,'PUT',{title:'Veralteter Entwurf',expectedUpdatedAt:'2000-01-01T00:00:00.000Z'});assert.equal(conflict.status,409);assert.match(conflict.data.error,/anderen Fenster/);
+   const desktopResponse=await realFetch(base.replace(/api\/$/,'')+'desktop.js');assert.equal(desktopResponse.status,200);assert.equal(desktopResponse.headers.get('x-frame-options'),'SAMEORIGIN');assert.match(desktopResponse.headers.get('content-security-policy'),/frame-ancestors 'self'/);
    const c2=(await req('records','POST',{type:'cases',title:'Vertraulicher Fall',confidential:true})).data;
    const word=await realFetch(base+`records/${c1.id}/docx`,{headers:{Cookie:staffCookie}});
    assert.equal(word.status,200);assert.equal(word.headers.get('content-type'),'application/vnd.openxmlformats-officedocument.wordprocessingml.document');

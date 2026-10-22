@@ -5,9 +5,13 @@
 1. Node.js ab Version 20 installieren, falls noch nicht vorhanden, und Supabase gemäß `docs/SUPABASE.md` konfigurieren.
 2. `start.cmd` doppelt anklicken (alternativ `npm start`).
 3. http://localhost:3000 im Browser öffnen.
-4. Beim ersten Aufruf einen Leitungszugang mit mindestens 12 Passwortzeichen erstellen.
+4. Beim ersten Aufruf einen Master-Zugang mit mindestens 8 Passwortzeichen erstellen.
 
-Das Serverfenster muss geöffnet bleiben. Keine Installation zusätzlicher Pakete erforderlich. Die eigentliche Website liegt in `public/index.html`, `public/styles.css` und `public/app.js`. Die `index.html` im Hauptordner enthält den Einstieg zum lokalen Portal.
+Das Serverfenster muss geöffnet bleiben. Abhängigkeiten vor dem ersten Start beziehungsweise nach Updates mit `npm.cmd ci` installieren. Die eigentliche Website liegt in `public/index.html`, `public/styles.css` und `public/app.js`. Die `index.html` im Hauptordner enthält den Einstieg zum lokalen Portal.
+
+## Desktop-Oberfläche
+
+Das Portal startet als Webdesktop mit Apps, mehreren unabhängigen Aktenfenstern und Taskleiste. Bedienung, Rückkehr zur klassischen Ansicht und Tests: [docs/DESKTOP.md](docs/DESKTOP.md).
 
 ## Enthalten
 
