@@ -170,6 +170,34 @@ try{
  await page.evaluate(()=>nav('drafts'));const draftsFrame=page.frameLocator('[data-window-key="app:drafts"] iframe');await draftsFrame.locator('article').filter({hasText:'Automatisch gesicherte Akte'}).locator('[data-draft-restore]').click();await draftsFrame.locator('#wizard-back').waitFor();await draftsFrame.locator('#wizard-back').click();assert.equal(await draftsFrame.locator('#case-wizard-form [name=title]').inputValue(),'Automatisch gesicherte Akte');await draftsFrame.locator('#case-wizard-form [data-close]').click();
  await page.evaluate(()=>nav('mywork'));await page.frameLocator('[data-window-key="app:mywork"] iframe').getByRole('heading',{name:'Meine Arbeit',exact:true}).waitFor();
  console.log('QA: Arbeitsplatz, Varianten, Zeitleiste, Matrix, Protokoll, Entwürfe und bereinigter Export geprüft');
+
+ // Persönliche Desktop-Ordner: echte API, Speicherung, Drag-and-drop und Berechtigungen.
+ assert.equal((await request('desktop-layout')).status,401);
+ assert.deepEqual((await request('desktop-layout','GET',undefined,master)).data.items,[]);
+ assert.equal((await request('desktop-layout','PUT',{version:1,items:[{type:'app',app:'settings'}],expectedUpdatedAt:null},master)).status,400);
+ await page.locator('[data-layout-edit]').click();
+ page.once('dialog',d=>d.accept('Ermittlungen'));await page.locator('[data-layout-new-folder]').click();
+ const folderSelector='.os-shortcuts [data-layout-folder]';const folderId=await page.locator(folderSelector).getAttribute('data-layout-folder');
+ await page.locator('[data-folder-close]').click();
+ await page.locator('.os-shortcuts [data-layout-app=cases]').dragTo(page.locator(folderSelector));
+ assert.equal(await page.locator('.os-shortcuts [data-layout-app=cases]').count(),0);
+ await page.locator('.os-shortcuts [data-layout-app=people]').click();await page.locator('[data-layout-destination]').selectOption(folderId);await page.locator('[data-layout-move]').click();
+ await page.locator(folderSelector).click();assert.equal(await page.locator('.os-folder-grid [data-layout-app]').count(),2);
+ await page.locator('.os-folder-grid [data-layout-app=people]').click();await page.locator('[data-layout-prev]').click();assert.equal(await page.locator('.os-folder-grid [data-layout-app]').first().getAttribute('data-layout-app'),'people');
+ await page.screenshot({path:'artifacts/chat-qa/desktop-bearbeiten.png'});await page.locator('[data-theme-toggle]').click();await page.screenshot({path:'artifacts/chat-qa/desktop-bearbeiten-dunkel.png'});await page.locator('[data-theme-toggle]').click();
+ await page.locator('[data-layout-save]').click();await page.locator('[data-layout-edit]').waitFor();
+ const savedDesktop=(await request('desktop-layout','GET',undefined,master)).data;
+ assert.deepEqual(savedDesktop.items.find(i=>i.type==='folder').apps,['people','cases']);
+ assert.deepEqual((await request('desktop-layout','GET',undefined,studentCookie)).data.items,[]);
+ assert.equal((await request('desktop-layout','PUT',{version:1,items:[],expectedUpdatedAt:null},master)).status,409);
+ await page.reload();await page.locator('[data-layout-edit]:enabled').waitFor();for(const minimize of await page.locator('.os-window:not([hidden]) [data-window=min]').all())await minimize.click();await page.locator(folderSelector).click();await page.locator('.os-folder-grid [data-layout-app=cases]').click();await page.locator('[data-window-key="app:cases"] iframe').waitFor();
+ await page.locator('[data-layout-edit]').click();await page.locator(folderSelector).click();page.once('dialog',d=>d.accept('Verworfener Name'));await page.locator('[data-layout-rename]').click();await page.locator('[data-layout-cancel]').click();assert.equal(await page.locator(folderSelector).innerText().then(t=>t.includes('Ermittlungen')),true);
+ await page.locator('[data-layout-edit]').click();await page.locator(folderSelector).click();page.once('dialog',d=>d.accept());await page.locator('[data-layout-dissolve]').click();assert.equal(await page.locator(folderSelector).count(),0);assert.equal(await page.locator('.os-shortcuts [data-layout-app=cases]').count(),1);await page.locator('[data-layout-cancel]').click();
+ await page.setViewportSize({width:390,height:844});await page.locator('[data-os=start]').click();await page.locator('[data-layout-launcher-edit]').click();await page.locator(folderSelector).click();await page.screenshot({path:'artifacts/chat-qa/desktop-ordner-mobil.png'});await page.locator('[data-layout-cancel]').click();await page.setViewportSize({width:1500,height:1000});
+ // Layout-Daten können keine zusätzlichen App-Rechte erteilen.
+ const studentLayout=await request('desktop-layout','PUT',{version:1,items:[{type:'folder',id:'restricted-folder',name:'Ordner',apps:['audit','cases']}],expectedUpdatedAt:null,userId:masterUser.id},studentCookie);assert.equal(studentLayout.status,200);assert.deepEqual((await request('desktop-layout','GET',undefined,master)).data.items,savedDesktop.items);
+ await studentPage.reload();await studentPage.locator('[data-layout-edit]:enabled').waitFor();if(await studentPage.locator('[data-reminder-snooze]').first().isVisible())await studentPage.locator('[data-reminder-snooze]').first().click();for(const minimize of await studentPage.locator('.os-window:not([hidden]) [data-window=min]').all())await minimize.click();await studentPage.locator('.os-shortcuts [data-layout-folder]').click();assert.equal(await studentPage.locator('.os-folder-grid [data-layout-app=audit]').count(),0);assert.equal(await studentPage.locator('.os-folder-grid [data-layout-app=cases]').count(),1);
+ console.log('Desktop-Anordnung geprüft: Ordner, Drag-and-drop, Reihenfolge, Speichern, Abbrechen, Mobilansicht, Konflikte und Nutzerisolation.');
  await request('users/'+student.id,'PUT',{active:false},master);assert.equal((await request('chat/private/'+student.id,'POST',{text:'Nicht senden',references:[],nonce:'inactive-private-123'},collaboratorCookie)).status,403);assert.equal((await request('chat/private/'+student.id,'GET',undefined,collaboratorCookie)).data.canWrite,false);
  assert.deepEqual(errors,[]);console.log('Desktop-Arbeitsmittel geprüft: Fall-/Privatchats, ungelesene Highlights, Aktenzeichen, private Notizen, gemeinsame To-dos, Kalender, Rechte, Erinnerungen und Mobilansicht.');
 }finally{if(browser)await browser.close();if(server){server.closeAllConnections();await new Promise(resolve=>server.close(resolve));}globalThis.fetch=realFetch;await pg.close();}

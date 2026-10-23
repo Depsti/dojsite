@@ -1,0 +1,16 @@
+/* Shared validation for personal desktop layouts. App membership never grants access. */
+(function(root){
+ const apps=['dashboard','cases','people','evidence','documents','requests','laws','calculator','hearings','tasks','knowledge','archive','team','audit','notebook','calendar','todos','references','mywork','search','drafts','textblocks'];
+ const clone=value=>JSON.parse(JSON.stringify(value));
+ function normalize(value){
+  if(!value||value.version!==1||!Array.isArray(value.items)||value.items.length>100)throw Error('Ungültige Desktop-Anordnung.');
+  const used=new Set(),folders=new Set();let count=0;const app=value=>{if(typeof value!=='string'||!apps.includes(value)||used.has(value))throw Error('Eine App ist unbekannt oder mehrfach zugeordnet.');used.add(value);return value;};
+  const items=value.items.map(item=>{if(!item||typeof item!=='object')throw Error('Ungültiges Desktop-Symbol.');if(item.type==='app')return {type:'app',app:app(item.app)};if(item.type!=='folder'||typeof item.id!=='string'||!/^[a-zA-Z0-9-]{8,80}$/.test(item.id)||folders.has(item.id)||typeof item.name!=='string'||!item.name.trim()||item.name.trim().length>60||!Array.isArray(item.apps)||item.apps.length>apps.length||++count>30)throw Error('Ungültiger Ordner (maximal 30 Ordner, Name 1–60 Zeichen).');folders.add(item.id);return {type:'folder',id:item.id,name:item.name.trim(),apps:item.apps.map(app)};});
+  return {version:1,items};
+ }
+ function locate(layout,app){for(let i=0;i<layout.items.length;i++){const item=layout.items[i];if(item.type==='app'&&item.app===app)return {folder:null,index:i};if(item.type==='folder'&&item.apps.includes(app))return {folder:item.id,index:item.apps.indexOf(app)};}return null;}
+ function moveApp(layout,app,folder=null,before=null){const out=clone(layout);if(!locate(out,app))throw Error('App nicht vorhanden.');if(before===app)return out;const target=folder&&out.items.find(i=>i.type==='folder'&&i.id===folder);if(folder&&!target)throw Error('Ordner nicht vorhanden.');out.items=out.items.filter(i=>i.type!=='app'||i.app!==app);for(const item of out.items)if(item.type==='folder')item.apps=item.apps.filter(a=>a!==app);if(target){const position=before?target.apps.indexOf(before):-1;target.apps.splice(position<0?target.apps.length:position,0,app);}else{const position=before?out.items.findIndex(i=>i.type==='app'?i.app===before:i.id===before):-1;out.items.splice(position<0?out.items.length:position,0,{type:'app',app});}return normalize(out);}
+ function moveFolder(layout,id,before=null){const out=clone(layout),from=out.items.findIndex(i=>i.type==='folder'&&i.id===id);if(from<0)throw Error('Ordner nicht vorhanden.');if(before===id)return out;const item=out.items.splice(from,1)[0],position=before?out.items.findIndex(i=>i.type==='app'?i.app===before:i.id===before):-1;out.items.splice(position<0?out.items.length:position,0,item);return normalize(out);}
+ function dissolve(layout,id){const out=clone(layout),index=out.items.findIndex(i=>i.type==='folder'&&i.id===id);if(index<0)throw Error('Ordner nicht vorhanden.');out.items.splice(index,1,...out.items[index].apps.map(app=>({type:'app',app})));return normalize(out);}
+ const model={apps,normalize,locate,moveApp,moveFolder,dissolve};root.dojDesktopLayoutModel=model;if(typeof module!=='undefined')module.exports=model;
+})(globalThis);
