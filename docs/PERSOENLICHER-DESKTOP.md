@@ -5,7 +5,7 @@ Jeder angemeldete Mitarbeiter kann die eigene Desktop-Anordnung bearbeiten. Die 
 ## Bedienung
 
 1. Auf dem Desktop oder im Startmenü **Desktop bearbeiten** wählen. Geöffnete App-Fenster bleiben erhalten und werden während der Bearbeitung ausgeblendet.
-2. Symbole ziehen, um sie umzusortieren. Alternativ ein Symbol auswählen und die Pfeiltasten in der Werkzeugleiste bzw. **Alt + Pfeil nach oben/unten** verwenden.
+2. Apps und Ordner auf ein beliebiges Feld des sichtbaren Rasters ziehen. Belegte Felder tauschen ihre Symbole. Alternativ ein Symbol und danach ein freies Rasterfeld anklicken oder über **Spalte / Zeile → Position setzen** platzieren. Die Pfeile und **Alt + Pfeiltaste** verschieben Desktop-Symbole um ein Feld. Innerhalb eines Ordners bleibt die Reihenfolge-Liste erhalten.
 3. Über **+ Ordner** einen benannten Ordner anlegen. Apps auf das Ordnersymbol ziehen oder über **Verschieben nach** zuordnen. Ein Klick auf einen Ordner zeigt dessen Apps.
 4. Apps innerhalb eines Ordners ebenfalls umsortieren. Um sie herauszunehmen, als Ziel **Desktop** wählen.
 5. Ordner lassen sich umbenennen oder auflösen. Beim Auflösen werden alle enthaltenen Apps wieder auf dem Desktop angezeigt.
@@ -25,3 +25,9 @@ Ordner enthalten Apps, keine weiteren Ordner. Namen dürfen 1–60 Zeichen lang 
 ## Dateien
 
 `public/desktop-layout.js` (Bedienung), `public/desktop-layout.css` (Darstellung), `public/desktop-layout-model.js` (gemeinsame Validierung und Anordnung), `lib/desktop-layout.mjs` (persönliche Speicherung); eingebunden über `public/index.html`, `public/desktop.js` und `lib/http-server.mjs`.
+
+## Freie Rasterpositionen
+
+Positionen bleiben auch nach Speichern und Neuladen erhalten. Die Rasterlinien sind nur im Bearbeitungsmodus sichtbar. Die Bearbeitungsleiste kann am Titel **⠿ Desktop bearbeiten** verschoben werden, um darunterliegende Felder zu erreichen.
+
+Bisherige Anordnungen werden automatisch weiterverwendet; eine Datenbankmigration ist nicht nötig. Auf kleineren Bildschirmen werden außerhalb liegende Symbole vorübergehend auf erreichbare Felder verteilt. Beim normalen Betrachten verändert dies den gespeicherten Desktop nicht; beim Zurückwechseln auf den größeren Bildschirm erscheinen die ursprünglichen Positionen wieder. Erst **Speichern** im Bearbeitungsmodus übernimmt die aktuell angezeigte Anordnung. Auf sehr kleinen Bildschirmen bleibt der Bereich bei Platzmangel scrollbar, damit kein Symbol verschwindet.
