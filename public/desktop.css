@@ -4,3 +4,10 @@ body.doj-desktop{overflow:hidden;background:#0a1927}.doj-os{height:100dvh;min-he
 .os-workspace{isolation:isolate;z-index:1}
 
 .os-settings{display:grid;place-items:center;width:35px;height:35px;color:#d6b77b!important}.os-settings svg{width:19px;height:19px}.os-settings:hover{color:#f3d7a2!important}
+
+/* Desktop-Symbole: Spalten von oben nach unten, ohne eigene Scrollfläche. */
+@media(min-width:761px){
+ .os-caption{left:20px;top:22px}
+ .os-shortcuts{top:55px;bottom:10px;left:8px;right:8px;width:auto;overflow:visible;display:flex;flex-flow:column wrap;align-content:flex-start;align-items:flex-start;gap:10px 12px;pointer-events:none}
+ .os-shortcuts .os-shortcut{width:100px;height:86px;min-height:86px;flex:0 0 86px;pointer-events:auto;text-align:center}
+}
