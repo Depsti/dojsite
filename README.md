@@ -21,6 +21,14 @@ Interner Chat pro Fallakte mit Dienstgradfarben, Antworten, Reaktionen und gesch
 
 Vollständiger Strafmaßkatalog aus der verknüpften Tabelle mit Haftgrenzen, Beteiligungsregeln und variablen Beträgen: [docs/STRAFMASS.md](docs/STRAFMASS.md).
 
+## Aktenzeichengenerator
+
+Jährlich eindeutige Aktenzeichen mit Gerichts-/Behördenkürzeln, Vorschau, Kopierfunktion und Integration in neue Fallakten: [docs/AKTENZEICHEN.md](docs/AKTENZEICHEN.md).
+
+## Persönliche Arbeitsmittel
+
+Notizblock mit Bereichen und Archiv, private/gemeinsame To-dos sowie Kalender mit Terminerinnerungen: [docs/ARBEITSMITTEL.md](docs/ARBEITSMITTEL.md).
+
 ## Enthalten
 
 - Dashboard mit aktuellen Akten, Aufgaben, Freigaben und Terminen

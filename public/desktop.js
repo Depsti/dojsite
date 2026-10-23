@@ -24,6 +24,7 @@
   async function reload(){if(pendingReload)return;const chatWasOpen=!!document.querySelector('.case-chat-active');pendingReload=true;try{await original.refresh();remember();stale=false;notice();if(recordId){const r=state.records.find(r=>r.id===recordId);if(!r){setDirty(false);send('unavailable');return;}original.detail(recordId);if(chatWasOpen)window.openCurrentCaseChat?.();}}catch(err){toast(err.message);}finally{pendingReload=false;}}
   document.addEventListener('input',e=>{if(e.target.closest('form')&&!e.target.closest('[data-case-chat-form]'))setDirty(true);});
   document.addEventListener('change',e=>{if(e.target.closest('form')&&!e.target.closest('[data-case-chat-form]'))setDirty(true);});
+  document.addEventListener('doj-organizer-revoked',()=>setDirty(false));
   document.addEventListener('doj-chat-draft',e=>{chatDirty=!!e.detail;setDirty(formDirty);});
   document.addEventListener('pointerdown',()=>send('focus'),{capture:true});document.addEventListener('focusin',()=>send('focus'));
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!document.querySelector('dialog[open]'))send('minimize');});
@@ -48,6 +49,7 @@
   dialog.addEventListener('cancel',e=>{e.preventDefault();dialog.close();});
   window.addEventListener('message',async e=>{if(e.origin!==location.origin||e.source!==parent||e.data?.protocol!==protocol)return;const m=e.data;
    if(m.type==='open-chat')window.openCurrentCaseChat?.();
+   if(m.type==='organizer-event')window.openOrganizerEvent?.(m.id);
    if(m.type==='check-close'){const allow=!dirty||confirm('Dieses Fenster enthält ungespeicherte Änderungen. Trotzdem schließen?');send('close-result',{token:m.token,allow});}
    if(m.type==='refresh'){if(dirty||editorOpen()){stale=true;notice();}else await reload();}
    if(m.type==='validate'){
@@ -144,7 +146,7 @@
  window.addEventListener('message',async e=>{if(e.origin!==location.origin||e.data?.protocol!==protocol)return;const win=[...windows.values()].find(w=>w.frame.contentWindow===e.source);if(!win)return;const m=e.data;
   if(m.type==='chat-update')window.dispatchEvent(new Event('doj-chat-summary-refresh'));
   if(m.type==='focus'){if(active!==win.key)focus(win);}
-  if(m.type==='ready'){win.ready=true;win.el.querySelector('.os-frame-loading').hidden=true;if(win.openChat){sendWindow(win,'open-chat');win.openChat=false;}}
+  if(m.type==='ready'){win.ready=true;win.el.querySelector('.os-frame-loading').hidden=true;if(win.openChat){sendWindow(win,'open-chat');win.openChat=false;}if(win.organizerEvent){sendWindow(win,'organizer-event',{id:win.organizerEvent});win.organizerEvent=null;}}
   if(m.type==='dirty'){win.dirty=!!m.dirty;win.el.querySelector('.os-dirty').hidden=!win.dirty;tasks();}
   if(m.type==='title'&&typeof m.title==='string'){win.title=m.title.slice(0,350);win.el.querySelector('.os-title-text').textContent=win.title;tasks();}
   if(m.type==='open')openApp(m.app);
@@ -157,6 +159,7 @@
   if(m.type==='unavailable'){await remove(win,true);toast('Der Eintrag oder Bereich ist nicht mehr zugänglich.');}
  });
  window.addEventListener('doj-open-case-chat',async event=>{await sync();const id=event.detail?.id;if(!state?.user)return;openApp('cases',id);const win=windows.get('record:'+id);if(win){if(win.ready)sendWindow(win,'open-chat');else win.openChat=true;}});
+ window.addEventListener('doj-open-calendar-event',async event=>{await sync();if(!state?.user)return;openApp('calendar');const win=windows.get('app:calendar');if(win){if(win.ready)sendWindow(win,'organizer-event',{id:event.detail.id});else win.organizerEvent=event.detail.id;}});
  window.addEventListener('resize',()=>{if(!shell||matchMedia('(max-width:760px)').matches)return;for(const win of windows.values()){if(win.maximized){const area=shell.querySelector('.os-workspace');applyRect(win.el,{x:0,y:0,w:area.clientWidth,h:area.clientHeight});}else applyRect(win.el,clamp(win.el.offsetLeft,win.el.offsetTop,win.el.offsetWidth,win.el.offsetHeight));}});
  window.addEventListener('beforeunload',e=>{if([...windows.values()].some(w=>w.dirty)){e.preventDefault();e.returnValue='';}});
  document.addEventListener('keydown',e=>{if(!shell)return;if(e.key==='Escape')shell.querySelector('.os-launcher').hidden=true;if(e.altKey&&e.key.toLowerCase()==='m'&&active){e.preventDefault();minimize(windows.get(active));}});

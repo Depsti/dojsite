@@ -1,3 +1,4 @@
+import {issueReference} from '../lib/references.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createStore,emptyState} from '../lib/store.mjs';
@@ -21,3 +22,11 @@ test('Sitzungen gelten instanzübergreifend',async()=>{const f=fake(),a=createSt
 test('Anmeldeversuche',async()=>{const s=createStore({env,fetcher:fake()});await s.setAttempts('ip',3,Date.now()+1000);assert.equal((await s.getAttempts('ip')).count,3);await s.clearAttempts('ip');assert.equal(await s.getAttempts('ip'),null);});
 test('Fehler und Konfiguration',async()=>{await assert.rejects(()=>createStore({env,fetcher:async()=>Response.json({},{status:403})}).load(),/HTTP 403/);
  assert.throws(()=>createStore({env:{}}),/fehlen/);assert.throws(()=>createStore({env:{...env,SUPABASE_URL:'http://x.co'}}),/HTTPS/);});
+
+test('Aktennummern bleiben bei konkurrierenden Serverinstanzen eindeutig',async()=>{
+ const f=fake(),a=createStore({env,fetcher:f}),b=createStore({env,fetcher:f}),user={id:'u1',role:'Master'};
+ const config={court:'StA',procedure:'Ds',date:'2310',year:'26',initials:'GL',requestId:'reference-instance-1'};
+ const first=await a.load(),second=await b.load();issueReference(first,config,user);issueReference(second,{...config,requestId:'reference-instance-2'},user);await a.save(first);await assert.rejects(()=>b.save(second),e=>e.status===409);
+ const fresh=await b.load(),next=issueReference(fresh,{...config,requestId:'reference-instance-2'},user);assert.equal(next.entry.number,2);await b.save(fresh);
+ const final=await a.load();assert.deepEqual(final.referenceIssues.map(r=>r.number),[1,2]);assert.equal(issueReference(final,config,user).created,false);
+});
