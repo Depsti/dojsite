@@ -104,6 +104,7 @@ if(parent===window){
   dock.querySelector('.chat-dock-list').onclick=event=>{const button=event.target.closest('[data-chat-case],[data-private-chat]');if(!button)return;const kind=button.hasAttribute('data-private-chat')?'private':'cases',record=(kind==='private'?contacts:summaries).find(r=>r.id===(button.dataset.privateChat||button.dataset.chatCase));if(record)openDockChat(record,kind);};
   pollChatSummary();
  }
+ window.addEventListener('doj-open-dock-chat',async event=>{const requested=state?.user?.id;ensureChatDock();try{const kind=event.detail.kind,result=await api(kind==='private'?'chat/private':'chat/summary?all=1');if(state?.user?.id!==requested||!dock)return;const record=(kind==='private'?result.contacts:result.cases).find(r=>r.id===event.detail.id);if(!record){toast('Dieser Chat ist nicht mehr verfügbar.');return;}if(kind==='private')contacts=result.contacts;else summaries=result.cases;setExpanded(true);openDockChat(record,kind);}catch(e){toast(e.message);}});
  new MutationObserver(ensureChatDock).observe(document.getElementById('app'),{childList:true,subtree:true});
  setInterval(()=>{ensureChatDock();pollChatSummary();},10000);window.addEventListener('doj-chat-summary-refresh',pollChatSummary);window.addEventListener('focus',pollChatSummary);
  window.addEventListener('beforeunload',event=>{if(hasDrafts()){event.preventDefault();event.returnValue='';}});
