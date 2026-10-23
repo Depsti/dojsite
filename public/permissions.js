@@ -1,7 +1,7 @@
 const permissionModules=['cases','people','evidence','documents','requests','laws','hearings','tasks','knowledge','characters'];
 const extraLabels={assignments:['Zuteilungen verwalten','Staatsanwälte auf zugängliche Akten und Verhandlungen eintragen und Selbstübernahme freischalten.'],selfAssign:['Einträge selbst übernehmen','Als Staatsanwalt freigeschaltete Akten und Verhandlungen übernehmen.'],approve:['Entscheidungen freigeben','Anträge genehmigen oder ablehnen; benötigt Bearbeitungszugriff.'],settings:['Portal konfigurieren','Servername und Verbindungseinstellungen bearbeiten.'],audit:['Protokoll einsehen','Aktivitäten anderer Mitarbeiter zu zugänglichen Einträgen sehen.']};
 const canModule=(key,action='read')=>!!state.user.permissions?.modules?.[key]?.[action];
-const canRoute=key=>permissionModules.includes(key)?canModule(key):key==='calculator'?canModule('laws'):true;
+const canRoute=key=>permissionModules.includes(key)?canModule(key):key==='calculator'?canModule('laws'):key==='settings'?!!state.user.permissions?.settings:key==='audit'?!!state.user.permissions?.audit:true;
 function staffPage(){
  const leader=['Master','Leitung'].includes(state.user.role);
  return heading('Personal & Befugnisse','Zuständigkeiten, Dienstrollen und individuelle Zugriffsrechte.',leader?'<button class="primary" data-action="user">+ Mitarbeiter aufnehmen</button>':'')+

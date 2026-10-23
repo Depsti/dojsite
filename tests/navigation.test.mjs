@@ -24,3 +24,11 @@ test('Bereichswechsel zeigt die jeweiligen Einträge und setzt Filter zurück',(
 test('Ausgeblendete Navigation bleibt auch bei display:flex unsichtbar',()=>{
  assert.match(readFileSync(new URL('../public/doj-theme.css',import.meta.url),'utf8'),/\[hidden\]\s*\{display:none!important\}/);
 });
+
+
+test('Klassische Navigation schützt Einstellungen und Protokoll nach Sonderrechten',()=>{
+ const context=vm.createContext({});vm.runInContext(readFileSync(new URL('../public/permissions.js',import.meta.url),'utf8'),context);
+ vm.runInContext("state={user:{permissions:{modules:{},settings:false,audit:false}}}",context);
+ assert.equal(vm.runInContext("canRoute('settings')",context),false);assert.equal(vm.runInContext("canRoute('audit')",context),false);
+ vm.runInContext('state.user.permissions.settings=true',context);assert.equal(vm.runInContext("canRoute('settings')",context),true);assert.equal(vm.runInContext("canRoute('audit')",context),false);
+});

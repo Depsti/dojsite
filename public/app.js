@@ -7,7 +7,7 @@ const userName=id=>state.users.find(u=>u.id===id)?.name||'Nicht zugewiesen';
 const date=v=>v?new Date(v).toLocaleDateString('de-DE',{day:'2-digit',month:'short',year:'numeric'}):'Ohne Termin';
 const money=v=>Number(v||0).toLocaleString('de-DE')+' $';
 const badge=s=>`<span class="badge ${['Freigegeben','Abgeschlossen'].includes(s)?'green':['Dringend','Abgelehnt','Zurückgegeben'].includes(s)?'red':['In Prüfung','Hoch','Vorgelegt'].includes(s)?'gold':''}">${esc(s||'Offen')}</span>`;
-async function api(url,method='GET',data){const res=await fetch('/api/'+url,{method,headers:{'Content-Type':'application/json'},body:data===undefined?undefined:JSON.stringify(data)});const result=await res.json();if(!res.ok)throw Error(result.error||'Anfrage fehlgeschlagen.');return result;}
+async function api(url,method='GET',data){const res=await fetch('/api/'+url,{method,headers:{'Content-Type':'application/json'},body:data===undefined?undefined:JSON.stringify(data)});const result=await res.json();if(!res.ok){const error=Error(result.error||'Anfrage fehlgeschlagen.');error.status=res.status;throw error;}return result;}
 function toast(t){$('#toast').textContent=t;$('#toast').style.display='block';clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('#toast').style.display='none',4500);}
 async function refresh(){state=await api('state');render();}
 function nav(t){if(!modules[t])return;if(!canRoute(t)){toast('Du hast kein Leserecht für diesen Bereich.');return;}route=t;query='';filter='';location.hash=t;render();}

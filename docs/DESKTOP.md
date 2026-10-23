@@ -13,6 +13,10 @@ Der Desktop ist die neue Standardoberfläche des Hauptprogramms. Die separate De
 - Auf Smartphones nimmt eine App den Arbeitsbereich ein. Die Taskleiste dient dem Wechsel. Desktop-Fensterpositionen werden beim Wechsel der Bildschirmgröße erhalten.
 - „Klassisch“ öffnet die bisherige Oberfläche. Über „Zum Desktop wechseln“ geht es zurück. Die klassische Ansicht lässt sich auch direkt über `/?view=classic` öffnen.
 
+## Verwaltungseinstellungen und Rechte
+
+Das Zahnrad oben rechts öffnet die Verwaltungseinstellungen. Es wird ausschließlich mit dem Sonderrecht „Portal konfigurieren“ angezeigt. Master besitzen dieses Recht immer; Leitungen nach ihrem aktuellen Rechteprofil. Ein Entzug entfernt sowohl das Symbol als auch ein bereits geöffnetes Einstellungsfenster. Im Startmenü bleibt der rechtegebundene Eintrag verfügbar; ein zusätzliches Desktop-Symbol für Einstellungen entfällt. In der klassischen Ansicht gelten dieselben Rechte, einschließlich ausgeblendeter Navigation für Einstellungen und Änderungsprotokoll. Direkte Schreibzugriffe bleiben durch die API geschützt.
+
 ## Ansichten und Fensterverwaltung
 
 `public/desktop.js` stellt die Desktop-Oberfläche und die Fensterverwaltung bereit, `public/desktop.css` die Darstellung. Beide werden nach den vorhandenen Portalmodulen geladen.
@@ -41,3 +45,11 @@ Lokal nach dem Aktualisieren der Abhängigkeiten mit `npm.cmd ci` und `npm.cmd s
 - `npm.cmd run test:desktop`: reproduzierbare Browserprüfung mit Playwright und lokal installiertem Google Chrome. Für einen anderen installierten Browserkanal kann `DOJ_TEST_BROWSER_CHANNEL` gesetzt werden.
 
 Die Browserprüfung nutzt einen lokalen Testserver mit Beispieldaten und greift nicht auf den produktiven Supabase-Bestand oder Discord zu. Sie prüft parallele Akten, getrennte Formulare, Schutz ungespeicherter Änderungen, Aktualisierung zwischen Fenstern, Fenstersteuerung, alle Apps, Word-Vorschau und Download, Rechte von Master/Leitung/Student, Sitzungsende und die Mobilansicht. Vorschaubilder liegen lokal unter `artifacts/organization-qa/`.
+## Fehlerprüfung vom 23.10.2026
+
+- Aktualisierungen aus anderen Fenstern erhalten auch den Versionsstand eines geöffneten, noch unveränderten Formulars. Dadurch kann ein späterer Speichervorgang keine neuere Aktenversion unbemerkt überschreiben.
+- Vorübergehend fehlgeschlagene Rechteprüfungen zeigen einen Hinweis, statt den Benutzer abzumelden.
+- Nach dem Abmelden dürfen verspätete Datenantworten den Desktop nicht erneut aufbauen.
+- Beschädigte lokale Fensterlayouts werden abgefangen; Ladeanzeigen verdecken Fehlermeldungen der App nicht dauerhaft.
+- Schließbestätigungen sind an das jeweilige Absenderfenster gebunden.
+- Regressionstests prüfen den Einstellungszugang für Master, Leitung, entzogenes Einstellungsrecht und Studenten sowie die klassische Navigation.
