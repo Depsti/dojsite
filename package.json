@@ -4,11 +4,12 @@
   "private": true,
   "scripts": {
     "start": "node server.mjs",
-    "test": "node --test tests/store.test.mjs tests/access.test.mjs tests/new-features.test.mjs tests/navigation.test.mjs tests/case-wizard.test.mjs tests/case-print.test.mjs tests/organization.test.mjs tests/accounts.test.mjs tests/docx-export.test.mjs tests/docx-import.test.mjs tests/case-requests.test.mjs tests/request-formatting.test.mjs tests/law-catalog.test.mjs",
+    "test": "node --test tests/store.test.mjs tests/access.test.mjs tests/new-features.test.mjs tests/navigation.test.mjs tests/case-wizard.test.mjs tests/case-print.test.mjs tests/organization.test.mjs tests/accounts.test.mjs tests/docx-export.test.mjs tests/docx-import.test.mjs tests/case-requests.test.mjs tests/request-formatting.test.mjs tests/law-catalog.test.mjs tests/case-chat.test.mjs tests/chat-schema.test.mjs",
     "db:check": "node scripts/check-supabase.mjs",
     "db:import": "node scripts/import-supabase.mjs",
     "master:setup": "node scripts/setup-master.mjs",
-    "test:desktop": "node tests/desktop-browser.mjs"
+    "test:desktop": "node tests/desktop-browser.mjs",
+    "test:chat": "node tests/chat-browser.mjs"
   },
   "engines": {
     "node": ">=20"
@@ -18,6 +19,7 @@
     "docx-preview": "^0.4.1"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "^0.5.11",
     "playwright": "^1.64.1"
   }
 }

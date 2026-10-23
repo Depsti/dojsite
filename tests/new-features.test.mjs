@@ -49,6 +49,8 @@ test('API: Personen mehrfach verknüpfen, Sichtbarkeit, Import und Discord-Versa
    await req('setup','POST',{name:'Lead',password:'OnlyForTest123!'});cookie=(await req('login','POST',{name:'Lead',password:'OnlyForTest123!'})).cookie;
    const lead=(await req('state')).data.user;process.env.DOJ_DISCORD_IMPORT_USER_ID=lead.id;
    const staff=(await req('users','POST',{name:'Lawyer',role:'Staatsanwalt',password:'OnlyForTest456!'})).data;
+   assert.equal((await req('users/'+staff.id,'PUT',{rank:'district_attorney'})).data.rank,'district_attorney');
+   assert.equal((await req('users/'+staff.id,'PUT',{rank:'invalid'})).status,400);
    const staffCookie=(await req('login','POST',{name:'Lawyer',password:'OnlyForTest456!'})).cookie;
    assert.equal((await req('settings','PUT',{serverName:'Nicht erlaubt'},staffCookie)).status,403);
    assert.equal((await req('settings','PUT',{serverName:'San Andreas'})).status,200);

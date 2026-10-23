@@ -1,0 +1,3 @@
+function rankOptions(value){return '<option value="">Kein Dienstgrad</option>'+(state.ranks||[]).map(r=>`<option value="${esc(r.id)}" ${r.id===value?'selected':''}>${esc(r.name)}</option>`).join('');}
+const rankStaffPage=staffPage;
+staffPage=function(){return rankStaffPage().replace(/<h2>(.*?)<\/h2>/g,(html,name)=>{const person=state.users.find(u=>esc(u.name)===name),rank=(state.ranks||[]).find(r=>r.id===person?.rank);return html+(rank?`<p class="staff-rank">${esc(rank.name)}</p>`:'');});};

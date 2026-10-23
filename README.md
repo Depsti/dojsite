@@ -13,6 +13,10 @@ Das Serverfenster muss geöffnet bleiben. Abhängigkeiten vor dem ersten Start b
 
 Das Portal startet als Webdesktop mit Apps, mehreren unabhängigen Aktenfenstern und Taskleiste. Bedienung, Rückkehr zur klassischen Ansicht und Tests: [docs/DESKTOP.md](docs/DESKTOP.md).
 
+## Fallchat
+
+Interner Chat pro Fallakte mit Dienstgradfarben, Antworten, Reaktionen und geschützten Verweisen. Einrichtung in Supabase, Deployment und Bedienung: [docs/FALLCHAT.md](docs/FALLCHAT.md).
+
 ## Enthalten
 
 - Dashboard mit aktuellen Akten, Aufgaben, Freigaben und Terminen

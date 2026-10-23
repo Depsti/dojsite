@@ -14,19 +14,21 @@
   return true;
  };
  if(isFrame){
-  let dirty=false,stale=false,initialized=false,pendingReload=false;
+  let dirty=false,formDirty=false,chatDirty=false,stale=false,initialized=false,pendingReload=false;
   let ownRevision=new Map();
-  const editorOpen=()=>!!document.querySelector('dialog[open] form:not(#comment-form)');
+  const editorOpen=()=>!!document.querySelector('dialog[open] form:not(#comment-form):not([data-case-chat-form])');
   document.body.classList.add('workspace-app');if(recordId)document.body.classList.add('workspace-record');
   const remember=()=>{ownRevision=new Map((state?.records||[]).map(r=>[r.id,r.updatedAt]));};
-  const setDirty=value=>{dirty=value;send('dirty',{dirty});};
+  const setDirty=value=>{formDirty=value;dirty=formDirty||chatDirty;send('dirty',{dirty});};
   const notice=()=>{let el=document.getElementById('frame-refresh-notice');if(!stale){el?.remove();return;}if(el)return;el=document.createElement('div');el.id='frame-refresh-notice';el.className='frame-refresh-notice';el.setAttribute('role','status');el.innerHTML='Daten wurden in einem anderen Fenster geändert. Dein Entwurf bleibt erhalten. <button type="button">Neu laden</button>';el.querySelector('button').onclick=()=>{if(!dirty||confirm('Ungespeicherte Änderungen verwerfen und aktuelle Daten laden?')){setDirty(false);reload();}};document.body.append(el);};
-  async function reload(){if(pendingReload)return;pendingReload=true;try{await original.refresh();remember();stale=false;notice();if(recordId){const r=state.records.find(r=>r.id===recordId);if(!r){setDirty(false);send('unavailable');return;}original.detail(recordId);}}catch(err){toast(err.message);}finally{pendingReload=false;}}
-  document.addEventListener('input',e=>{if(e.target.closest('form'))setDirty(true);});
-  document.addEventListener('change',e=>{if(e.target.closest('form'))setDirty(true);});
+  async function reload(){if(pendingReload)return;const chatWasOpen=!!document.querySelector('.case-chat-active');pendingReload=true;try{await original.refresh();remember();stale=false;notice();if(recordId){const r=state.records.find(r=>r.id===recordId);if(!r){setDirty(false);send('unavailable');return;}original.detail(recordId);if(chatWasOpen)window.openCurrentCaseChat?.();}}catch(err){toast(err.message);}finally{pendingReload=false;}}
+  document.addEventListener('input',e=>{if(e.target.closest('form')&&!e.target.closest('[data-case-chat-form]'))setDirty(true);});
+  document.addEventListener('change',e=>{if(e.target.closest('form')&&!e.target.closest('[data-case-chat-form]'))setDirty(true);});
+  document.addEventListener('doj-chat-draft',e=>{chatDirty=!!e.detail;setDirty(formDirty);});
   document.addEventListener('pointerdown',()=>send('focus'),{capture:true});document.addEventListener('focusin',()=>send('focus'));
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!document.querySelector('dialog[open]'))send('minimize');});
   api=async function(url,method='GET',data){
+   if(/^cases\/[a-f0-9]+\/chat(?:\/|$)/.test(url.split('?')[0]))return original.api(url,method,data);
    const match=url.match(/^records\/([a-f0-9]+)(?:\/.*)?$/);
    if(method!=='GET'&&match&&ownRevision.has(match[1]))data={...data,expectedUpdatedAt:ownRevision.get(match[1])};
    try{const result=await original.api(url,method,data);if(!['GET','HEAD'].includes(method)){setDirty(false);stale=false;notice();if(result?.id&&result.updatedAt)ownRevision.set(result.id,result.updatedAt);send('changed');}return result;}catch(err){if(/gleichzeitig|anderes Fenster|aktualisiert/i.test(err.message)){stale=true;notice();}throw err;}
@@ -42,9 +44,10 @@
   detail=function(id){if(recordId===id){original.detail(id);return;}const r=state.records.find(r=>r.id===id);if(r)send('record',{id,recordType:modules[r.type]?r.type:'archive',title:(r.reference?r.reference+' · ':'')+r.title});};
   login=function(){send('session-ended');};
   const dialog=document.getElementById('modal'),baseClose=dialog.close.bind(dialog);
-  dialog.close=function(...args){if(dirty&&!confirm('Ungespeicherte Änderungen verwerfen?'))return;const editing=!!dialog.querySelector('form:not(#comment-form)');setDirty(false);baseClose(...args);if(recordId){if(editing)setTimeout(()=>original.detail(recordId),0);else send('close');}};
+  dialog.close=function(...args){if(dirty&&!confirm('Ungespeicherte Änderungen verwerfen?'))return;const editing=!!dialog.querySelector('form:not(#comment-form):not([data-case-chat-form])');chatDirty=false;setDirty(false);baseClose(...args);if(recordId){if(editing)setTimeout(()=>original.detail(recordId),0);else send('close');}};
   dialog.addEventListener('cancel',e=>{e.preventDefault();dialog.close();});
   window.addEventListener('message',async e=>{if(e.origin!==location.origin||e.source!==parent||e.data?.protocol!==protocol)return;const m=e.data;
+   if(m.type==='open-chat')window.openCurrentCaseChat?.();
    if(m.type==='check-close'){const allow=!dirty||confirm('Dieses Fenster enthält ungespeicherte Änderungen. Trotzdem schließen?');send('close-result',{token:m.token,allow});}
    if(m.type==='refresh'){if(dirty||editorOpen()){stale=true;notice();}else await reload();}
    if(m.type==='validate'){
@@ -80,7 +83,7 @@
  const appNames={requests:'Anträge',knowledge:'Freigabeverfahren',team:'Personal',audit:'Änderungsprotokoll',dashboard:'Übersicht'};
  const name=key=>appNames[key]||modules[key]?.[0]||key;
  const icon=key=>modules[key]?.[1]||'▤';
- function stop(){sessionGeneration++;for(const check of closeChecks.values())check.finish(false);closeChecks.clear();clearInterval(clockTimer);clearInterval(pollTimer);for(const win of windows.values())win.el.remove();windows.clear();active=null;shell=null;document.body.classList.remove('doj-desktop');}
+ function stop(){document.querySelectorAll('dialog[open]').forEach(dialog=>{dialog.close();dialog.innerHTML='';});sessionGeneration++;for(const check of closeChecks.values())check.finish(false);closeChecks.clear();clearInterval(clockTimer);clearInterval(pollTimer);for(const win of windows.values())win.el.remove();windows.clear();active=null;shell=null;document.body.classList.remove('doj-desktop');}
  login=function(setup){stop();return original.login(setup);};
  function focus(win){if(!win||win.el.hidden)return;windows.forEach(w=>w.el.classList.remove('focused'));win.el.classList.add('focused');win.el.style.zIndex=++highest;active=win.key;tasks();}
  function nextFocus(){const candidates=[...windows.values()].filter(w=>!w.el.hidden).sort((a,b)=>Number(b.el.style.zIndex)-Number(a.el.style.zIndex));active=null;if(candidates[0])focus(candidates[0]);else tasks();}
@@ -139,8 +142,9 @@
  nav=key=>openApp(key);
  detail=id=>{const record=state.records.find(r=>r.id===id);if(record)openApp(modules[record.type]?record.type:'archive',id);};
  window.addEventListener('message',async e=>{if(e.origin!==location.origin||e.data?.protocol!==protocol)return;const win=[...windows.values()].find(w=>w.frame.contentWindow===e.source);if(!win)return;const m=e.data;
+  if(m.type==='chat-update')window.dispatchEvent(new Event('doj-chat-summary-refresh'));
   if(m.type==='focus'){if(active!==win.key)focus(win);}
-  if(m.type==='ready'){win.el.querySelector('.os-frame-loading').hidden=true;}
+  if(m.type==='ready'){win.ready=true;win.el.querySelector('.os-frame-loading').hidden=true;if(win.openChat){sendWindow(win,'open-chat');win.openChat=false;}}
   if(m.type==='dirty'){win.dirty=!!m.dirty;win.el.querySelector('.os-dirty').hidden=!win.dirty;tasks();}
   if(m.type==='title'&&typeof m.title==='string'){win.title=m.title.slice(0,350);win.el.querySelector('.os-title-text').textContent=win.title;tasks();}
   if(m.type==='open')openApp(m.app);
@@ -152,6 +156,7 @@
   if(m.type==='session-ended'){state=null;login();}
   if(m.type==='unavailable'){await remove(win,true);toast('Der Eintrag oder Bereich ist nicht mehr zugänglich.');}
  });
+ window.addEventListener('doj-open-case-chat',async event=>{await sync();const id=event.detail?.id;if(!state?.user)return;openApp('cases',id);const win=windows.get('record:'+id);if(win){if(win.ready)sendWindow(win,'open-chat');else win.openChat=true;}});
  window.addEventListener('resize',()=>{if(!shell||matchMedia('(max-width:760px)').matches)return;for(const win of windows.values()){if(win.maximized){const area=shell.querySelector('.os-workspace');applyRect(win.el,{x:0,y:0,w:area.clientWidth,h:area.clientHeight});}else applyRect(win.el,clamp(win.el.offsetLeft,win.el.offsetTop,win.el.offsetWidth,win.el.offsetHeight));}});
  window.addEventListener('beforeunload',e=>{if([...windows.values()].some(w=>w.dirty)){e.preventDefault();e.returnValue='';}});
  document.addEventListener('keydown',e=>{if(!shell)return;if(e.key==='Escape')shell.querySelector('.os-launcher').hidden=true;if(e.altKey&&e.key.toLowerCase()==='m'&&active){e.preventDefault();minimize(windows.get(active));}});

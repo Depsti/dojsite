@@ -14,7 +14,7 @@ function showTemporaryCredential(name,password){
 }
 addUser=function(){
  const roles=state.user.role==='Master'?['Master','Leitung','Staatsanwalt','Referendar','Student']:['Staatsanwalt','Referendar','Student'];
- modal('Mitarbeiter anlegen',`<form id="user-form"><label class="field">Anmeldename<input name="name" required maxlength="100" autocomplete="off"></label><label class="field">Rolle<select name="role">${roles.map(r=>`<option>${r}</option>`).join('')}</select></label><p class="subtitle">Ein zufälliges Einmalpasswort wird nach dem Anlegen einmalig angezeigt.</p><p class="form-error"></p><button class="primary">Zugang erstellen</button></form>`);
+ modal('Mitarbeiter anlegen',`<form id="user-form"><label class="field">Anmeldename<input name="name" required maxlength="100" autocomplete="off"></label><label class="field">Dienstgrad<select name="rank">${rankOptions(null)}</select></label><label class="field">Rolle<select name="role">${roles.map(r=>`<option>${r}</option>`).join('')}</select></label><p class="subtitle">Ein zufälliges Einmalpasswort wird nach dem Anlegen einmalig angezeigt.</p><p class="form-error"></p><button class="primary">Zugang erstellen</button></form>`);
  $('#user-form').onsubmit=async e=>{e.preventDefault();const button=e.target.querySelector('.primary');button.disabled=true;try{const result=await api('users','POST',Object.fromEntries(new FormData(e.target)));await refresh();showTemporaryCredential(result.name,result.temporaryPassword);}catch(err){e.target.querySelector('.form-error').textContent=err.message;button.disabled=false;}};
 };
 const accountAccessUI=applyAccessUI;
