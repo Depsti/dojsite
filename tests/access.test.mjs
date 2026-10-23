@@ -22,3 +22,9 @@ test('Rollenstandards und validierte individuelle Rechte',()=>{
  assert.throws(()=>validatePermissions({modules:{cases:{read:'false'}}}));
  assert.throws(()=>validatePermissions({superadmin:true}));assert.equal(permissions({...lead,role:'Master',permissions:{approve:false}}).approve,true);
 });
+
+test('Gesetzbuch bleibt für alle außer Master schreibgeschützt, auch bei individuellen Freigaben',()=>{
+ const law={id:'law',type:'laws',title:'Gesetz',createdBy:'l',owner:'l'},db={records:[law]};
+ for(const role of ['Leitung','Staatsanwalt','Referendar','Student']){const user={id:'l',role,permissions:{modules:{laws:{read:true,create:true,edit:true}}}};assert.equal(defaults(role).modules.laws.create,false);assert.equal(permissions(user).modules.laws.create,false);assert.equal(permissions(user).modules.laws.edit,false);assert.equal(visible(law,user,db),true);assert.equal(canEdit(law,user,db),false);assert.equal(canManage(law,user,db),false);assert.equal(canComment(law,user,db),false);}
+ const master={id:'m',role:'Master'};assert.equal(permissions(master).modules.laws.create,true);assert.equal(canEdit(law,master,db),true);
+});

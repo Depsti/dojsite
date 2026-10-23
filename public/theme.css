@@ -1,0 +1,82 @@
+.theme-toggle{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:34px;cursor:pointer;white-space:nowrap}.theme-toggle>span:first-child{font-size:18px;line-height:1}.theme-toggle:focus-visible{outline:2px solid #bd9658;outline-offset:2px}
+/* Screen-only overrides keep PDF, print and Word preview pages on white paper. */
+@media screen{
+ html[data-theme=dark]{color-scheme:dark;--bg:#0e1924;--panel:#162634;--line:#344857;--muted:#a1b5c6;--text:#e5edf4;--gold:#dabc83;--green:#8adbb8;--red:#f0a2a7}
+ html[data-theme=dark] body,html[data-theme=dark] body.workspace-app{background:var(--bg);color:var(--text)}
+ html[data-theme=dark] :is(.panel,.card,.stat,dialog,.login,.organizer-day,.organizer-month,.organizer-todo,.organizer-note){background:var(--panel);color:var(--text);border-color:var(--line)}
+ html[data-theme=dark] :is(.panel-head,th,.rights-heading,.participant-edit-row,.permission-option,.prose,.quick button,.date-tile,.avatar,.case-wizard-step,.wizard-summary,.organizer-calendar-grid,.organizer-calendar-day,.organizer-event,.calendar-day,.calendar-cell,.reference-preview,.reference-history){background:#1b3041;color:var(--text);border-color:var(--line)}
+ html[data-theme=dark] :is(h1,h2,h3,.panel-head h2,.stat strong,.staff-summary strong,.calc-line-title,.organizer-todo h2){color:#eaf1f6}
+ html[data-theme=dark] :is(label.field,.prose,.comment p,.participant-edit-row p,.case-person-entry p){color:#c9d8e4}
+ html[data-theme=dark] :is(.subtitle,.stat label,.stat small,.staff-summary,.record-access-note,.organizer-todo small,.organizer-empty,.organizer-toolbar>small,.organizer-note header small,.permission-option small,td small){color:#a5b9ca}
+ html[data-theme=dark] :is(input,textarea,select){background:#10202e;color:#ecf3f9;border-color:#506577}
+ html[data-theme=dark] input[type=checkbox]{accent-color:#d0ac6a}
+ html[data-theme=dark] :is(button,.button){background:#263d50;color:#e5edf4;border-color:#506577}
+ html[data-theme=dark] :is(button,.button):hover{background:#36536a;border-color:#d0ac6a}
+ html[data-theme=dark] .primary{background:#d0ac6a;color:#142434;border-color:#d0ac6a}
+ html[data-theme=dark] .primary:hover{background:#e2c38e}
+ html[data-theme=dark] :is(td,.detail-meta,.heading,.case-person-section,.case-person-entry,.personnel-footer,.dossier-title,.rights-table,.modal-content hr){border-color:var(--line)}
+ html[data-theme=dark] tr.clickable:hover{background:#20394c}
+ html[data-theme=dark] a,html[data-theme=dark] .eyebrow{color:#e4c488}
+ html[data-theme=dark] .notice{background:#3a3225;color:#ead4a9;border-color:#8b7044}
+ html[data-theme=dark] .badge{background:#2a455d;color:#c3def6}
+ html[data-theme=dark] .badge.gold{background:#493c25;color:#edd093}
+ html[data-theme=dark] .badge.green{background:#204238;color:#a3e3c8}
+ html[data-theme=dark] .badge.red{background:#502e37;color:#f4b3be}
+ html[data-theme=dark] .classification{color:#dfc28a;border-color:#947c52}
+ html[data-theme=dark] .organizer-tag{background:#443a28;color:#e7cd98;border-color:#786649}
+ html[data-theme=dark] .organizer-tag.overdue{background:#4c2e30;color:#f1b0ac;border-color:#8f5d5b}
+ html[data-theme=dark] :is(.os-frame-loading,.word-preview-toolbar){background:#152736;color:#c4d4e0}
+ html[data-theme=dark] .word-preview-pages{background:#283b4b}
+ html[data-theme=dark] .os-window{background:var(--bg)}
+ html[data-theme=dark] :is(.os-top button,.os-taskbar button){background:#ffffff09;color:#d4e4ef;border-color:#718a9a50}
+ html[data-theme=dark] .os-shortcut{background:transparent;color:#e6edf3}
+ html[data-theme=light] .doj-os{background:#e6edf3;color:#1e3548}
+ html[data-theme=light] .os-workspace{background:radial-gradient(ellipse at 75% 35%,#fff,#e4edf5 70%,#d5e1eb)}
+ html[data-theme=light] :is(.os-top,.os-taskbar,.os-titlebar,.os-launcher,.topbar){background:#f8fafdeF;color:#213b50;border-color:#bdcbd7}
+ html[data-theme=light] :is(.os-brand,.os-caption,.os-user-name,.os-clock,.os-clock small,.crumb,.crumb span,.account small){color:#37566e}
+ html[data-theme=light] .os-brand{color:#72562b}
+ html[data-theme=light] :is(.os-top button,.os-taskbar button,.os-titlebar button,.os-launcher button,.os-launcher input,.topbar button){background:#edf2f7;color:#253f54!important;border-color:#c4d0db}
+ html[data-theme=light] :is(.os-start,.os-search-button){color:#37556a!important}
+ html[data-theme=light] :is(.os-title,.os-window-title,.os-shortcut){color:#223e54}
+ html[data-theme=light] .os-window{border-color:#a6b9c9}
+ html[data-theme=light] .os-task.active{background:#dce7ef}
+ html[data-theme=light] .os-shortcut:hover{background:#b9cedc50}
+ html[data-theme=light] .os-watermark{color:#63809618}
+ html[data-theme=light] .os-launcher h2{color:#775d32}
+ html[data-theme=light] .os-launcher small{color:#526b7f}
+ html[data-theme=light] :is(.chat-dock-panel,.chat-dock-header,.chat-dock-overview,.chat-dock-conversations,.chat-messages,.notification-panel,.organizer-reminders){background:#f8fafd;color:#233e53;border-color:#b5c6d4}
+ html[data-theme=light] :is(.chat-message,.chat-dock-case,.chat-dock-contact,.chat-dock-categories button,.chat-record-link,.chat-actions button){background:#edf3f8;color:#243f54;border-color:#c1d1df}
+ html[data-theme=light] :is(.chat-message time,.chat-rank,.notification-panel small,.notification-panel time,.chat-dock-empty,.chat-dock-search,.chat-dock-search-label){color:#536f83}
+ html[data-theme=light] .chat-message blockquote{background:#e2eaf1;color:#425d71}
+ html[data-theme=light] .notification-item{border-bottom-color:#c7d4df}
+ html[data-theme=light] .notification-item.unread{background:#f7eedb}
+ html[data-theme=light] .notification-symbol{color:#826126}
+ html[data-theme=light] .notification-panel button:hover{background:#d6e3ee80}
+ html[data-theme=light] .notification-empty,html[data-theme=light] .notification-panel>p{color:#546d80}
+ html[data-theme=light] .notification-toolbar,html[data-theme=light] .notification-panel header{border-color:#c6d4df}
+ html[data-theme=light] .notification-bell.has-unread{color:#8c6526}
+ html[data-theme=light] .chat-author{filter:none}
+}
+@media(max-width:600px){.theme-toggle-label{display:none}.theme-toggle{min-width:32px}.os-brand{font-size:0!important;letter-spacing:0!important}.os-brand img{flex-shrink:0}.os-user{gap:3px}}
+@media screen{
+ html[data-theme=dark] :is(.organizer-people,.organizer-assignees span,.calendar-weekday,.calendar-day small,.calendar-day.other-month,.penalty-entry.selected,.chat-picker,.chat-reply-draft){background:#203648;color:#cbdce9;border-color:#40576a}
+ html[data-theme=dark] .calendar-day[aria-pressed=true]{background:#423a2c;color:#ead2a6;border-color:#c0a16c}
+ html[data-theme=dark] .calendar-grid{background:#344857}
+ html[data-theme=dark] .organizer-assignees .done{background:#24473c;color:#a3e1c5}
+ html[data-theme=dark] .penalty-warning{background:#443925;color:#efd9a5;border-color:#8d754a}
+ html[data-theme=dark] .chat-dock .chat-compose .chat-picker input{background:#10202e;color:#ecf3f9}
+ html[data-theme=light] :is(.chat-dock-categories,.organizer-reminders header){background:#e7eff6;color:#2d485c;border-color:#bfd0df}
+ html[data-theme=light] :is(.chat-dock-search input,.chat-dock .chat-compose textarea){background:#fff;color:#263f54;border-color:#bdcddd}
+ html[data-theme=light] .chat-dock .chat-compose .actions button{background:#e5edf4;color:#253f53;border-color:#bdcddd}
+ html[data-theme=light] .chat-dock .chat-compose .actions .primary{background:#17374e;color:#fff}
+ html[data-theme=light] .chat-dock-case.unread{background:#faf0da;color:#4c402c}
+ html[data-theme=light] .chat-dock-case:hover{background:#dce8f1;color:#233f54}
+ html[data-theme=light] .chat-dock-categories button[aria-pressed=true]{background:#d6e5f0;color:#243f54}
+ html[data-theme=light] .chat-actions .reacted{background:#d6e7f5;color:#23415b;border-color:#997b41}
+}
+@media screen{
+ html[data-theme=dark] .os-shortcut{border-color:transparent}
+ html[data-theme=light] .organizer-reminders :is(small,p){color:#526d81}
+ html[data-theme=light] .organizer-reminders header strong{color:#674d25}
+ html[data-theme=light] .organizer-reminders button{background:#e1ebf3;color:#234056;border-color:#bdcddd}
+}
