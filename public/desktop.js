@@ -49,6 +49,7 @@
   dialog.close=function(...args){if(dirty&&!confirm('Ungespeicherte Änderungen verwerfen?'))return;const editing=!!dialog.querySelector('form:not(#comment-form):not([data-case-chat-form])');chatDirty=false;setDirty(false);baseClose(...args);if(recordId){if(editing)setTimeout(()=>original.detail(recordId),0);else send('close');}};
   dialog.addEventListener('cancel',e=>{e.preventDefault();dialog.close();});
   window.addEventListener('message',async e=>{if(e.origin!==location.origin||e.source!==parent||e.data?.protocol!==protocol)return;const m=e.data;
+   if(m.type==='notification-focus')window.dojFocusNotificationTarget?.(m.target);
    if(m.type==='open-chat')window.openCurrentCaseChat?.();
    if(m.type==='penalty-scenario')window.dojLoadPenaltyScenario?.(m.scenario);
    if(m.type==='organizer-todo')window.openOrganizerTodo?.(m.id);
@@ -147,10 +148,11 @@
  nav=key=>openApp(key);
  detail=id=>{const record=state.records.find(r=>r.id===id);if(record)openApp(modules[record.type]?record.type:'archive',id);};
  window.addEventListener('message',async e=>{if(e.origin!==location.origin||e.data?.protocol!==protocol)return;const win=[...windows.values()].find(w=>w.frame.contentWindow===e.source);if(!win)return;const m=e.data;
+  if(m.type==='workflow-target')window.dispatchEvent(new CustomEvent('doj-open-notification-target',{detail:m.target}));
   if(m.type==='chat-update')window.dispatchEvent(new Event('doj-chat-summary-refresh'));
   if(m.type==='focus'){if(active!==win.key)focus(win);}
   if(m.type==='penalty-scenario'){window.dispatchEvent(new CustomEvent('doj-open-penalty-scenario',{detail:m.scenario}));}
-  if(m.type==='ready'){win.ready=true;win.el.querySelector('.os-frame-loading').hidden=true;if(win.openChat){sendWindow(win,'open-chat');win.openChat=false;}if(win.penaltyScenario){sendWindow(win,'penalty-scenario',{scenario:win.penaltyScenario});win.penaltyScenario=null;}if(win.organizerTodo){sendWindow(win,'organizer-todo',{id:win.organizerTodo});win.organizerTodo=null;}if(win.organizerEvent){sendWindow(win,'organizer-event',{id:win.organizerEvent});win.organizerEvent=null;}}
+  if(m.type==='ready'){win.ready=true;if(win.notificationTarget){sendWindow(win,'notification-focus',{target:win.notificationTarget});win.notificationTarget=null;}win.el.querySelector('.os-frame-loading').hidden=true;if(win.openChat){sendWindow(win,'open-chat');win.openChat=false;}if(win.penaltyScenario){sendWindow(win,'penalty-scenario',{scenario:win.penaltyScenario});win.penaltyScenario=null;}if(win.organizerTodo){sendWindow(win,'organizer-todo',{id:win.organizerTodo});win.organizerTodo=null;}if(win.organizerEvent){sendWindow(win,'organizer-event',{id:win.organizerEvent});win.organizerEvent=null;}}
   if(m.type==='dirty'){win.dirty=!!m.dirty;win.el.querySelector('.os-dirty').hidden=!win.dirty;tasks();}
   if(m.type==='title'&&typeof m.title==='string'){win.title=m.title.slice(0,350);win.el.querySelector('.os-title-text').textContent=win.title;tasks();}
   if(m.type==='open')openApp(m.app);
@@ -164,7 +166,7 @@
  });
  window.addEventListener('doj-open-case-chat',async event=>{await sync();const id=event.detail?.id;if(!state?.user)return;openApp('cases',id);const win=windows.get('record:'+id);if(win){if(win.ready)sendWindow(win,'open-chat');else win.openChat=true;}});
  window.addEventListener('doj-open-penalty-scenario',event=>{openApp('calculator');const win=windows.get('app:calculator');if(win){if(win.ready)sendWindow(win,'penalty-scenario',{scenario:event.detail});else win.penaltyScenario=event.detail;}});
- window.addEventListener('doj-open-notification-target',async event=>{await sync();if(!state?.user)return;const t=event.detail;if(t.type==='record')detail(t.id);else if(t.type==='events')window.dispatchEvent(new CustomEvent('doj-open-calendar-event',{detail:{id:t.id}}));else if(t.type==='todos'){openApp('todos');const win=windows.get('app:todos');if(win){if(win.ready)sendWindow(win,'organizer-todo',{id:t.id});else win.organizerTodo=t.id;}}else toast('Deine Zugangsdaten wurden aktualisiert.');});
+ window.addEventListener('doj-open-notification-target',async event=>{await sync();if(!state?.user)return;const t=event.detail;if(t.type==='record'){detail(t.id);const win=windows.get('record:'+t.id);if(win){if(win.ready)sendWindow(win,'notification-focus',{target:t});else win.notificationTarget=t;}}else if(t.type==='events')window.dispatchEvent(new CustomEvent('doj-open-calendar-event',{detail:{id:t.id}}));else if(t.type==='todos'){openApp('todos');const win=windows.get('app:todos');if(win){if(win.ready)sendWindow(win,'organizer-todo',{id:t.id});else win.organizerTodo=t.id;}}else if(t.type==='account')window.dojShowOwnAccess?.();else toast('Deine Zugangsdaten wurden aktualisiert.');});
  window.addEventListener('doj-open-calendar-event',async event=>{await sync();if(!state?.user)return;openApp('calendar');const win=windows.get('app:calendar');if(win){if(win.ready)sendWindow(win,'organizer-event',{id:event.detail.id});else win.organizerEvent=event.detail.id;}});
  window.addEventListener('resize',()=>{if(!shell||matchMedia('(max-width:760px)').matches)return;for(const win of windows.values()){if(win.maximized){const area=shell.querySelector('.os-workspace');applyRect(win.el,{x:0,y:0,w:area.clientWidth,h:area.clientHeight});}else applyRect(win.el,clamp(win.el.offsetLeft,win.el.offsetTop,win.el.offsetWidth,win.el.offsetHeight));}});
  window.addEventListener('beforeunload',e=>{if([...windows.values()].some(w=>w.dirty)){e.preventDefault();e.returnValue='';}});
