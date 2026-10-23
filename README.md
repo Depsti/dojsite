@@ -17,6 +17,10 @@ Das Portal startet als Webdesktop mit Apps, mehreren unabhängigen Aktenfenstern
 
 Interner Chat pro Fallakte mit Dienstgradfarben, Antworten, Reaktionen und geschützten Verweisen. Einrichtung in Supabase, Deployment und Bedienung: [docs/FALLCHAT.md](docs/FALLCHAT.md).
 
+## Strafmaßrechner
+
+Vollständiger Strafmaßkatalog aus der verknüpften Tabelle mit Haftgrenzen, Beteiligungsregeln und variablen Beträgen: [docs/STRAFMASS.md](docs/STRAFMASS.md).
+
 ## Enthalten
 
 - Dashboard mit aktuellen Akten, Aufgaben, Freigaben und Terminen

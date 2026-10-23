@@ -1,0 +1,1708 @@
+{
+  "spreadsheetId": "1R7Sy5ZPJNcM8PQa3mNCK7QblE5K1f2Ea8wWdvJCM3GE",
+  "sourceUrl": "https://docs.google.com/spreadsheets/d/1R7Sy5ZPJNcM8PQa3mNCK7QblE5K1f2Ea8wWdvJCM3GE/edit",
+  "retrievedAt": "2026-10-23",
+  "sheets": [
+    {
+      "sheet": "StGB",
+      "range": "StGB!A1:G100",
+      "majorDimension": "ROWS",
+      "values": [
+        [
+          "Gesetzbuch",
+          "Paragraph",
+          "Tatbestand",
+          "Beschreibung",
+          "Geldstrafe ($)",
+          "Haft (HE)",
+          "Maßnahme / Folge"
+        ],
+        [
+          "StGB",
+          "§ 7",
+          "Anstiftung",
+          "Vorsätzliches Verleiten einer anderen Person zur Straftat; Bestrafung wie Täter",
+          "wie Haupttat",
+          "wie Haupttat",
+          "Gleichstellung mit Täter"
+        ],
+        [
+          "StGB",
+          "§ 8",
+          "Mittäterschaft",
+          "Gemeinschaftliche Begehung einer Straftat mit Tatplan und Beitrag jedes Beteiligten; jeder Mittäter haftet für die gesamte Tat",
+          "wie Haupttat",
+          "wie Haupttat",
+          "Gleichstellung mit Haupttäter; volle Strafe ohne Abzug"
+        ],
+        [
+          "StGB",
+          "§ 8",
+          "Beihilfe",
+          "Vorsätzliche Unterstützung bei einer rechtswidrigen Tat (Fahrzeuge, Waffen, Infos, Flucht, Absicherung); Strafminderung –20 % gegenüber Täter",
+          "wie Haupttat –20 %",
+          "wie Haupttat –20 %",
+          "Milderung gegenüber Täter (20 %)"
+        ],
+        [
+          "StGB",
+          "§ 9",
+          "Versuch",
+          "Unmittelbares Ansetzen zur Tat ohne Vollendung; freiwilliger Abbruch strafmildernd; äußere Umstände (Festnahme, Gegenwehr) heben Strafbarkeit nicht auf",
+          "wie vollendete Tat",
+          "wie vollendete Tat",
+          "Freiwilliger Abbruch strafmildernd"
+        ],
+        [
+          "StGB",
+          "§ 13",
+          "Raub",
+          "Wegnahme einer Sache durch Gewalt oder Drohung; bewaffneter Raub / Staatseigentum = besonders schwerer Fall",
+          "25000",
+          "15",
+          "Haft, Sicherungsverwahrung möglich"
+        ],
+        [
+          "StGB",
+          "§ 14",
+          "Geiselnahme",
+          "Freiheitsberaubung zur Nötigung Dritter",
+          "40000",
+          "25",
+          "Haft, Sicherungsverwahrung"
+        ],
+        [
+          "StGB",
+          "§ 15",
+          "Betrug",
+          "Erlangung eines Vermögensvorteils durch Täuschung oder Verschweigen wesentlicher Tatsachen",
+          "20000",
+          "10",
+          "Ersatzpflicht, Einziehung"
+        ],
+        [
+          "StGB",
+          "§ 16",
+          "Beweismittelfälschung",
+          "Manipulation, Fälschung, Veränderung oder Löschung von Beweismitteln (Akten, Fotos, Videos, digitale Daten)",
+          "25000",
+          "15",
+          "Einziehung, Haft"
+        ],
+        [
+          "StGB",
+          "§ 17",
+          "Korruption",
+          "Missbrauch anvertrauter Macht zum eigenen Vorteil oder zum Vorteil Dritter im Staatsdienst",
+          "40000",
+          "25",
+          "Suspendierung, Amtsverlust; ggf. Berufsverbot"
+        ],
+        [
+          "StGB",
+          "§ 18",
+          "Bestechung",
+          "Anbieten, Versprechen oder Gewähren von Geld / Vorteilen an Amtsträger zur Beeinflussung der Amtsführung",
+          "30000",
+          "15",
+          "Haft, Einziehung"
+        ],
+        [
+          "StGB",
+          "§ 19",
+          "Körperverletzung (leicht)",
+          "Körperliche Misshandlung oder Gesundheitsschädigung ohne schwere Merkmale",
+          "15000",
+          "10",
+          "Schmerzensgeld"
+        ],
+        [
+          "StGB",
+          "§ 19",
+          "Körperverletzung (schwer)",
+          "Körperverletzung mit Waffe, hinterlistig oder mit Lebensgefahr; Schusswaffeneinsatz kann als Totschlagsversuch gewertet werden",
+          "25000",
+          "15",
+          "Haft, Bewährung möglich"
+        ],
+        [
+          "StGB",
+          "§ 20",
+          "Totschlag",
+          "Vorsätzliche Tötung ohne besondere Mordmerkmale; Versuch strafbar",
+          "40000",
+          "20",
+          "Haft"
+        ],
+        [
+          "StGB",
+          "§ 21",
+          "Mord",
+          "Vorsätzliche Tötung mit Heimtücke, Grausamkeit, Habgier oder zur Tatverdeckung; nur durch Gericht verurteilbar",
+          "50000",
+          "30",
+          "Lebenslange Haft"
+        ],
+        [
+          "StGB",
+          "§ 22",
+          "Strafvereitelung im Amt",
+          "Amtsträger verhindert absichtlich Strafverfolgung (Beweise zurückhalten, Ermittlungen manipulieren, Meldung unterlassen)",
+          "35000",
+          "25",
+          "Haft, Amtsverlust, Disziplinarverfahren"
+        ],
+        [
+          "StGB",
+          "§ 23",
+          "Hehlerei",
+          "Ankaufen, Verkaufen, Lagern oder Weitergeben gestohlener / illegal erlangter Gegenstände",
+          "25000",
+          "15",
+          "Einziehung, Haft"
+        ],
+        [
+          "StGB",
+          "§ 24",
+          "Widerstand gegen Vollstreckungsbeamte",
+          "Widerstand, Gewalt, Drohung oder aktive Flucht bei rechtmäßiger Diensthandlung",
+          "25000",
+          "10",
+          "Haft"
+        ],
+        [
+          "StGB",
+          "§ 24",
+          "Widerstand (schwerer Fall)",
+          "Widerstand gegen Vollstreckungsbeamte mit Verletzungsfolge",
+          "25000",
+          "15",
+          "Haft; Verletzung des Beamten = +5 HE"
+        ],
+        [
+          "StGB",
+          "§ 25",
+          "Gefangenenbefreiung",
+          "Befreiung eines Gefangenen, Ermöglichen oder Unterstützen der Flucht (inkl. Fahrzeuge, Waffen, Infos)",
+          "25000",
+          "20",
+          "Haft"
+        ],
+        [
+          "StGB",
+          "§ 26",
+          "Amtsanmaßung",
+          "Ausgeben als Beamter, Amtsträger oder staatliche Stelle ohne Berechtigung (falsche Ausweise, Uniformen, Abzeichen)",
+          "20000",
+          "10",
+          "Haft, Disziplinarverfahren"
+        ],
+        [
+          "StGB",
+          "§ 27",
+          "Geldwäsche",
+          "Einführen, Verschleiern oder Umwandeln illegaler Vermögenswerte in den legalen Wirtschaftskreislauf",
+          "30000",
+          "15",
+          "Einziehung, Haft"
+        ],
+        [
+          "StGB",
+          "§ 28",
+          "Verkehr mit illegalen Geldmitteln",
+          "Besitz, Handel, Transport oder Weitergabe illegaler Geldmittel",
+          "25000",
+          "15",
+          "Einziehung, Haft"
+        ],
+        [
+          "StGB",
+          "§ 29",
+          "Schweigepflicht und Datenschutz",
+          "Unbefugte Weitergabe interner, privater oder dienstlich erlangter Informationen; schwere Fälle: Berufsverbot",
+          "15000",
+          "10",
+          "Disziplinarmaßnahme, ggf. Berufsverbot"
+        ],
+        [
+          "StGB",
+          "§ 30",
+          "Nötigung",
+          "Zwang zu Handlung, Duldung oder Unterlassung durch Gewalt, Drohung oder erheblichen Druck",
+          "20000",
+          "20",
+          "Haft"
+        ],
+        [
+          "StGB",
+          "§ 31",
+          "Freiheitsberaubung",
+          "Einsperren, Festhalten, Fesseln oder anderweitiges Verhindern der freien Bewegung einer Person",
+          "20000",
+          "15",
+          "Haft, Schadensersatz"
+        ],
+        [
+          "StGB",
+          "§ 32",
+          "Störung von Behördenarbeit",
+          "Erhebliche Behinderung staatlicher Behörden (Einsätze, Ermittlungen, Kontrollen, Absperrungen, Funkverkehr)",
+          "15000",
+          "10",
+          "Verwarnung, Haft bei Wiederholung"
+        ],
+        [
+          "StGB",
+          "§ 35",
+          "Schwerer Diebstahl",
+          "Diebstahl aus Fahrzeugen, Gebäuden, Tresoren, staatlichen Einrichtungen oder gemeinschaftlich",
+          "20000",
+          "10",
+          "Rückgabe, Einziehung, Haft"
+        ],
+        [
+          "StGB",
+          "§ 36",
+          "Selbstjustiz",
+          "Eigenmächtige Vergeltung oder Bestrafung einer Person ohne gesetzliche Grundlage",
+          "20000",
+          "15",
+          "Haft"
+        ],
+        [
+          "StGB",
+          "§ 37",
+          "Meineid",
+          "Vorsätzlich falsche Aussage oder Eid vor Gericht oder zuständiger Behörde",
+          "30000",
+          "15",
+          "Haft, Einziehung der Aussage"
+        ],
+        [
+          "StGB",
+          "§ 38",
+          "Amtsmissbrauch",
+          "Missbrauch von Befugnissen als Amtsträger zur rechtswidrigen Nötigung einer Person",
+          "35000",
+          "30",
+          "Disziplinarverfahren, Suspendierung"
+        ],
+        [
+          "StGB",
+          "§ 39",
+          "Kriminelle Vereinigungen",
+          "Bildung, Unterstützung oder Mitgliedschaft in kriminellen Vereinigungen",
+          "30000",
+          "15",
+          "Haft, Organisationsauflösung"
+        ],
+        [
+          "StGB",
+          "§ 40",
+          "Terroristische Vereinigungen",
+          "Bildung, Unterstützung oder Mitgliedschaft in terroristischen Vereinigungen",
+          "50000",
+          "30",
+          "Haft, Aberkennung von Ämtern"
+        ],
+        [
+          "StGB",
+          "§ 41",
+          "Falschaussage",
+          "Bewusstes Falschaussagen gegenüber Gericht, DOJ oder Strafverfolgungsbehörden; Verschweigen wesentlicher Tatsachen",
+          "20000",
+          "10",
+          "Haft"
+        ],
+        [
+          "StGB",
+          "§ 42",
+          "Angriff auf staatliche Einrichtungen",
+          "Planung, Vorbereitung, Unterstützung oder Durchführung eines Angriffs auf Regierungsgebäude, Polizei, Militär, Krankenhäuser, Gerichte",
+          "40000",
+          "25",
+          "Haft, Sicherungsverwahrung"
+        ],
+        [
+          "StGB",
+          "§ 43",
+          "Sachbeschädigung",
+          "Beschädigung, Zerstörung oder unbefugte Veränderung fremden Eigentums",
+          "15000",
+          "10",
+          "Ersatzpflicht"
+        ],
+        [
+          "StGB",
+          "§ 44",
+          "Aufenthalt an illegalen Orten",
+          "Aufenthalt in Bereichen, an denen illegale Substanzen / Gegenstände gesammelt, verarbeitet, gehandelt oder transportiert werden",
+          "15000",
+          "10",
+          "Platzverweis, Haft bei Wiederholung"
+        ],
+        [
+          "StGB",
+          "§ 45",
+          "Sexuelle Nötigung und Belästigung",
+          "Sexuelle Handlungen gegen erkennbaren Willen oder sexuell belästigende Äußerungen",
+          "20000",
+          "20",
+          "Haft, Annäherungsverbot (DOJ)"
+        ],
+        [
+          "StGB",
+          "§ 46",
+          "Nachstellung",
+          "Wiederholtes Nachstellen, Kontaktieren, Bedrohen oder Verfolgen einer Person (Stalking)",
+          "10000",
+          "10",
+          "Haft, Annäherungsverbot"
+        ],
+        [
+          "StGB",
+          "§ 47",
+          "Offene Rechnungen",
+          "Erhebliche offene Forderungen; DOJ-Fahndung möglich; Kopfgeldjäger-Einsatz zulässig",
+          "Variabel",
+          "Variabel",
+          "Fahndung, richterliche Entscheidung"
+        ],
+        [
+          "StGB",
+          "§ 48",
+          "Erpressung",
+          "Zwang zu Handlung, Duldung oder Unterlassung durch Gewalt/Drohung zur eigenen Bereicherung",
+          "20000",
+          "10",
+          "Schadensersatz, Haft"
+        ],
+        [
+          "StGB",
+          "§ 49",
+          "Verleumdung / Üble Nachrede",
+          "Verleumdung: bewusstes Verbreiten falscher Tatsachen; Üble Nachrede: Verbreiten rufschädigender unbewiesener Tatsachen",
+          "10000",
+          "5",
+          "Schadensersatz; nur DOJ / Gericht zuständig"
+        ],
+        [
+          "StGB",
+          "§ 50",
+          "Unterschlagung",
+          "Behalten, Verwenden oder Nichtherausgeben fremden Eigentums ohne Rechtsgrundlage (inkl. Bitcoin, Fahrzeuge, digitale Assets)",
+          "15000",
+          "10",
+          "Ersatzpflicht, Haft"
+        ],
+        [
+          "StGB",
+          "§ 51",
+          "Verbreitung von Aufnahmen von Straftaten",
+          "Unbefugtes Verbreiten von Bild-/Videoaufnahmen von Straftaten oder verletzter / hilfloser / getöteter Personen",
+          "15000",
+          "10",
+          "Medienlöschung, Haft"
+        ],
+        [
+          "StGB",
+          "§ 52",
+          "Amtsputsch",
+          "Versuch, einen rechtmäßig eingesetzten Amtsträger zu entfernen, Befugnisse einzuschränken oder staatliche Strukturen zu übernehmen ohne Rechtsgrundlage; Versuch strafbar",
+          "50000",
+          "40",
+          "Haft, Aberkennung aller Ämter"
+        ],
+        [
+          "StGB",
+          "§ 53",
+          "Hochverrat",
+          "Destabilisierung oder Beseitigung staatlicher Ordnung / Institutionen durch Gewalt, Drohung, geheime Absprachen oder Einflussnahme; Planung bereits strafbar",
+          "50000",
+          "40",
+          "Haft, dauerhaftes Berufsverbot"
+        ],
+        [
+          "StGB",
+          "§ 54",
+          "Illegaler Aufenthalt",
+          "Aufenthalt im Staat Retro trotz gesetzlicher oder behördlicher Untersagung; gilt auch für Mitglieder staatsfeindlicher Organisationen",
+          "20000",
+          "15",
+          "Ausweisung, Haft"
+        ],
+        [
+          "StGB",
+          "§ 55",
+          "Falschberichterstattung",
+          "Wissentliches Veröffentlichen, Verändern oder Verbreiten falscher Tatsachen zur Irreführung der Öffentlichkeit oder Schädigung von Personen / Institutionen",
+          "15000",
+          "10",
+          "Disziplinarmaßnahme, Haft; Satire ausgenommen"
+        ],
+        [
+          "StGB",
+          "§ 56",
+          "Verletzung der Privatsphäre (Presse)",
+          "Unbefugte Bild- oder Tonaufnahmen in privaten Räumen (Wohnungen, Hotels, Büros, Vereinsräume) ohne Zustimmung",
+          "15000",
+          "15",
+          "Haft, Löschung der Daten"
+        ],
+        [
+          "StGB",
+          "§ 57",
+          "Diffamierung und Hetze",
+          "Beleidigung, Verächtlichmachung, Verleumdung oder Aufruf zu Hass und Feindseligkeit gegen Personen, Gruppen oder Institutionen durch Medien",
+          "15000",
+          "10",
+          "Schadensersatz, Haft"
+        ],
+        [
+          "StGB",
+          "§ 58",
+          "Behinderung von Ermittlungen durch Pressearbeit",
+          "Veröffentlichungen, die laufende Ermittlungen, Gerichtsverfahren oder behördliche Maßnahmen behindern (vertrauliche Ergebnisse, Vorverurteilungen)",
+          "20000",
+          "15",
+          "Haft, Mediensperre"
+        ],
+        [
+          "StGB",
+          "§ 59",
+          "Missbrauch der Pressefreiheit",
+          "Missbrauch der Pressefreiheit zur Verdeckung von Straftaten, Unterstützung von Tätern oder Erzwingen von Zugang zu geschützten Bereichen",
+          "20000",
+          "15",
+          "Haft, Entzug der Presseakkreditierung"
+        ],
+        [
+          "StGB",
+          "§ 60",
+          "Behinderung der Pressearbeit",
+          "Behinderung von Pressevertretern bei rechtmäßiger Ausübung ihrer Tätigkeit",
+          "10000",
+          "10",
+          "Verwarnung, Disziplinarmaßnahme"
+        ],
+        [
+          "StGB",
+          "§ 61",
+          "Bedrohung von Pressevertretern",
+          "Bedrohung, Einschüchterung oder Druckausübung gegen Pressevertreter wegen ihrer Tätigkeit",
+          "15000",
+          "10",
+          "Haft, Unterlassung"
+        ],
+        [
+          "StGB",
+          "§ 62",
+          "Angriff auf Pressevertreter",
+          "Körperlicher Angriff auf Pressevertreter während oder wegen ihrer Tätigkeit; schwerer Fall bei Waffen oder mehreren Tätern",
+          "25000",
+          "15",
+          "Haft; schwerer Fall: 25 HE"
+        ],
+        [
+          "StGB",
+          "§ 63",
+          "Ausbruch aus dem Staatsgefängnis",
+          "Verlassen des Gefängnisses, eines Haftbereichs oder Transports ohne Erlaubnis; Beihilfe ebenfalls strafbar; Wiederergreifung kann Einzelhaft / Isolationshaft zur Folge haben",
+          "30000",
+          "20",
+          "Haft, ggf. Einzelhaft / Isolationshaft"
+        ],
+        [
+          "StGB",
+          "§ 64",
+          "Haus- und Wohnungseinbruch",
+          "Unbefugtes Betreten oder Aufenthalten in Gebäude / Wohnung / Grundstück; kein tatsächlicher Diebstahl erforderlich; Einbruchswerkzeug = erschwerender Umstand",
+          "20000",
+          "10",
+          "Haft, Einziehung aufgefundener Güter ohne Eigentumsnachweis"
+        ],
+        [
+          "StGB",
+          "§ 65",
+          "Vermummungsverbot",
+          "Verbergen oder Verdecken der Identität durch Masken, Helme oder ähnliche Mittel im öffentlichen Raum ohne triftigen Grund (bei Versammlungen, Kontrollen, polizeilichen Maßnahmen)",
+          "10000",
+          "10",
+          "Platzverweis, Haft"
+        ],
+        [
+          "StGB",
+          "§ 66 ",
+          "Sperrzone",
+          "Unbefugtes betreten einer ausgerufenen Sperrzone",
+          "15000",
+          "10",
+          "Haft, Platzverweis"
+        ],
+        [
+          "StGB",
+          "§ 67",
+          "Missachtung Polizeilicher Anweisung",
+          "Nichbefolgen rechtmäiger Anweisung von Amtsträgern",
+          "10000",
+          "5",
+          "Haft, Bußgeld"
+        ],
+        [
+          "StGB",
+          "§ 68",
+          "Unterlassene Hilfeleistung",
+          "Nichtleisten von erforderlicher Hilfe ",
+          "15000",
+          "10",
+          "Haft, Platzverweis"
+        ],
+        [
+          "StGB",
+          "§ 69",
+          "Beleidigung und üble Nachrede",
+          "Verbale ausdrücke und rufschädigende Aussagen",
+          "10000",
+          "10",
+          "Haft, Bußgeld"
+        ],
+        [
+          "StGB",
+          "§ 70",
+          "Bedrohung",
+          "Bewusstes erzeugen von Angst oder Druck",
+          "15000",
+          "15",
+          "Haft, Bußgeld"
+        ],
+        [
+          "StGB",
+          "§ 71",
+          "Besitz illegaler Gegenstände",
+          "Besitz, lagern, transportieren oder weitergabe ",
+          "15000",
+          "10",
+          "Haft, Bußgeld"
+        ],
+        [
+          "StGB",
+          "§ 72",
+          "Vortäuschen einer Straftat",
+          "Das selbe wie bei einer begangenen Straftat",
+          "/",
+          "/"
+        ],
+        [
+          "StGB",
+          "§ 73",
+          "Sittenwidriges Verhalten in der Öffentlichkeit ",
+          "Gegen das allgemeine Anstands- und Moralempfinden",
+          "20000",
+          "10",
+          "Haft, Bußgeld"
+        ],
+        [
+          "StGB",
+          "§ 74",
+          "Gefangenenmeuterei",
+          "Unruhe stiften im Staatsgefängnis",
+          "15000",
+          "10",
+          "Haft, Bußgeld"
+        ],
+        [
+          "StGB",
+          "§ 78",
+          "Einschüchterung von Zeugen",
+          "Das bewusste bedrohen und einschüchtern von Zeugen",
+          "20000",
+          "15",
+          "Haft, Bußgeld"
+        ],
+        [
+          "StGB",
+          "§ 79",
+          "Gefährdung staatlicher Einsätze",
+          "Das bewusste provozieren und gefährden staatlicher Einsätze",
+          "15000",
+          "15",
+          "Haft, Bußgeld"
+        ],
+        [
+          "StGB",
+          "§ 80",
+          "Behinderung verdeckter Ermittlungen",
+          "Das bewusste provozieren und gefährden verdeckter Ermittlungen",
+          "15000",
+          "15",
+          "Haft, Bußgeld"
+        ]
+      ]
+    },
+    {
+      "sheet": "StPO",
+      "range": "StPO!A1:G100",
+      "majorDimension": "ROWS",
+      "values": [
+        [
+          "Gesetzbuch",
+          "Paragraph",
+          "Tatbestand",
+          "Beschreibung",
+          "Geldstrafe ($)",
+          "Haft (HE)",
+          "Maßnahme / Folge"
+        ],
+        [
+          "StPO",
+          "§ 26",
+          "Kontaktverbot",
+          "Gerichtliches Verbot des Kontakts, der Annäherung oder des Betretens von Orten des Opfers; Verstoß ist strafbar",
+          "10000",
+          "10",
+          "Nebenentscheidung, Schutzmaßnahme"
+        ],
+        [
+          "StPO",
+          "§ 29",
+          "Berufsverbot",
+          "Temporäres oder dauerhaftes Verbot der Berufsausübung bei Missbrauch des Berufs; Überprüfung alle 2 Wochen bei Dauerverbot",
+          "20000",
+          "20",
+          "Nebenentscheidung"
+        ],
+        [
+          "StPO",
+          "§ 31",
+          "Vermögensabschöpfung",
+          "Abschöpfung unrechtmäßig erlangter Gewinne oder Ersatz von Umweltschäden",
+          "Variabel",
+          "—",
+          "Zusätzliche Geldstrafe"
+        ],
+        [
+          "StPO",
+          "§ 33",
+          "Kollektivstrafe",
+          "Bei gemeinschaftlichen Straftaten gemeinsame Bewertung möglich; Beteiligung individuell festzustellen; Zustimmung DOJ oder ranghöchster Beamter erforderlich",
+          "wie Haupttat",
+          "wie Haupttat",
+          "Individuelle Feststellung der Beteiligung"
+        ],
+        [
+          "StPO",
+          "§ 34",
+          "Gesamtstrafenbildung",
+          "Mehrere Taten werden zusammen bewertet und dokumentiert",
+          "kumulativ",
+          "kumulativ",
+          "Dokumentationspflicht"
+        ],
+        [
+          "StPO",
+          "§ 35",
+          "Ordnungsgeld",
+          "Ordnungsmittel bei Missachtung, Störung oder Nichterscheinen vor Gericht; Warnung vorab erforderlich",
+          "100000",
+          "—",
+          "Gerichtliche Disziplinarmaßnahme"
+        ],
+        [
+          "StPO",
+          "§ 35",
+          "Ordnungshaft",
+          "Schwerwiegende Störung der Gerichtshoheit",
+          "—",
+          "10 – 30",
+          "Gerichtliche Disziplinarmaßnahme"
+        ],
+        [
+          "StPO",
+          "§ 36",
+          "Haftgrenze – Exekutive",
+          "Maximale Haftzeit durch Exekutive",
+          "—",
+          "40",
+          "Verwaltungsregel; Überschreitung unzulässig"
+        ],
+        [
+          "StPO",
+          "§ 36",
+          "Haftgrenze – Richter",
+          "Maximale Haftzeit durch Richter bei Gerichtsverfahren",
+          "—",
+          "50",
+          "Gerichtsentscheidung"
+        ],
+        [
+          "StPO",
+          "§ 36",
+          "Haftgrenze – DOJ Leitung",
+          "Maximale Haftzeit durch DOJ Leitung",
+          "—",
+          "60",
+          "DOJ-Entscheidung"
+        ],
+        [
+          "StPO",
+          "§ 36",
+          "Haftgrenze – Präsident",
+          "Maximale Haftzeit durch Präsidenten",
+          "—",
+          "80",
+          "Präsidialentscheidung"
+        ]
+      ]
+    },
+    {
+      "sheet": "BGB",
+      "range": "BGB!A1:G100",
+      "majorDimension": "ROWS",
+      "values": [
+        [
+          "Gesetzbuch",
+          "Paragraph",
+          "Tatbestand",
+          "Beschreibung",
+          "Geldstrafe ($)",
+          "Haft (HE)",
+          "Maßnahme / Folge"
+        ],
+        [
+          "BGB",
+          "§ 7",
+          "Anfechtung",
+          "Nichtiger Vertrag durch Irrtum, Täuschung oder falsche Übermittlung; erfolgreiche Anfechtung = Nichtigkeit ab Beginn",
+          "15000",
+          "≈ 5",
+          "Rückabwicklung, Schadensersatz"
+        ],
+        [
+          "BGB",
+          "§ 8",
+          "Schadensersatz",
+          "Vorsätzliche oder fahrlässige Schadensverursachung; Wiederherstellung des ursprünglichen Zustands",
+          "10000",
+          "0",
+          "Zivilrechtliche Ersatzpflicht"
+        ],
+        [
+          "BGB",
+          "§ 12",
+          "Ehe – Falschangaben",
+          "Täuschung über Identität oder Ehefähigkeit bei Eheschließung vor dem DOJ",
+          "20000",
+          "≈ 10",
+          "Nichtigkeit, Disziplinarfolge"
+        ],
+        [
+          "BGB",
+          "§ 14",
+          "Namensrecht – Verstoß",
+          "Namensänderung ohne triftigen Grund oder ohne DOJ-Genehmigung",
+          "10000",
+          "≈ 5",
+          "Rücknahme, Verwaltungsstrafe"
+        ],
+        [
+          "BGB",
+          "§ 16",
+          "Testament – Fälschung",
+          "Gefälschtes oder manipuliertes Testament (unechte / verfälschte Urkunde)",
+          "25000",
+          "≈ 15",
+          "Nichtigkeit, Haft"
+        ],
+        [
+          "BGB",
+          "§ 17",
+          "Todesfall – Pflichtverletzung",
+          "Weigerung, Autopsie durchzuführen / Bericht vorzulegen; vorzeitige Leichenfreigabe vor Abschluss aller Untersuchungen",
+          "50000",
+          "50",
+          "Amtspflichtverletzung, Dienstvergehen"
+        ],
+        [
+          "BGB",
+          "§ 19",
+          "Bestattung – Fristverstoß",
+          "Beerdigung vor Fristablauf oder ohne DOJ-Genehmigung (Feuer-/Seebestattung)",
+          "10000",
+          "≈ 5",
+          "Verwarnung, Disziplinarfolge"
+        ]
+      ]
+    },
+    {
+      "sheet": "BeamtenG",
+      "range": "BeamtenG!A1:G100",
+      "majorDimension": "ROWS",
+      "values": [
+        [
+          "Gesetzbuch",
+          "Paragraph",
+          "Tatbestand",
+          "Beschreibung",
+          "Geldstrafe ($)",
+          "Haft (HE)",
+          "Maßnahme / Folge"
+        ],
+        [
+          "BeamtG",
+          "§ 7",
+          "Pflichtverletzung Verschwiegenheit",
+          "Unbefugte Weitergabe dienstlicher Informationen, Akten, Ermittlungen oder interner Vorgänge; gilt auch nach Ausscheiden",
+          "15000",
+          "10",
+          "Entlassung, Haft, Berufsverbot"
+        ],
+        [
+          "BeamtG",
+          "§ 10",
+          "Disziplinarverstoß",
+          "Fehlverhalten, Pflichtverletzungen oder dienstschädigendes Verhalten eines Beamten",
+          "15000",
+          "10",
+          "Mündliche/schriftliche Verwarnung, Suspendierung, Degradierung, Entlassung"
+        ],
+        [
+          "BeamtG",
+          "§ 14",
+          "Korruption im Staatsdienst",
+          "Annahme von Geld, Geschenken oder Vorteilen, die die Amtsführung beeinflussen; Bestechung, Bestechlichkeit, Vorteilsnahme",
+          "40000",
+          "25",
+          "Entlassung, Haft, dauerhaftes Berufsverbot"
+        ],
+        [
+          "BeamtG",
+          "§ 15",
+          "Verletzung der Verschwiegenheitspflicht",
+          "Weitergabe dienstlicher Informationen, Akten, Einsatzdaten an unbefugte Personen",
+          "20000",
+          "15",
+          "Entlassung, Berufsverbot, Haft"
+        ],
+        [
+          "BeamtG",
+          "§ 16",
+          "Hochverrat (Beamter)",
+          "Weitergabe vertraulicher Staatsinformationen, geheimer Akten, Einsatzinfos oder Unterstützung krimineller / feindlicher Gruppen",
+          "50000",
+          "40",
+          "Besonders schwere Strafe, Entlassung, dauerhaftes Berufsverbot"
+        ],
+        [
+          "BeamtG",
+          "§ 18",
+          "Amtsmissbrauch (besonders schwer)",
+          "Schwere Korruption, Hochverrat, schwerer Amtsmissbrauch, Straftaten gegen das Leben oder Gefährdung der Staatssicherheit durch Beamte",
+          "außergewöhnlich",
+          "außergewöhnlich",
+          "Lebenslange Haft nur durch Chief of Justice; schriftliche Begründung Pflicht"
+        ],
+        [
+          "BeamtG",
+          "§ 19",
+          "Berufsverbot",
+          "Schweres Fehlverhalten durch Beamten, das das Vertrauen des Staates missbraucht",
+          "—",
+          "—",
+          "Zeitlich oder dauerhaft; DOJ / State Administration zuständig"
+        ]
+      ]
+    },
+    {
+      "sheet": "AggG",
+      "range": "AggG!A1:G100",
+      "majorDimension": "ROWS",
+      "values": [
+        [
+          "Gesetzbuch",
+          "Paragraph",
+          "Tatbestand",
+          "Beschreibung",
+          "Geldstrafe ($)",
+          "Haft (HE)",
+          "Maßnahme / Folge"
+        ],
+        [
+          "AggG",
+          "§ 4",
+          "Unerlaubter Datenzugriff",
+          "Zugriff auf Daten, Akten oder Beweismittel ohne schriftlichen Antrag und DOJ-Aufsicht",
+          "20000",
+          "15",
+          "Disziplinarmaßnahme, Haft"
+        ],
+        [
+          "AggG",
+          "§ 5",
+          "Unbefugte Operation",
+          "Operation, Durchsuchung oder Festnahme ohne Genehmigung des DOJ oder Richters (außer Gefahr im Verzug ohne Nachmeldung)",
+          "25000",
+          "20",
+          "Suspendierung, Haft"
+        ],
+        [
+          "AggG",
+          "§ 6",
+          "Eigenständige Überwachung",
+          "Überwachung von Telekommunikation, Finanzbewegungen oder Standortdaten ohne DOJ-Genehmigung",
+          "25000",
+          "20",
+          "Disziplinarverfahren, Haft"
+        ],
+        [
+          "AggG",
+          "§ 9",
+          "Eigenmächtige Übernahme von Ermittlungen",
+          "Übernahme von Ermittlungen ohne Abstimmung mit dem DOJ",
+          "15000",
+          "10",
+          "Rückgabe an zuständige Behörde, Disziplinarmaßnahme"
+        ],
+        [
+          "AggG",
+          "§ 12",
+          "Verletzung Geheimhaltung",
+          "Unbefugte Weitergabe von Agency-Ermittlungsinformationen",
+          "25000",
+          "20",
+          "Disziplinarmaßnahme, Haft"
+        ],
+        [
+          "AggG",
+          "§ 13",
+          "Verdeckte Operation ohne Genehmigung",
+          "Verdeckte Operation ohne Genehmigung von DOJ und State Administration",
+          "30000",
+          "20",
+          "Suspendierung, Haft"
+        ]
+      ]
+    },
+    {
+      "sheet": "MilG",
+      "range": "MilG!A1:G100",
+      "majorDimension": "ROWS",
+      "values": [
+        [
+          "Gesetzbuch",
+          "Paragraph",
+          "Tatbestand",
+          "Beschreibung",
+          "Geldstrafe ($)",
+          "Haft (HE)",
+          "Maßnahme / Folge"
+        ],
+        [
+          "MilG",
+          "§ 2",
+          "Unbefugte Aktivierung",
+          "Einsatz der U.S. Army ohne Bestätigung durch Präsident oder Governor innerhalb von 12 Stunden; Einsatz ist unverzüglich zu beenden",
+          "30000",
+          "30",
+          "Haft, Deaktivierung des Einsatzes"
+        ],
+        [
+          "MilG",
+          "§ 3",
+          "Unbefugter Einsatz",
+          "Aktivierung oder Einsatz ohne Anweisung / Genehmigung des Governors oder Präsidenten",
+          "40000",
+          "40",
+          "Haft, Amtsverlust"
+        ],
+        [
+          "MilG",
+          "§ 4",
+          "Eingriff in zivile Angelegenheiten",
+          "Militärische Einflussnahme auf zivile Ermittlungen oder Polizeiaktionen ohne Anweisung",
+          "25000",
+          "25",
+          "Haft, Disziplinarverfahren"
+        ],
+        [
+          "MilG",
+          "§ 8",
+          "Verletzung militärisches Disziplinarrecht",
+          "Befehlsverweigerung, Missbrauch von Ausrüstung, eigenmächtiges Handeln, Gefährdung der öffentlichen Sicherheit",
+          "20000",
+          "20",
+          "Disziplinarmaßnahme intern; schwere Fälle: DOJ-Meldung"
+        ]
+      ]
+    },
+    {
+      "sheet": "PolG",
+      "range": "PolG!A1:G100",
+      "majorDimension": "ROWS",
+      "values": [
+        [
+          "Gesetzbuch",
+          "Paragraph",
+          "Tatbestand",
+          "Beschreibung",
+          "Geldstrafe ($)",
+          "Haft (HE)",
+          "Maßnahme / Folge"
+        ],
+        [
+          "PolG",
+          "§ 2",
+          "Unverhältnismäßige Polizeimaßnahme",
+          "Maßnahme nicht legitim, ungeeignet, nicht erforderlich oder unangemessen",
+          "20000",
+          "20",
+          "Disziplinarverfahren, Suspendierung"
+        ],
+        [
+          "PolG",
+          "§ 3",
+          "Maßnahmen gegen Unbeteiligte",
+          "Eingriff gegen unbeteiligte Person ohne unmittelbare Gefahr oder zwingende Notwendigkeit",
+          "25000",
+          "25",
+          "Haft, Dienstaufsicht"
+        ],
+        [
+          "PolG",
+          "§ 6",
+          "Unzulässige Personenkontrolle",
+          "Identitätsfeststellung ohne Tatverdacht, gefährdeten Ort oder Gefahrenabwehrgrund",
+          "10000",
+          "10",
+          "Verwarnung, interne Prüfung"
+        ],
+        [
+          "PolG",
+          "§ 7",
+          "Unzulässige Fahrzeugkontrolle",
+          "Fahrzeugkontrolle ohne Verkehrsverstoß, Tatverdacht oder allgemeine Kontrollbefugnis",
+          "10000",
+          "10",
+          "Verwarnung, Disziplinarmaßnahme"
+        ],
+        [
+          "PolG",
+          "§ 8",
+          "Unrechtmäßige Festnahme",
+          "Freiheitsentzug ohne frische Tat, Fluchtgefahr oder ungeklärte Identität",
+          "30000",
+          "30",
+          "Haft, Suspendierung"
+        ],
+        [
+          "PolG",
+          "§ 9",
+          "Missbrauch von Einsatzmitteln",
+          "Unverhältnismäßiger Einsatz von Schusswaffe, Taser oder Schlagstock ohne erhebliche Gefahr für Leib / Leben",
+          "25000",
+          "25",
+          "Disziplinarverfahren, Amtsverlust"
+        ],
+        [
+          "PolG",
+          "§ 10",
+          "Razzia ohne Genehmigung",
+          "Durchführung ohne konkreten Tatverdacht / DOJ-Genehmigung und ohne nachträgliche Einholung der Genehmigung",
+          "35000",
+          "35",
+          "Haft, Suspendierung"
+        ],
+        [
+          "PolG",
+          "§ 11",
+          "Unrechtmäßige Beugehaft",
+          "Beugehaft ohne Meldung an DOJ oder ohne DOJ-Bestätigung",
+          "25000",
+          "25",
+          "Haft, Disziplinarmaßnahme"
+        ],
+        [
+          "PolG",
+          "§ 12",
+          "Missbräuchlicher Platzverweis",
+          "Platzverweis oder Aufenthaltsverbot ohne hinreichenden Grund oder ohne vorherige Ankündigung",
+          "10000",
+          "10",
+          "Verwarnung, Dienstaufsicht"
+        ],
+        [
+          "PolG",
+          "§ 13",
+          "Verbotene Waffenführung im Dienst",
+          "Führen nicht staatlich genehmigter / nicht im Behörden-Waffenladen erhältlicher Waffen im regulären Dienst",
+          "15000",
+          "10",
+          "Verwarnung, Einziehung der Waffe"
+        ]
+      ]
+    },
+    {
+      "sheet": "WaffG",
+      "range": "WaffG!A1:G100",
+      "majorDimension": "ROWS",
+      "values": [
+        [
+          "Gesetzbuch",
+          "Paragraph",
+          "Tatbestand",
+          "Beschreibung",
+          "Geldstrafe ($)",
+          "Haft (HE)",
+          "Maßnahme / Folge"
+        ],
+        [
+          "WaffG",
+          "§ 3",
+          "Besitz / Führen ohne Waffenlizenz",
+          "Besitz, Erwerb oder Führen einer Waffe ohne gültige Waffenlizenz",
+          "25000",
+          "15",
+          "Haft, Einziehung der Waffe"
+        ],
+        [
+          "WaffG",
+          "§ 4",
+          "Offenes Waffentragen",
+          "Sichtbares Tragen einer Waffe im öffentlichen Raum ohne Berechtigung (außer staatliche Behörden)",
+          "15000",
+          "10",
+          "Verwarnung, Lizenzentzug"
+        ],
+        [
+          "WaffG",
+          "§ 5",
+          "Waffe illegaler Herkunft",
+          "Besitz einer Waffe nicht nachvollziehbarer oder illegaler Herkunft",
+          "30000",
+          "15",
+          "Einziehung, Haft"
+        ],
+        [
+          "WaffG",
+          "§ 6",
+          "Entzug der Waffenlizenz",
+          "Gefährdung der öffentlichen Sicherheit, wiederholte Verstöße oder Zweifel an der Zuverlässigkeit",
+          "—",
+          "—",
+          "Lizenzentzug, Verwaltungsmaßnahme"
+        ],
+        [
+          "WaffG",
+          "§ 7",
+          "Unerlaubter Waffenhandel",
+          "Verkauf, Weitergabe oder Überlassen von Waffen an nicht berechtigte Personen ohne Genehmigung",
+          "35000",
+          "20",
+          "Haft, Entzug der Gewerbeerlaubnis"
+        ],
+        [
+          "WaffG",
+          "§ 8 Lic.1",
+          "Unerlaubter Besitz – Lizenzstufe 1",
+          "Führen von SNS-Pistole oder Baseballschläger ohne Basislizenz (erhältlich bei autorisiertem Waffenhändler)",
+          "10000",
+          "5",
+          "Verwarnung, Einziehung"
+        ],
+        [
+          "WaffG",
+          "§ 8 Lic.2",
+          "Unerlaubter Besitz – Lizenzstufe 2",
+          "Führen von Messer oder WM 29 Pistole ohne DOJ-Lizenz Stufe 2",
+          "20000",
+          "10",
+          "Einziehung, Haft"
+        ],
+        [
+          "WaffG",
+          "§ 8 Lic.3",
+          "Unerlaubter Besitz – Lizenzstufe 3",
+          "Führen von Beil, Marksman Pistole oder Perico Pistole ohne DOJ-Lizenz Stufe 3",
+          "25000",
+          "15",
+          "Einziehung, Haft"
+        ],
+        [
+          "WaffG",
+          "§ 9",
+          "Munition ohne Waffenschein",
+          "Mitführen oder Besitzen von Munition ohne gültige Waffenlizenz; Munition muss zur Lizenzstufe passen",
+          "10000",
+          "10",
+          "Einziehung, Verwarnung"
+        ],
+        [
+          "WaffG",
+          "§ 10",
+          "Pflichtverstoß im Waffenumgang",
+          "Leichtfertige Nutzung, unbeaufsichtigte Zugänglichkeit, Missbrauch oder Nichtmeldung eines Waffenverlustes",
+          "10000",
+          "5",
+          "Verwarnung, Lizenzentzug"
+        ]
+      ]
+    },
+    {
+      "sheet": "BtMG",
+      "range": "BtMG!A1:G100",
+      "majorDimension": "ROWS",
+      "values": [
+        [
+          "Gesetzbuch",
+          "Paragraph",
+          "Tatbestand",
+          "Beschreibung",
+          "Geldstrafe ($)",
+          "Haft (HE)",
+          "Maßnahme / Folge"
+        ],
+        [
+          "BtMG",
+          "§ 1",
+          "Besitz / Konsum illegaler Substanzen",
+          "Besitz, Konsum, Herstellung, Verarbeitung, Handel, Weitergabe oder Transport von Cannabis, Kokain, Speed, LSD, Pilzen, Giftfröschen, Säure oder Toxin",
+          "30000",
+          "15",
+          "Haft, Einziehung"
+        ],
+        [
+          "BtMG",
+          "§ 2",
+          "Überschreitung Eigenbedarfsmenge Cannabis",
+          "Besitz von mehr als 400 g Cannabisblüten oder mehr als 20 fertigen Joints; Weitergabe auch innerhalb der Menge verboten",
+          "15000",
+          "15",
+          "Vernichtung, Verwarnung oder Haft"
+        ]
+      ]
+    },
+    {
+      "sheet": "StVO",
+      "range": "StVO!A1:G100",
+      "majorDimension": "ROWS",
+      "values": [
+        [
+          "Gesetzbuch",
+          "Paragraph",
+          "Tatbestand",
+          "Beschreibung",
+          "Geldstrafe ($)",
+          "Haft (HE)",
+          "Maßnahme / Folge"
+        ],
+        [
+          "StVO",
+          "§ 2",
+          "Straßenbenutzung – Verstoß",
+          "Befahren von Gehwegen, Fußgängerzonen oder verkehrsfreien Bereichen",
+          "10000",
+          "5",
+          "Verwarnung, Haft bei Gefährdung"
+        ],
+        [
+          "StVO",
+          "§ 3",
+          "Geschwindigkeit innerorts",
+          "Überschreitung der Höchstgeschwindigkeit von 100 km/h innerhalb geschlossener Ortschaften",
+          "10000",
+          "10",
+          "Verwarnung, Fahrerlaubnisentzug"
+        ],
+        [
+          "StVO",
+          "§ 3",
+          "Geschwindigkeit außerorts",
+          "Überschreitung der Höchstgeschwindigkeit von 180 km/h außerhalb geschlossener Ortschaften",
+          "15000",
+          "15",
+          "Fahrerlaubnisentzug, Haft"
+        ],
+        [
+          "StVO",
+          "§ 3",
+          "Highway – Gefährdung durch Geschwindigkeit",
+          "Gefährdung anderer Verkehrsteilnehmer auf dem Highway (keine generelle Begrenzung, aber Gefährdungsverbot)",
+          "20000",
+          "15",
+          "Fahrerlaubnisentzug, Haft"
+        ],
+        [
+          "StVO",
+          "§ 5",
+          "Verbotenes Überholen",
+          "Überholen in unübersichtlichen Bereichen, in der Nähe von Fußgängern oder bei nicht ausreichend Platz",
+          "10000",
+          "5",
+          "Fahrverbot, Verwarnung"
+        ],
+        [
+          "StVO",
+          "§ 7",
+          "Sonderrechte – Fehlgebrauch",
+          "Nutzung von Sonder- und Wegerechten außerhalb dienstlicher Aufgaben durch Einsatzfahrzeuge",
+          "10000",
+          "10",
+          "Disziplinarmaßnahme"
+        ],
+        [
+          "StVO",
+          "§ 8",
+          "Unzulässiges Halten / Parken",
+          "Halten oder Parken auf Hydranten, Feuerwehrzufahrten, Behindertenparkplätzen, Einfahrten oder behindernd am Bordstein",
+          "5000",
+          "0",
+          "Verwarnung, Abschleppung"
+        ],
+        [
+          "StVO",
+          "§ 9",
+          "Fahrerflucht / fehlende Hilfeleistung",
+          "Nichtanhalten nach Unfall, Nichtverständigen der Exekutive / des Medical Department",
+          "15000",
+          "15",
+          "Haft, Fahrerlaubnisentzug"
+        ],
+        [
+          "StVO",
+          "§ 10",
+          "Fahren ohne Fahrerlaubnis",
+          "Führen eines Fahrzeugs ohne gültige Fahrerlaubnis",
+          "25000",
+          "0",
+          "Abschleppung"
+        ],
+        [
+          "StVO",
+          "§ 11",
+          "Personentransport im Kofferraum",
+          "Transport von Personen im Kofferraum oder Überschreitung der zulässigen Personenzahl",
+          "5000",
+          "5",
+          "Verwarnung"
+        ],
+        [
+          "StVO",
+          "§ 14",
+          "Fahren unter Einfluss",
+          "Führen eines Fahrzeugs unter Alkohol (≥ 0,5 ‰) oder Drogen",
+          "25000",
+          "15",
+          "Führerscheinentzug, Haft"
+        ],
+        [
+          "StVO",
+          "§ 15",
+          "Falschfahren",
+          "Fahren entgegen der Fahrtrichtung ohne unverzügliche Korrektur",
+          "10000",
+          "10",
+          "Verwarnung, Haft bei Gefährdung"
+        ],
+        [
+          "StVO",
+          "§ 16",
+          "Gefährlicher Eingriff in den Straßenverkehr",
+          "Beeinträchtigung der Verkehrssicherheit durch Hindernisse, Beschädigungen oder absichtliche Gefährdungen",
+          "15000",
+          "15",
+          "Haft, Ersatzpflicht"
+        ],
+        [
+          "StVO",
+          "§ 17",
+          "Gefährliches Fahren",
+          "Gefährdung anderer Verkehrsteilnehmer durch das eigene Fahrverhalten",
+          "15000",
+          "10",
+          "Verwarnung, Fahrverbot"
+        ],
+        [
+          "StVO",
+          "§ 20",
+          "Verkehrsuntaugliches Fahrzeug",
+          "Betrieb eines Fahrzeugs mit erheblichen Mängeln",
+          "10000",
+          "0",
+          "Verwarnung, Abschleppung"
+        ],
+        [
+          "StVO",
+          "§ 21",
+          "Illegale Kraftfahrzeugrennen",
+          "Teilnahme, Organisation oder Unterstützung nicht genehmigter Straßenrennen",
+          "30000",
+          "15",
+          "Haft, Führerscheinentzug, Abschleppung"
+        ],
+        [
+          "StVO",
+          "§ 22",
+          "Illegales Tuning",
+          "Einbau, Besitz, Erwerb, Handel oder Nutzung von Tuningchips, Flammenchips, Unterbodenbeleuchtung, farbigen Scheinwerfern oder Nitro-Systemen",
+          "20000",
+          "15",
+          "Stilllegung, Rückbau des Tunings"
+        ],
+        [
+          "StVO",
+          "§ 23",
+          "Missachtung Grenzkontrolle",
+          "Missachtung oder Verweigerung polizeilicher Grenzkontrollen; Verweigerung der Kontrolle von Person, Fahrzeug oder Ladung",
+          "15000",
+          "15",
+          "Haft, Sicherheitsprüfung"
+        ],
+        [
+          "StVO",
+          "§ 24",
+          "Widerstand bei Verkehrskontrolle",
+          "Widerstand, Falschangaben oder Flucht bei Verkehrskontrolle; Verweigerung gilt als Entziehung polizeilicher Maßnahmen",
+          "20000",
+          "20",
+          "Haft"
+        ],
+        [
+          "StVO",
+          "§ 25",
+          "Unzulässiges PIT-Manöver gegen Zweiräder",
+          "Gewaltsames Stoppen von Zweirädern ohne unmittelbare Gefahr und ohne Freigabe / Dokumentation",
+          "30000",
+          "20",
+          "Suspendierung, Disziplinarmaßnahme"
+        ],
+        [
+          "StVO",
+          "§ 26",
+          "Abgelaufene Hauptuntersuchung",
+          "Abgelaufene Hauptuntersuchung 1 Monat: 150.000 2 Monat 300.000 3 Monat 450.000 ",
+          "150000 - 450000",
+          "0",
+          "Ab dem 4 Monat Führerschein Entzug"
+        ]
+      ]
+    },
+    {
+      "sheet": "LuVO",
+      "range": "LuVO!A1:G100",
+      "majorDimension": "ROWS",
+      "values": [
+        [
+          "Gesetzbuch",
+          "Paragraph",
+          "Tatbestand",
+          "Beschreibung",
+          "Geldstrafe ($)",
+          "Haft (HE)",
+          "Maßnahme / Folge"
+        ],
+        [
+          "LuVO",
+          "§ 1",
+          "Fliegen ohne Pilotenschein",
+          "Führen eines Flugzeugs oder Helikopters ohne gültige Fluglizenz",
+          "25000",
+          "15",
+          "Flugverbot, Lizenzentzug"
+        ],
+        [
+          "LuVO",
+          "§ 2",
+          "Verstoß gegen Flugverbotszone",
+          "Fliegen, Landen oder Fallschirmspringen in verbotenen Lufträumen (Stadtgebiet Los Santos, Staatsgefängnis, Militärbasis)",
+          "30000",
+          "20",
+          "Haft, Fluglizenzentzug"
+        ],
+        [
+          "LuVO",
+          "§ 3",
+          "Unterschreiten der Mindestflughöhe",
+          "Fliegen zu nah an Personen, Gebäuden oder Verkehr; Mindesthöhe nicht eingehalten",
+          "15000",
+          "10",
+          "Verwarnung, Flugverbot bei Wiederholung"
+        ],
+        [
+          "LuVO",
+          "§ 4",
+          "Unerlaubtes Starten oder Landen",
+          "Start oder Landung außerhalb zugelassener / registrierter Flächen oder ohne Genehmigung für staatliche Landeplätze",
+          "20000",
+          "15",
+          "Haft, Abschleppung des Fluggeräts"
+        ]
+      ]
+    },
+    {
+      "sheet": "GewG",
+      "range": "GewG!A1:G100",
+      "majorDimension": "ROWS",
+      "values": [
+        [
+          "Gesetzbuch",
+          "Paragraph",
+          "Tatbestand",
+          "Beschreibung",
+          "Geldstrafe ($)",
+          "Haft (HE)",
+          "Maßnahme / Folge"
+        ],
+        [
+          "GewG",
+          "§ 1",
+          "Fehlende Gewerbeanmeldung",
+          "Aufnahme einer gewinnorientierten Tätigkeit ohne vollständige Prüfung und Genehmigung des DOJ",
+          "20000",
+          "10",
+          "Betriebsschließung, Haft"
+        ],
+        [
+          "GewG",
+          "§ 2",
+          "Betrieb ohne Sonderlizenz",
+          "Tätigkeit in genehmigungspflichtiger Branche (Bewachung, Personenbeförderung, Gastronomie mit Alkohol, Waffenhandel, Glücksspiel) ohne ausdrückliche DOJ-Genehmigung",
+          "25000",
+          "10",
+          "Lizenzentzug, Betriebsschließung"
+        ],
+        [
+          "GewG",
+          "§ 3",
+          "Verletzung unternehmerischer Pflichten",
+          "Fehlende oder unordentliche Buchführung, Intransparenz gegenüber Behörden, illegale Nutzung des Unternehmens",
+          "15000",
+          "15",
+          "Verwarnung, Lizenzentzug"
+        ],
+        [
+          "GewG",
+          "§ 4",
+          "Nichtmeldung Geschäftsführerwechsel",
+          "Änderung der Geschäftsführung ohne unverzügliche Mitteilung an das DOJ",
+          "10000",
+          "10",
+          "Verwarnung, Bußgeldbescheid"
+        ]
+      ]
+    },
+    {
+      "sheet": "LDG",
+      "range": "LDG!A1:G100",
+      "majorDimension": "ROWS",
+      "values": [
+        [
+          "Gesetzbuch",
+          "Paragraph",
+          "Tatbestand",
+          "Beschreibung",
+          "Geldstrafe ($)",
+          "Haft (HE)",
+          "Maßnahme / Folge"
+        ],
+        [
+          "LDG",
+          "§ 2",
+          "Unbefugte Nutzung Titel 'Anwalt'",
+          "Führen des Anwaltstitels ohne bestandene Prüfung beim DOJ und gültige Lizenz",
+          "20000",
+          "20",
+          "Haft, Lizenzverweigerung"
+        ],
+        [
+          "LDG",
+          "§ 3",
+          "Unbefugte Nutzung Titel 'Staatsanwalt'",
+          "Auftreten oder Handeln als Staatsanwalt ohne offizielle Ernennung durch das DOJ",
+          "25000",
+          "25",
+          "Haft, dauerhaftes Berufsverbot"
+        ],
+        [
+          "LDG",
+          "§ 4",
+          "Tätigkeit ohne Anwaltslizenz",
+          "Ausübung anwaltlicher Tätigkeit (Beratung, Vertretung, Anträge) ohne gültige Zulassung",
+          "25000",
+          "25",
+          "Lizenzentzug, Haft"
+        ],
+        [
+          "LDG",
+          "§ 5",
+          "Verletzung anwaltlicher Verschwiegenheit",
+          "Weitergabe anvertrauter Mandanteninformationen",
+          "25000",
+          "25",
+          "Haft, Lizenzentzug"
+        ],
+        [
+          "LDG",
+          "§ 7",
+          "Verstoß gegen Gerichtsordnung",
+          "Respektloses Auftreten vor Gericht oder Nichtbefolgung richterlicher Anweisungen",
+          "10000",
+          "10",
+          "Verwarnung, Ordnungsgeld"
+        ],
+        [
+          "LDG",
+          "§ 7",
+          "Pflichtverletzung gegenüber Mandanten",
+          "Fehlende Sorgfalt, Falschangaben oder Interessenkonflikt zum Nachteil des Mandanten",
+          "15000",
+          "10",
+          "Disziplinarverfahren, Schadensersatz"
+        ],
+        [
+          "LDG",
+          "§ 7",
+          "Entzug der Anwaltslizenz",
+          "Straftaten, Pflichtverletzungen oder Missbrauch der anwaltlichen Tätigkeit",
+          "—",
+          "—",
+          "Lizenzentzug durch DOJ"
+        ],
+        [
+          "LDG",
+          "§ 35",
+          "Schwerwiegender ethischer Verstoß",
+          "Korruption, Bestechung, Täuschung oder Amtsmissbrauch im juristischen Dienst",
+          "40000",
+          "40",
+          "Haft, Lizenzentzug"
+        ],
+        [
+          "LDG",
+          "§ 37",
+          "Verletzung des Zeugenschutzes",
+          "Offenlegung oder Gefährdung geschützter Zeugen oder Informanten",
+          "30000",
+          "30",
+          "Haft, Berufsverbot"
+        ],
+        [
+          "LDG",
+          "§ 40",
+          "Verletzung anwaltlicher Vertraulichkeit",
+          "Offenlegung geschützter Kommunikation zwischen Anwalt und Mandant",
+          "25000",
+          "25",
+          "Haft, Lizenzentzug"
+        ],
+        [
+          "LDG",
+          "§ 43",
+          "Diskriminierung durch Anwälte",
+          "Ungleichbehandlung oder Benachteiligung aus diskriminierenden Gründen",
+          "20000",
+          "20",
+          "Disziplinarverfahren, Haft bei Wiederholung"
+        ]
+      ]
+    }
+  ]
+}
