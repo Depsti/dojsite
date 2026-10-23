@@ -34,7 +34,7 @@ Empfohlene Reihenfolge: zuerst SQL ausführen, danach den vollständigen Stand d
 - Berechtigungen werden bei jedem Abruf und jeder Aktion auf dem Server geprüft. Verliert ein Nutzer den Zugriff auf einen verknüpften Datensatz, werden dessen Titel und Kennung nicht mehr angezeigt. Frei eingegebener Nachrichtentext wird nicht automatisch redigiert.
 - Pro Nachricht und Nutzer gibt es entweder ✅ oder ❌. Erneutes Anklicken entfernt die eigene Reaktion; die andere Auswahl wechselt sie. Anzahl und Namen sind sichtbar. Reaktionen ersetzen keine formelle Freigabe.
 - Eigene Nachrichten lassen sich bearbeiten oder löschen. Master und Leitung können andere Nachrichten löschen. Ein Löschhinweis bleibt bestehen; die Bearbeitungshistorie wird serverseitig gespeichert und nicht im normalen Chat ausgeliefert.
-- Die Sprechblase in der Taskleiste zeigt ungelesene Nachrichten und öffnet die jeweilige Fallakte direkt im Chat. Der aktive Chat aktualisiert sich alle drei Sekunden, die Übersicht alle zehn Sekunden. Lesestände werden nur bei fokussiertem Chat aktualisiert.
+- Die ausklappbare Box unten rechts zeigt alle zugänglichen Fallchats, auch ohne Nachrichten. Die Übersicht lässt sich nach Titel oder Aktenzeichen durchsuchen; ungelesene Chats stehen oben. Eine Auswahl öffnet die Unterhaltung direkt in der Box. Über den Zurück-Pfeil geht es zur Übersicht. Einklappen und Chatwechsel behalten Entwürfe bis zum Abmelden oder Neuladen bei. Der aktive Chat aktualisiert sich alle drei Sekunden, die Übersicht alle zehn Sekunden. Lesestände werden nur bei fokussiertem Chat aktualisiert.
 - Maximal 5.000 Zeichen und zehn Verweise pro Nachricht; maximal fünf neue Nachrichten pro Nutzer innerhalb von zehn Sekunden. Fehlgeschlagene Sendeversuche behalten ihren Entwurf; Wiederholungen derselben Sendung werden nicht doppelt gespeichert.
 - Chatentwürfe gelten als ungespeicherte Änderungen und lösen beim Schließen eines Desktopfensters eine Rückfrage aus. Sie werden nicht dauerhaft gespeichert.
 - Chatnachrichten sind vom Aktenbestand getrennt und erscheinen nicht automatisch in PDF- oder DOCX-Exporten.
@@ -54,3 +54,5 @@ Unterstützt werden Attorney General, Deputy Attorney General, Supervising Distr
 5. Bei einem Fehler im Fallchat die Railway-Logs und die erfolgreiche SQL-Ausführung im richtigen Supabase-Projekt prüfen.
 
 Lokale Prüfungen: **npm.cmd test**, **npm.cmd run test:desktop**, **npm.cmd run test:chat**. Die Browserprüfungen benötigen einen installierten Chrome-Browser. Der Chat-Test verwendet den echten DOJ-Server mit einer lokalen PostgreSQL-Engine und simuliert lediglich den Transport zur Datenbank. Er greift nicht auf Produktivdaten zu. PGlite und Playwright sind nur Entwicklungsabhängigkeiten.
+
+Für die ausklappbare Chatbox ist keine weitere Supabase-Migration und keine zusätzliche Railway-Variable nötig. Backend und Frontend gemeinsam deployen.

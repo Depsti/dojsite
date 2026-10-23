@@ -13,3 +13,9 @@ test('Reaktionen, Antworten und Moderation bleiben an den sichtbaren Fall gebund
  await call(lawyer,'PUT','/reaction',{kind:'check'});assert.deepEqual(reaction,[message.id,lawyer.id,'check']);await call(lawyer,'PUT','/reaction',{kind:null});assert.equal(reaction[2],null);
  await assert.rejects(call(student,'PUT','/reaction',{kind:'cross'}),e=>e.status===403);await assert.rejects(call(lead,'PATCH','',{text:'Fremd',updatedAt:'stamp'}),e=>e.status===403);await call(lead,'DELETE','',{updatedAt:'stamp'});
 });
+test('Chatübersicht zeigt auf Wunsch alle zugänglichen Fälle, auch ohne Nachrichten',async()=>{
+ const db=fixture();db.records.push({id:id('4'),type:'cases',title:'Leerer Fall',status:'Archiviert'});
+ let requested;const store={unread:async(user,ids)=>{requested=ids;return [{case_id:id('1'),unread:2},{case_id:id('2'),unread:99}];}};
+ const call=query=>handleChat({path:'/api/chat/summary',method:'GET',query:new URLSearchParams(query),user:student,db,store});
+ const all=await call('all=1');assert.deepEqual(requested,[id('1'),id('4')]);assert.equal(all.cases.length,2);assert.equal(all.cases.find(r=>r.id===id('4')).unread,0);assert.equal(all.cases.find(r=>r.id===id('4')).archived,true);assert.ok(!JSON.stringify(all).includes('GEHEIMER TITEL'));assert.equal((await call('')).cases.length,1);
+});
