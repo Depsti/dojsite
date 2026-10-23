@@ -1,5 +1,7 @@
 # Fallchat einrichten und verwenden
 
+**Erweiterung:** Der allgemeine Chatbereich enthält jetzt auch Privatchats. Dafür ist die zusätzliche Migration `20261023154039_private_chat.sql` erforderlich; Anleitung: [CHAT.md](CHAT.md).
+
 Die Änderung befindet sich im Hauptprojekt C:\Users\lsqde\Documents\GitHub\dojsite. Die produktive Supabase-Datenbank wurde nicht verändert und es wurde noch kein Deployment ausgelöst.
 
 ## 1. Supabase

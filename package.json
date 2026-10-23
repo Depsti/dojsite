@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node server.mjs",
-    "test": "node --test tests/store.test.mjs tests/access.test.mjs tests/new-features.test.mjs tests/navigation.test.mjs tests/case-wizard.test.mjs tests/case-print.test.mjs tests/organization.test.mjs tests/accounts.test.mjs tests/docx-export.test.mjs tests/docx-import.test.mjs tests/case-requests.test.mjs tests/request-formatting.test.mjs tests/law-catalog.test.mjs tests/case-chat.test.mjs tests/chat-schema.test.mjs tests/sentencing.test.mjs tests/references.test.mjs tests/organizer.test.mjs",
+    "test": "node --test tests/store.test.mjs tests/access.test.mjs tests/new-features.test.mjs tests/navigation.test.mjs tests/case-wizard.test.mjs tests/case-print.test.mjs tests/organization.test.mjs tests/accounts.test.mjs tests/docx-export.test.mjs tests/docx-import.test.mjs tests/case-requests.test.mjs tests/request-formatting.test.mjs tests/law-catalog.test.mjs tests/case-chat.test.mjs tests/chat-schema.test.mjs tests/sentencing.test.mjs tests/references.test.mjs tests/organizer.test.mjs tests/direct-chat.test.mjs tests/direct-chat-schema.test.mjs",
     "db:check": "node scripts/check-supabase.mjs",
     "db:import": "node scripts/import-supabase.mjs",
     "master:setup": "node scripts/setup-master.mjs",

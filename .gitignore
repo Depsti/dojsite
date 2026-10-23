@@ -10,3 +10,5 @@ backups/
 _backup-doj-update-*/
 artifacts/
 DOJ-Update-*.zip
+
+/supabase/.temp/
