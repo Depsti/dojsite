@@ -8,7 +8,7 @@ test('Fallassistent hält Entwurf über Schritte und speichert erst am Ende',asy
  const record={id:'person1',type:'people',title:'Vorhandene Person'};
  const context=vm.createContext({crypto:{randomUUID:()=>'wizard-request-123456'},TextEncoder,URL,editor(){},applyDetailAccess(){},esc:v=>String(v??''),roleOptions:()=>'<option>Sonstige</option>',state:{user:{id:'lead'},users:[{id:'lead',name:'Leitung'}],records:[record]},records:t=>t==='people'?[record]:[],canModule:()=>true,modules:{},document:{querySelectorAll:()=>[]},$:s=>nodes[s]||null,modal(title,body){
   html=body;nodes={'#modal':{close(){}},'#wizard-error':{textContent:''}};
-  for(const match of body.matchAll(/id="([^"]+)"/g))nodes['#'+match[1]]={value:'',files:[],textContent:''};
+  for(const match of body.matchAll(/id="([^"]+)"/g))nodes['#'+match[1]]={dataset:{},value:'',files:[],textContent:''};
   const elements={};
   for(const m of body.matchAll(/<(input|textarea|select)\b([^>]*)name="([^"]+)"([^>]*)>([\s\S]*?)(?:<\/textarea>|<\/select>|(?=<))/g)){
    const attrs=m[2]+m[4];let value=attrs.match(/value="([^"]*)"/)?.[1]||'';

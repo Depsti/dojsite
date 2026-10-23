@@ -29,6 +29,7 @@
   document.addEventListener('pointerdown',()=>send('focus'),{capture:true});document.addEventListener('focusin',()=>send('focus'));
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!document.querySelector('dialog[open]'))send('minimize');});
   api=async function(url,method='GET',data){
+   if(url.startsWith('workbench/'))return original.api(url,method,data);
    if(/^cases\/[a-f0-9]+\/chat(?:\/|$)/.test(url.split('?')[0]))return original.api(url,method,data);
    const match=url.match(/^records\/([a-f0-9]+)(?:\/.*)?$/);
    if(method!=='GET'&&match&&ownRevision.has(match[1]))data={...data,expectedUpdatedAt:ownRevision.get(match[1])};
@@ -49,6 +50,7 @@
   dialog.addEventListener('cancel',e=>{e.preventDefault();dialog.close();});
   window.addEventListener('message',async e=>{if(e.origin!==location.origin||e.source!==parent||e.data?.protocol!==protocol)return;const m=e.data;
    if(m.type==='open-chat')window.openCurrentCaseChat?.();
+   if(m.type==='penalty-scenario')window.dojLoadPenaltyScenario?.(m.scenario);
    if(m.type==='organizer-todo')window.openOrganizerTodo?.(m.id);
    if(m.type==='organizer-event')window.openOrganizerEvent?.(m.id);
    if(m.type==='check-close'){const allow=!dirty||confirm('Dieses Fenster enthält ungespeicherte Änderungen. Trotzdem schließen?');send('close-result',{token:m.token,allow});}
@@ -98,7 +100,7 @@
  async function allCanClose(){if(window.dojChatHasDrafts?.()&&!confirm('Ungesendete Chatentwürfe verwerfen?'))return false;for(const win of windows.values())if(!await checkClose(win))return false;return true;}
  function max(win){if(!win.maximized){saveGeometry(win);win.previous={x:win.el.offsetLeft,y:win.el.offsetTop,w:win.el.offsetWidth,h:win.el.offsetHeight};win.maximized=true;win.el.classList.add('maximized');const area=shell.querySelector('.os-workspace');applyRect(win.el,{x:0,y:0,w:area.clientWidth,h:area.clientHeight});}else{win.maximized=false;win.el.classList.remove('maximized');applyRect(win.el,clamp(...[win.previous.x,win.previous.y,win.previous.w,win.previous.h]));}const b=win.el.querySelector('[data-window=max]');b.textContent=win.maximized?'❐':'□';b.setAttribute('aria-label',win.maximized?'Fenstergröße wiederherstellen':'Maximieren');focus(win);}
  function drag(win,handle,resizing=false){handle.addEventListener('pointerdown',e=>{if(e.button!==0||e.target.closest('.os-controls')||win.maximized||matchMedia('(max-width:760px)').matches)return;e.preventDefault();focus(win);const start={x:e.clientX,y:e.clientY,left:win.el.offsetLeft,top:win.el.offsetTop,w:win.el.offsetWidth,h:win.el.offsetHeight};handle.setPointerCapture(e.pointerId);const shield=document.createElement('div');shield.className='os-drag-shield';shell.querySelector('.os-workspace').append(shield);shell.classList.add('os-dragging');const move=ev=>{const dx=ev.clientX-start.x,dy=ev.clientY-start.y;applyRect(win.el,resizing?clamp(start.left,start.top,start.w+dx,start.h+dy):clamp(start.left+dx,start.top+dy,start.w,start.h));};const done=()=>{shield.remove();shell?.classList.remove('os-dragging');handle.removeEventListener('pointermove',move);handle.removeEventListener('pointerup',done);handle.removeEventListener('pointercancel',done);saveGeometry(win);};handle.addEventListener('pointermove',move);handle.addEventListener('pointerup',done,{once:true});handle.addEventListener('pointercancel',done,{once:true});});}
- function openApp(app,record=null,action=null){if(!permitted(app)){toast('Für diese App fehlt das Leserecht.');return;}const r=record&&state.records.find(r=>r.id===record);if(record&&!r){toast('Der Eintrag ist nicht mehr zugänglich.');return;}const key=record?'record:'+record:action?'action:'+action:'app:'+app;if(windows.has(key)){const win=windows.get(key);win.el.hidden=false;focus(win);return;}
+ function openApp(app,record=null,action=null){if(!permitted(app)){toast('Für diese App fehlt das Leserecht.');return;}const r=record&&state.records.find(r=>r.id===record);if(record&&!r){toast('Der Eintrag ist nicht mehr zugänglich.');return;}if(r?.type==='cases')original.api('workbench/recent','POST',{id:r.id}).catch(()=>{});const key=record?'record:'+record:action?'action:'+action:'app:'+app;if(windows.has(key)){const win=windows.get(key);win.el.hidden=false;focus(win);return;}
   const title=record?((r.reference?r.reference+' · ':'')+r.title):action==='password'?'Passwort ändern':name(app);
   const win={key,app,record,action,title,dirty:false,maximized:false,layoutKey:key};
   const el=document.createElement('section');win.el=el;el.className='os-window';el.dataset.windowKey=key;el.setAttribute('aria-label',title);
@@ -147,7 +149,8 @@
  window.addEventListener('message',async e=>{if(e.origin!==location.origin||e.data?.protocol!==protocol)return;const win=[...windows.values()].find(w=>w.frame.contentWindow===e.source);if(!win)return;const m=e.data;
   if(m.type==='chat-update')window.dispatchEvent(new Event('doj-chat-summary-refresh'));
   if(m.type==='focus'){if(active!==win.key)focus(win);}
-  if(m.type==='ready'){win.ready=true;win.el.querySelector('.os-frame-loading').hidden=true;if(win.openChat){sendWindow(win,'open-chat');win.openChat=false;}if(win.organizerTodo){sendWindow(win,'organizer-todo',{id:win.organizerTodo});win.organizerTodo=null;}if(win.organizerEvent){sendWindow(win,'organizer-event',{id:win.organizerEvent});win.organizerEvent=null;}}
+  if(m.type==='penalty-scenario'){window.dispatchEvent(new CustomEvent('doj-open-penalty-scenario',{detail:m.scenario}));}
+  if(m.type==='ready'){win.ready=true;win.el.querySelector('.os-frame-loading').hidden=true;if(win.openChat){sendWindow(win,'open-chat');win.openChat=false;}if(win.penaltyScenario){sendWindow(win,'penalty-scenario',{scenario:win.penaltyScenario});win.penaltyScenario=null;}if(win.organizerTodo){sendWindow(win,'organizer-todo',{id:win.organizerTodo});win.organizerTodo=null;}if(win.organizerEvent){sendWindow(win,'organizer-event',{id:win.organizerEvent});win.organizerEvent=null;}}
   if(m.type==='dirty'){win.dirty=!!m.dirty;win.el.querySelector('.os-dirty').hidden=!win.dirty;tasks();}
   if(m.type==='title'&&typeof m.title==='string'){win.title=m.title.slice(0,350);win.el.querySelector('.os-title-text').textContent=win.title;tasks();}
   if(m.type==='open')openApp(m.app);
@@ -160,6 +163,7 @@
   if(m.type==='unavailable'){await remove(win,true);toast('Der Eintrag oder Bereich ist nicht mehr zugänglich.');}
  });
  window.addEventListener('doj-open-case-chat',async event=>{await sync();const id=event.detail?.id;if(!state?.user)return;openApp('cases',id);const win=windows.get('record:'+id);if(win){if(win.ready)sendWindow(win,'open-chat');else win.openChat=true;}});
+ window.addEventListener('doj-open-penalty-scenario',event=>{openApp('calculator');const win=windows.get('app:calculator');if(win){if(win.ready)sendWindow(win,'penalty-scenario',{scenario:event.detail});else win.penaltyScenario=event.detail;}});
  window.addEventListener('doj-open-notification-target',async event=>{await sync();if(!state?.user)return;const t=event.detail;if(t.type==='record')detail(t.id);else if(t.type==='events')window.dispatchEvent(new CustomEvent('doj-open-calendar-event',{detail:{id:t.id}}));else if(t.type==='todos'){openApp('todos');const win=windows.get('app:todos');if(win){if(win.ready)sendWindow(win,'organizer-todo',{id:t.id});else win.organizerTodo=t.id;}}else toast('Deine Zugangsdaten wurden aktualisiert.');});
  window.addEventListener('doj-open-calendar-event',async event=>{await sync();if(!state?.user)return;openApp('calendar');const win=windows.get('app:calendar');if(win){if(win.ready)sendWindow(win,'organizer-event',{id:event.detail.id});else win.organizerEvent=event.detail.id;}});
  window.addEventListener('resize',()=>{if(!shell||matchMedia('(max-width:760px)').matches)return;for(const win of windows.values()){if(win.maximized){const area=shell.querySelector('.os-workspace');applyRect(win.el,{x:0,y:0,w:area.clientWidth,h:area.clientHeight});}else applyRect(win.el,clamp(win.el.offsetLeft,win.el.offsetTop,win.el.offsetWidth,win.el.offsetHeight));}});
