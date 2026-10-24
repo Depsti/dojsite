@@ -12,7 +12,8 @@
     "test:workflow": "node tests/workflow-browser.mjs",
     "test:sounds": "node tests/notification-sounds-browser.mjs",
     "test:chat": "node tests/chat-browser.mjs",
-    "catalog:build": "node scripts/build-penalty-catalog.mjs"
+    "catalog:build": "node scripts/build-penalty-catalog.mjs",
+    "test:ui": "node tests/ui-browser.mjs"
   },
   "engines": {
     "node": ">=20"
