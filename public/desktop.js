@@ -43,12 +43,13 @@
   };
   refresh=async function(){await original.refresh();remember();};
   nav=function(key){if(permitted(key))send('open',{app:key});else toast('Für diesen Bereich fehlt das Leserecht.');};
-  detail=function(id){if(recordId===id){original.detail(id);return;}const r=state.records.find(r=>r.id===id);if(r)send('record',{id,recordType:modules[r.type]?r.type:'archive',title:(r.reference?r.reference+' · ':'')+r.title});};
+  detail=function(id){if(recordId===id){original.detail(id);return;}const r=state.records.find(r=>r.id===id);if(r)send('record',{id,recordType:modules[r.type]?r.type:'archive',title:(r.reference?r.reference+' · ':'')+r.title,caseContext:state.records.find(x=>x.id===recordId)?.type==='cases'?{id:recordId,title:state.records.find(x=>x.id===recordId).title}:window.dojLinkedCaseContext});};
   login=function(){send('session-ended');};
   const dialog=document.getElementById('modal'),baseClose=dialog.close.bind(dialog);
   dialog.close=function(...args){if(dirty&&!confirm('Ungespeicherte Änderungen verwerfen?'))return;const editing=!!dialog.querySelector('form:not(#comment-form):not([data-case-chat-form])');chatDirty=false;setDirty(false);baseClose(...args);if(recordId){if(editing)setTimeout(()=>original.detail(recordId),0);else send('close');}};
   dialog.addEventListener('cancel',e=>{e.preventDefault();dialog.close();});
   window.addEventListener('message',async e=>{if(e.origin!==location.origin||e.source!==parent||e.data?.protocol!==protocol)return;const m=e.data;
+   if(m.type==='case-context'){window.dojLinkedCaseContext=m.context;window.dojSetCaseContext?.(m.context);}
    if(m.type==='notification-focus')window.dojFocusNotificationTarget?.(m.target);
    if(m.type==='open-chat')window.openCurrentCaseChat?.();
    if(m.type==='penalty-scenario')window.dojLoadPenaltyScenario?.(m.scenario);
@@ -152,11 +153,12 @@
   if(m.type==='chat-update')window.dispatchEvent(new Event('doj-chat-summary-refresh'));
   if(m.type==='focus'){if(active!==win.key)focus(win);}
   if(m.type==='penalty-scenario'){window.dispatchEvent(new CustomEvent('doj-open-penalty-scenario',{detail:m.scenario}));}
-  if(m.type==='ready'){win.ready=true;if(win.notificationTarget){sendWindow(win,'notification-focus',{target:win.notificationTarget});win.notificationTarget=null;}win.el.querySelector('.os-frame-loading').hidden=true;if(win.openChat){sendWindow(win,'open-chat');win.openChat=false;}if(win.penaltyScenario){sendWindow(win,'penalty-scenario',{scenario:win.penaltyScenario});win.penaltyScenario=null;}if(win.organizerTodo){sendWindow(win,'organizer-todo',{id:win.organizerTodo});win.organizerTodo=null;}if(win.organizerEvent){sendWindow(win,'organizer-event',{id:win.organizerEvent});win.organizerEvent=null;}}
+  if(m.type==='ready'){win.ready=true;if(win.caseContext)sendWindow(win,'case-context',{context:win.caseContext});if(win.notificationTarget){sendWindow(win,'notification-focus',{target:win.notificationTarget});win.notificationTarget=null;}win.el.querySelector('.os-frame-loading').hidden=true;if(win.openChat){sendWindow(win,'open-chat');win.openChat=false;}if(win.penaltyScenario){sendWindow(win,'penalty-scenario',{scenario:win.penaltyScenario});win.penaltyScenario=null;}if(win.organizerTodo){sendWindow(win,'organizer-todo',{id:win.organizerTodo});win.organizerTodo=null;}if(win.organizerEvent){sendWindow(win,'organizer-event',{id:win.organizerEvent});win.organizerEvent=null;}}
   if(m.type==='dirty'){win.dirty=!!m.dirty;win.el.querySelector('.os-dirty').hidden=!win.dirty;tasks();}
   if(m.type==='title'&&typeof m.title==='string'){win.title=m.title.slice(0,350);win.el.querySelector('.os-title-text').textContent=win.title;tasks();}
   if(m.type==='open')openApp(m.app);
-  if(m.type==='record'){if(!state.records.some(r=>r.id===m.id))await sync();openApp(m.recordType,m.id);}
+  if(m.type==='record'){if(!state.records.some(r=>r.id===m.id))await sync();openApp(m.recordType,m.id);const target=windows.get('record:'+m.id);if(target&&m.caseContext){target.caseContext=m.caseContext;if(target.ready)sendWindow(target,'case-context',{context:m.caseContext});}}
+  if(m.type==='case-return'){const r=state.records.find(r=>r.id===m.id&&r.type==='cases');if(r)openApp('cases',r.id);}
   if(m.type==='close')remove(win);
   if(m.type==='minimize')minimize(win);
   if(m.type==='close-result'){const check=closeChecks.get(m.token);if(check?.windowKey===win.key){check.finish(!!m.allow);closeChecks.delete(m.token);}}

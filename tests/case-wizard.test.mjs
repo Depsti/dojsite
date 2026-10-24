@@ -28,5 +28,6 @@ test('Fallassistent hält Entwurf über Schritte und speichert erst am Ende',asy
  await next();assert.match(html,/Vorhandene Person/);await next();assert.equal(calls.length,0);
  nodes['#case-wizard-form'].elements.newTitle.value='Kameraaufnahme';await next();assert.equal(calls.length,0);
  nodes['#case-wizard-form'].elements.newTitle.value='Anklageschrift';nodes['#case-wizard-form'].elements.newDescription.value='Dokumenttext';await next();
+ assert.equal(calls.length,0);assert.match(html,/Fallakte vor dem Erstellen prüfen/);assert.match(html,/Kameraaufnahme/);assert.match(html,/Vorhandene Person/);await next();
  assert.equal(calls.length,1);assert.equal(calls[0].p,'cases/bundle');assert.equal(calls[0].b.case.title,'Staat gegen Test');assert.equal(calls[0].b.people[0].personId,'person1');assert.equal(calls[0].b.evidence[0].title,'Kameraaufnahme');assert.equal(calls[0].b.documents[0].description,'Dokumenttext');assert.equal(opened,'case1');
 });

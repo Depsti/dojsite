@@ -28,7 +28,7 @@
    host.querySelectorAll('[data-wb-action]').forEach(btn=>btn.onclick=()=>{const action=btn.dataset.wbAction;if(action==='request'&&canModule('requests','create'))caseRequestForm(record);else if(action==='people'&&can)editParticipants(record);else if(action==='matrix')show(id,'matrix');else if(action==='hearing'){const h=children.find(c=>c.type==='hearings');if(h)detail(h.id);else if(canModule('hearings','create'))editor('hearings',{caseId:id,title:'Verhandlung · '+record.title});else toast('Kein Recht zur Terminplanung.');}});
    if($('#wb-copy-handover'))$('#wb-copy-handover').onclick=async()=>{try{await navigator.clipboard.writeText($('#wb-handover').innerText);toast('Übergabeübersicht kopiert.');}catch{toast('Bitte den Text markieren und kopieren.');}};
    if(tab==='hearing'){const org=await api('organizer'),note=org.notes.find(n=>n.section==='Verhandlung '+id);const f=$('#wb-private-note');if(f){f.elements.description.value=note?.description||'';f.onsubmit=async e=>{e.preventDefault();try{await api('organizer/notes'+(note?'/'+note.id:''),note?'PATCH':'POST',{title:'Verhandlung · '+record.reference,description:f.elements.description.value,section:'Verhandlung '+id,pinned:false,archived:false,...(note?{expectedUpdatedAt:note.updatedAt}:{requestId:crypto.randomUUID()})});toast('Private Notizen gespeichert.');show(id,tab);}catch(err){toast(err.message);}};}}
-   if(tab==='disclosure')bindDisclosure(id,b.canShare);
+   if(tab==='disclosure'){const check=document.createElement('button');check.type='button';check.textContent='Quelldokumente prüfen';check.onclick=()=>window.dojCheckDocument?.(id);host.prepend(check);bindDisclosure(id,b.canShare);}
   }catch(e){toast(e.message);}
  }
  async function bindDisclosure(id,canShare){
