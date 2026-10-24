@@ -53,3 +53,7 @@ Die Browserprüfung nutzt einen lokalen Testserver mit Beispieldaten und greift 
 - Beschädigte lokale Fensterlayouts werden abgefangen; Ladeanzeigen verdecken Fehlermeldungen der App nicht dauerhaft.
 - Schließbestätigungen sind an das jeweilige Absenderfenster gebunden.
 - Regressionstests prüfen den Einstellungszugang für Master, Leitung, entzogenes Einstellungsrecht und Studenten sowie die klassische Navigation.
+
+## CopNet
+
+CopNet steht als eigene App mit einem direkten Link in einen neuen Tab oder ein separates Browserfenster bereit. Die tatsächliche CopNet-Seite blockiert derzeit fremde Einbettungen. Einrichtung und technische Grenze: [COPNET.md](COPNET.md).
