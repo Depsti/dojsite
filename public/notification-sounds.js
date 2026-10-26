@@ -2,7 +2,7 @@
 (function(root){
  const defaults={chat:true,notifications:true,volume:40};
  function preferences(value){return {chat:typeof value?.chat==='boolean'?value.chat:defaults.chat,notifications:typeof value?.notifications==='boolean'?value.notifications:defaults.notifications,volume:Number.isFinite(value?.volume)?Math.max(0,Math.min(100,Math.round(value.volume))):defaults.volume};}
- function eventFor(item){const type=item.target?.type;if(['case-chat','private-chat','event-chat'].includes(type))return {key:'chat:'+type+':'+item.target.id+':'+Date.parse(item.at),kind:'chat',at:item.at};return {key:'notice:'+item.id,kind:'notifications',at:item.at};}
+ function eventFor(item){const type=item.target?.type;if(['case-chat','private-chat','event-chat','ticket-chat'].includes(type))return {key:'chat:'+type+':'+item.target.id+':'+Date.parse(item.at),kind:'chat',at:item.at};return {key:'notice:'+item.id,kind:'notifications',at:item.at};}
  function createTracker(now=Date.now){const started=now();let primed=false;const seen=new Map();function accept(events,silent=false){const fresh=[];for(const event of events){if(!event?.key||!['chat','notifications'].includes(event.kind))continue;const known=seen.has(event.key);seen.set(event.key,now());if(!silent&&!known&&Number.isFinite(Date.parse(event.at))&&Date.parse(event.at)>=started-1000)fresh.push(event);}while(seen.size>1000)seen.delete(seen.keys().next().value);return fresh;}
   return {feed(items){const result=accept(items.map(i=>({...eventFor(i),read:i.read})),!primed);primed=true;return result.filter(i=>!i.read);},chat(events){return accept(events);}};
  }

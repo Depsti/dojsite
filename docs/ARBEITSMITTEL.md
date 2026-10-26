@@ -50,3 +50,7 @@ Prüfungen: `npm.cmd test`, `npm.cmd run test:desktop`, `npm.cmd run test:chat`.
 ## Erweiterte Termine und Arbeitsräume
 
 Der Kalender bietet inzwischen Tages-/Wochenansichten, Konfliktprüfung, Einladungen, Verschieben und persönliche Erinnerungsabstände. Kalendertermine öffnen ihren eigenen Arbeitsraum mit verknüpften To-dos, Unterlagen, Notizen und Chat. Bedienung, Rechte und Betrieb: [TERMINE-ARBEITSRAUM.md](TERMINE-ARBEITSRAUM.md).
+
+## Discord-Tickets
+
+[Ticket-Arbeitsräume, SQL-Einrichtung und Schnittstelle für den Lesebot](DISCORD-TICKETS.md).
