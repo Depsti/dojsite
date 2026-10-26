@@ -4,7 +4,7 @@ import {once} from 'node:events';
 import {authorizeImport,importCase,buildCaseMessage,sendCaseToDiscord} from '../lib/discord.mjs';
 
 test('Discord: Import-Authentifizierung, Validierung und Duplikatschutz',()=>{
- const env={DOJ_DISCORD_IMPORT_USER_ID:'lead'},db={users:[{id:'lead',role:'Leitung',active:true}],records:[]};
+ const env={DOJ_DISCORD_IMPORT_USER_ID:'lead'},db={users:[{id:'lead',rank:'deputy_attorney_general',active:true}],records:[]};
  assert.throws(()=>authorizeImport('',undefined),/nicht eingerichtet/);
  assert.throws(()=>authorizeImport('Bearer falsch','a'.repeat(32)),/Ungültiger/);
  authorizeImport('Bearer '+'a'.repeat(32),'a'.repeat(32));
@@ -16,7 +16,7 @@ test('Discord: Import-Authentifizierung, Validierung und Duplikatschutz',()=>{
 });
 
 test('Discord: Versand sperrt vertrauliche Fälle, fremde Hosts und Erwähnungen',async()=>{
- const user={id:'lead',role:'Leitung'},record={id:'c',type:'cases',createdBy:'lead',title:'@everyone Fall',reference:'DOJ-1',description:'@here',confidential:true},db={users:[user],records:[record]};
+ const user={id:'lead',rank:'deputy_attorney_general'},record={id:'c',type:'cases',createdBy:'lead',title:'@everyone Fall',reference:'DOJ-1',description:'@here',confidential:true},db={users:[user],records:[record]};
  await assert.rejects(()=>sendCaseToDiscord(record,user,db,{env:{}}),/vertraulicher/);
  await assert.rejects(()=>sendCaseToDiscord({...record,confidential:false},user,db,{env:{DISCORD_CASE_WEBHOOK_URL:'https://example.com/api/webhooks/1/x'}}),/Ungültige/);
  assert.deepEqual(buildCaseMessage(record,user,db).allowed_mentions,{parse:[]});
@@ -48,7 +48,7 @@ test('API: Personen mehrfach verknüpfen, Sichtbarkeit, Import und Discord-Versa
    async function req(p,method='GET',data,auth=cookie){const desiredPassword=data?.password;const body=p==='login'&&temporaryPasswords.has(data?.name)?{...data,password:temporaryPasswords.get(data.name)}:data;const res=await realFetch(base+p,{method,headers:{'Content-Type':'application/json',Cookie:auth},body:body===undefined?undefined:JSON.stringify(body)});let result={status:res.status,data:await res.json(),cookie:res.headers.get('set-cookie')?.split(';')[0]};if(p==='users'&&result.status===201)temporaryPasswords.set(result.data.name,result.data.temporaryPassword);if(p==='login'&&result.status===200&&result.data.user.requiresPasswordChange){const changed=await req('password/change','POST',{password:desiredPassword},result.cookie);temporaryPasswords.delete(data.name);result={...result,cookie:changed.cookie};}return result;}
    await req('setup','POST',{name:'Lead',password:'OnlyForTest123!'});cookie=(await req('login','POST',{name:'Lead',password:'OnlyForTest123!'})).cookie;
    const lead=(await req('state')).data.user;process.env.DOJ_DISCORD_IMPORT_USER_ID=lead.id;
-   const staff=(await req('users','POST',{name:'Lawyer',role:'Staatsanwalt',password:'OnlyForTest456!'})).data;
+   const staff=(await req('users','POST',{name:'Lawyer',rank:'district_attorney',password:'OnlyForTest456!'})).data;
    assert.equal((await req('users/'+staff.id,'PUT',{rank:'district_attorney'})).data.rank,'district_attorney');
    assert.equal((await req('users/'+staff.id,'PUT',{rank:'invalid'})).status,400);
    const staffCookie=(await req('login','POST',{name:'Lawyer',password:'OnlyForTest456!'})).cookie;
@@ -94,7 +94,7 @@ test('API: Personen mehrfach verknüpfen, Sichtbarkeit, Import und Discord-Versa
    assert.equal((await req(`records/${completed.data.id}/participants`,'PUT',{participants:[{personId:person.id,role:'Geschädigter',note:'Nachträglich geändert'}]})).status,200);
    const invalid=await req('cases/bundle','POST',{...bundle,requestId:'test-invalid-request-1234',evidence:[{recordId:looseEvidence.id}]});
    assert.equal(invalid.status,400);assert.equal((await req('references?year=26')).data.nextNumber,3);assert.equal((await req('state')).data.records.length,afterBundle.length);
-   const restricted=(await req('users','POST',{name:'Ohne Dokumentrecht',role:'Staatsanwalt',password:'OnlyForTest789!',permissions:{modules:{documents:{create:false}}}})).data;
+   const restricted=(await req('users','POST',{name:'Ohne Dokumentrecht',rank:'district_attorney',password:'OnlyForTest789!',permissions:{modules:{documents:{create:false}}}})).data;
    const restrictedCookie=(await req('login','POST',{name:restricted.name,password:'OnlyForTest789!'})).cookie;
    assert.equal((await req('cases/bundle','POST',{case:{title:'Keine Teilakte'},people:[{title:'Nicht speichern',role:'Zeuge'}],documents:[{title:'Verboten'}]},restrictedCookie)).status,403);
    assert.equal((await req('state')).data.records.length,afterBundle.length);
@@ -140,12 +140,12 @@ test('API: Personen mehrfach verknüpfen, Sichtbarkeit, Import und Discord-Versa
    const approved=await req('records/'+draft.id+'/review','POST',{status:'Freigegeben',reason:'Vollständig'});assert.equal(approved.status,200);assert.equal(approved.data.reviewHistory.length,5);
 
 
-   const leadAccount=(await req('users','POST',{name:'Department Head',role:'Leitung'})).data;
+   const leadAccount=(await req('users','POST',{name:'Department Head',rank:'deputy_attorney_general'})).data;
    const leadLogin=(await req('login','POST',{name:leadAccount.name,password:'HeadPass8'})).cookie;
-   assert.equal((await req('users/'+lead.id,'PUT',{role:'Leitung'},leadLogin)).status,403);
+   assert.equal((await req('users/'+lead.id,'PUT',{rank:'deputy_attorney_general'},leadLogin)).status,403);
    assert.equal((await req('users/'+leadAccount.id,'PUT',{active:false})).status,200);
    assert.equal((await req('users/'+leadAccount.id,'PUT',{active:true})).status,200);
-   const trainee=(await req('users','POST',{name:'Student Test',role:'Student'})).data;
+   const trainee=(await req('users','POST',{name:'Student Test',rank:'student'})).data;
    const otp=trainee.temporaryPassword;assert.ok(otp.length>=8);
    const firstLogin=await realFetch(base+'login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:trainee.name,password:otp})});
    assert.equal(firstLogin.status,200);const restrictedSession=firstLogin.headers.get('set-cookie').split(';')[0];
@@ -170,14 +170,14 @@ test('API: Personen mehrfach verknüpfen, Sichtbarkeit, Import und Discord-Versa
    const currentHeadCookie=(await req('login','POST',{name:leadAccount.name,password:'HeadPass8'})).cookie;
    assert.equal((await req('users/'+leadAccount.id,'PUT',{permissions:{modules:{cases:{read:false,create:false,edit:false}},approve:false}})).status,200);
    const limited=(await req('state','GET',undefined,currentHeadCookie)).data;assert.equal(limited.user.permissions.modules.cases.read,false);assert.equal(limited.user.permissions.approve,false);
-   assert.equal((await req('users/'+staff.id,'PUT',{role:'Master'},currentHeadCookie)).status,403);
+   assert.equal((await req('users/'+staff.id,'PUT',{isMaster:true},currentHeadCookie)).status,400);
    assert.equal((await req('users/'+leadAccount.id+'/password','PUT',{password:'HeadNew8',mustChange:false},staffCookie)).status,403);
    assert.equal((await req('users/'+leadAccount.id+'/password','PUT',{password:'HeadNew8',mustChange:false})).status,200);
    assert.equal((await req('state','GET',undefined,currentHeadCookie)).status,401);
    const headAgain=await req('login','POST',{name:leadAccount.name,password:'HeadNew8'});assert.equal(headAgain.status,200);
    assert.equal((await req('users/'+lead.id,'PUT',{active:false})).status,409);
-   assert.equal((await req('users/'+leadAccount.id,'PUT',{role:'Staatsanwalt'})).status,200);
-   assert.equal((await req('users/'+leadAccount.id,'PUT',{role:'Leitung'})).status,200);
+   assert.equal((await req('users/'+leadAccount.id,'PUT',{rank:'district_attorney'})).status,200);
+   assert.equal((await req('users/'+leadAccount.id,'PUT',{rank:'deputy_attorney_general'})).status,200);
 
  }finally{if(server)await new Promise(resolve=>server.close(resolve));globalThis.fetch=realFetch;}
 });

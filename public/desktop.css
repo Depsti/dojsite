@@ -11,3 +11,5 @@ body.doj-desktop{overflow:hidden;background:#0a1927}.doj-os{height:100dvh;min-he
  .os-shortcuts{top:55px;bottom:10px;left:8px;right:8px;width:auto;overflow:visible;display:flex;flex-flow:column wrap;align-content:flex-start;align-items:flex-start;gap:10px 12px;pointer-events:none}
  .os-shortcuts .os-shortcut{width:100px;height:86px;min-height:86px;flex:0 0 86px;pointer-events:auto;text-align:center}
 }
+/* One local SVG language for apps, folders, window titles and the taskbar. */
+.app-symbol{display:inline-block;width:20px;height:20px;flex-shrink:0;vertical-align:middle;pointer-events:none;overflow:visible}.nav-icon{display:inline-flex;align-items:center;justify-content:center}.nav-icon>.app-symbol{width:19px;height:19px}.os-app-icon>.app-symbol{display:block;width:25px;height:25px}.os-app-grid .os-app-icon>.app-symbol{width:21px;height:21px}.os-title .app-symbol{width:16px;height:16px}.os-task{display:inline-flex;align-items:center;gap:7px}.os-task>.app-symbol{width:16px;height:16px}.os-task-label{min-width:0;overflow:hidden;text-overflow:ellipsis}.os-folder-icon>.app-symbol{width:26px;height:26px}#classic-admin-settings>.app-symbol{width:19px;height:19px}

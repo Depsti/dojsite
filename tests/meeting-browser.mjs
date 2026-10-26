@@ -25,9 +25,9 @@ try{
  const request=async(path,method='GET',body,cookie='')=>{const response=await realFetch(base+'/api/'+path,{signal:AbortSignal.timeout(20000),method,headers:{Cookie:cookie,'Content-Type':'application/json'},body:body===undefined?undefined:JSON.stringify(body)});return {status:response.status,data:await response.json(),cookie:response.headers.get('set-cookie')?.split(';')[0]};};
  await request('setup','POST',{name:'Master',password:'MasterTest123!'});const master=(await request('login','POST',{name:'Master',password:'MasterTest123!'})).cookie;
  const masterUser=(await request('state','GET',undefined,master)).data.user;await request('users/'+masterUser.id,'PUT',{rank:'attorney_general'},master);
- const student=(await request('users','POST',{name:'Student Beispiel',role:'Student',rank:'public_prosecutor_trainee'},master)).data;
+ const student=(await request('users','POST',{name:'Student Beispiel',rank:'student'},master)).data;
  const firstLogin=await request('login','POST',{name:student.name,password:student.temporaryPassword});const studentCookie=(await request('password/change','POST',{password:'StudentTest123!'},firstLogin.cookie)).cookie;
- const collaborator=(await request('users','POST',{name:'Taylor Mitarbeit',role:'Staatsanwalt'},master)).data;
+ const collaborator=(await request('users','POST',{name:'Taylor Mitarbeit',rank:'district_attorney'},master)).data;
  const collaboratorFirst=await request('login','POST',{name:collaborator.name,password:collaborator.temporaryPassword});const collaboratorCookie=(await request('password/change','POST',{password:'CollaboratorTest123!'},collaboratorFirst.cookie)).cookie;
  const studentPrivateNote=(await request('organizer/notes','POST',{title:'Nur für den Studenten',description:'Privater Text',section:'Studium',pinned:false,archived:false,requestId:'private-student-note-001'},studentCookie)).data;
  assert.equal((await request('organizer','GET',undefined,master)).data.notes.length,0);

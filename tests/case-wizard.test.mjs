@@ -6,7 +6,7 @@ import {readFileSync} from 'node:fs';
 test('Fallassistent hält Entwurf über Schritte und speichert erst am Ende',async()=>{
  let nodes={},html='',calls=[],opened;
  const record={id:'person1',type:'people',title:'Vorhandene Person'};
- const context=vm.createContext({crypto:{randomUUID:()=>'wizard-request-123456'},TextEncoder,URL,editor(){},applyDetailAccess(){},esc:v=>String(v??''),roleOptions:()=>'<option>Sonstige</option>',state:{user:{id:'lead'},users:[{id:'lead',name:'Leitung'}],records:[record]},records:t=>t==='people'?[record]:[],canModule:()=>true,modules:{},document:{querySelectorAll:()=>[]},$:s=>nodes[s]||null,modal(title,body){
+ const context=vm.createContext({isStudentAccount:u=>u.rank==='student',crypto:{randomUUID:()=>'wizard-request-123456'},TextEncoder,URL,editor(){},applyDetailAccess(){},esc:v=>String(v??''),roleOptions:()=>'<option>Sonstige</option>',state:{user:{id:'lead'},users:[{id:'lead',name:'Leitung'}],records:[record]},records:t=>t==='people'?[record]:[],canModule:()=>true,modules:{},document:{querySelectorAll:()=>[]},$:s=>nodes[s]||null,modal(title,body){
   html=body;nodes={'#modal':{close(){}},'#wizard-error':{textContent:''}};
   for(const match of body.matchAll(/id="([^"]+)"/g))nodes['#'+match[1]]={dataset:{},value:'',files:[],textContent:''};
   const elements={};

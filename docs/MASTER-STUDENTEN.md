@@ -8,9 +8,9 @@ Bei einem leeren Portal ist der erste eingerichtete Zugang automatisch Master. F
 npm run master:setup -- Master
 ```
 
-Ein bestehender aktiver Zugang namens Master wird durch diesen ausschließlich serverseitigen Administrationsbefehl hochgestuft; sein Passwort bleibt erhalten. Falls der Name noch nicht existiert, wird ein neuer Master mit einem einmalig ausgegebenen Einmalpasswort erstellt. Ein bereits vorhandener anderer Master verhindert die einmalige Einrichtung über das Skript; weitere Master können anschließend über die Personalverwaltung angelegt werden. Der Master kann alle Leitungen und Mitarbeiter verwalten. Leitungen können reguläre Mitarbeiter verwalten, aber keine anderen Leitungen und keinen Master. Der Master kann Rollen, individuelle Leitungsrechte und Passwörter aller Mitarbeiter verwalten. Mindestens ein aktiver Master bleibt erhalten; weitere Master können angelegt werden.
+Ein bestehender aktiver Zugang namens Master wird durch diesen ausschließlich serverseitigen Administrationsbefehl hochgestuft; sein Passwort bleibt erhalten. Falls der Name noch nicht existiert, wird ein neuer Master mit einem einmalig ausgegebenen Einmalpasswort erstellt. Ein bereits vorhandener anderer Master verhindert die Einrichtung über das Skript. Master können nicht über die Personalverwaltung angelegt oder als Dienstgrad ausgewählt werden. Der Master verwaltet alle Accounts. Attorney General und Deputy Attorney General verwalten Dienstgradprofile und reguläre Accounts einschließlich anderer Leitungsdienstgrade, aber keinen Master. Mindestens ein aktiver Master bleibt erhalten. Siehe [Dienstgradrechte](DIENSTGRADRECHTE.md).
 
-Die Einrichtung wurde nicht in der produktiven Datenbank ausgeführt: Im lokalen Projekt liegt keine .env vor. Das Skript muss mit der Serverkonfiguration ausgeführt werden. Keine Supabase-Schlüssel im Browser hinterlegen.
+Das Skript muss mit der Serverkonfiguration ausgeführt werden. Keine Supabase-Schlüssel im Browser hinterlegen.
 
 ## Einmalpasswörter
 
@@ -24,7 +24,7 @@ Studenten haben standardmäßig Lese- und Anlegerechte. Vertrauliche Akten behal
 
 Neue Studenteneinträge erhalten „Vorgelegt“ und sind zunächst nur für Ersteller, Leitung und Master sichtbar. Unter Freigabeverfahren → Studenteneinreichungen entscheidet die Leitung über Übernahme oder begründete Rückgabe. Bei einer eingereichten Fallakte werden ihre gemeinsam neu angelegten Personen, Beweismittel und Dokumente zusammen übernommen. Erst nach Übernahme erscheint eine vorgemerkte Verhandlung im regulären Bestand.
 
-Zurückgegebene Einträge bleiben als Verlauf erhalten; Studenten dürfen sie entsprechend ihrer Rolle nicht bearbeiten und können stattdessen einen korrigierten neuen Eintrag vorlegen. Übernommene Dokumente und Anträge können anschließend das normale Freigabeverfahren durchlaufen.
+Zurückgegebene Einträge bleiben als Verlauf erhalten; Studenten dürfen sie entsprechend ihres Dienstgrades nicht bearbeiten und können stattdessen einen korrigierten neuen Eintrag vorlegen. Übernommene Dokumente und Anträge können anschließend das normale Freigabeverfahren durchlaufen.
 
 Keine Datenbankmigration erforderlich. Das Update muss inklusive lib/accounts.mjs und public/accounts.js deployt werden.
 

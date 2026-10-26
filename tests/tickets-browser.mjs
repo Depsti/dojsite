@@ -26,7 +26,7 @@ try{
  const request=async(path,method='GET',body,cookie='')=>{const response=await realFetch(base+'/api/'+path,{signal:AbortSignal.timeout(20000),method,headers:{Cookie:cookie,'Content-Type':'application/json'},body:body===undefined?undefined:JSON.stringify(body)});return {status:response.status,data:await response.json(),cookie:response.headers.get('set-cookie')?.split(';')[0]};};
  await request('setup','POST',{name:'Master',password:'MasterTest123!'});const master=(await request('login','POST',{name:'Master',password:'MasterTest123!'})).cookie;
  const masterUser=(await request('state','GET',undefined,master)).data.user;await request('users/'+masterUser.id,'PUT',{rank:'attorney_general'},master);
- const colleague=(await request('users','POST',{name:'Ticket Staatsanwalt',role:'Staatsanwalt'},master)).data;
+ const colleague=(await request('users','POST',{name:'Ticket Staatsanwalt',rank:'district_attorney'},master)).data;
  let login=await request('login','POST',{name:colleague.name,password:colleague.temporaryPassword});const cookie=(await request('password/change','POST',{password:'TicketTest123!'},login.cookie)).cookie;
  const guildId=process.env.DOJ_DISCORD_TICKET_GUILD_ID,channelId='333333333333333333',parentId='222222222222222222';
  const ingest=async input=>{const response=await realFetch(base+'/api/integrations/discord/tickets',{method:'POST',headers:{Authorization:'Bearer '+process.env.DOJ_DISCORD_TICKET_SECRET,'Content-Type':'application/json'},body:JSON.stringify(input)});return {status:response.status,data:await response.json()};};

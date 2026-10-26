@@ -25,9 +25,9 @@ try{
  const request=async(path,method='GET',body,cookie='')=>{const response=await realFetch(base+'/api/'+path,{signal:AbortSignal.timeout(20000),method,headers:{Cookie:cookie,'Content-Type':'application/json'},body:body===undefined?undefined:JSON.stringify(body)});return {status:response.status,data:await response.json(),cookie:response.headers.get('set-cookie')?.split(';')[0]};};
  await request('setup','POST',{name:'Master',password:'MasterTest123!'});const master=(await request('login','POST',{name:'Master',password:'MasterTest123!'})).cookie;
  const masterUser=(await request('state','GET',undefined,master)).data.user;await request('users/'+masterUser.id,'PUT',{rank:'attorney_general'},master);
- const student=(await request('users','POST',{name:'Student Beispiel',role:'Student',rank:'public_prosecutor_trainee'},master)).data;
+ const student=(await request('users','POST',{name:'Student Beispiel',rank:'student'},master)).data;
  const firstLogin=await request('login','POST',{name:student.name,password:student.temporaryPassword});const studentCookie=(await request('password/change','POST',{password:'StudentTest123!'},firstLogin.cookie)).cookie;
- const collaborator=(await request('users','POST',{name:'Taylor Mitarbeit',role:'Staatsanwalt'},master)).data;
+ const collaborator=(await request('users','POST',{name:'Taylor Mitarbeit',rank:'district_attorney'},master)).data;
  const collaboratorFirst=await request('login','POST',{name:collaborator.name,password:collaborator.temporaryPassword});const collaboratorCookie=(await request('password/change','POST',{password:'CollaboratorTest123!'},collaboratorFirst.cookie)).cookie;
  const studentPrivateNote=(await request('organizer/notes','POST',{title:'Nur für den Studenten',description:'Privater Text',section:'Studium',pinned:false,archived:false,requestId:'private-student-note-001'},studentCookie)).data;
  assert.equal((await request('organizer','GET',undefined,master)).data.notes.length,0);
@@ -119,7 +119,7 @@ try{
  assert.equal((await request('state','GET',undefined,collaboratorCookie)).data.user.permissions.modules.laws.edit,false);
  assert.equal((await request('records/'+law.id,'PUT',{title:'Trotz Freigabe unzulässig'},collaboratorCookie)).status,403);
  assert.equal((await request('records/'+law.id+'/comments','POST',{text:'Unzulässige Änderung'},collaboratorCookie)).status,403);
- await request('users/'+collaborator.id,'PUT',{role:'Leitung'},master);assert.equal((await request('records','POST',{type:'laws',title:'Auch Leitung darf nicht anlegen'},collaboratorCookie)).status,403);assert.equal((await request('records/'+law.id,'PUT',{title:'Auch Leitung darf nicht ändern'},collaboratorCookie)).status,403);await request('users/'+collaborator.id,'PUT',{role:'Staatsanwalt'},master);
+ await request('users/'+collaborator.id,'PUT',{rank:'deputy_attorney_general'},master);assert.equal((await request('records','POST',{type:'laws',title:'Auch Leitung darf nicht anlegen'},collaboratorCookie)).status,403);assert.equal((await request('records/'+law.id,'PUT',{title:'Auch Leitung darf nicht ändern'},collaboratorCookie)).status,403);await request('users/'+collaborator.id,'PUT',{rank:'district_attorney'},master);
  assert.equal((await request('records/'+law.id,'PUT',{title:'Aktualisiertes Testgesetz',owner:collaborator.id},master)).status,200);
  await page.bringToFront();await page.reload();await page.locator('.doj-os').waitFor();await page.locator('[data-desktop-app=laws]').click();const lawsFrame=page.frameLocator('[data-window-key="app:laws"] iframe');await lawsFrame.locator('[data-new=laws]').waitFor();assert.equal(await lawsFrame.getByRole('columnheader',{name:'ZUSTÄNDIG',exact:true}).count(),0);await lawsFrame.locator('[data-new=laws]').click();assert.equal(await lawsFrame.locator('#record-form [name=owner]').count(),0);await lawsFrame.locator('#record-form [data-close]').click();
  await page.locator('[data-theme-toggle]').click();await page.locator('html[data-theme=dark]').waitFor();await lawsFrame.locator('html[data-theme=dark]').waitFor();await page.screenshot({path:'artifacts/chat-qa/desktop-dunkel.png'});

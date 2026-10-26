@@ -46,7 +46,7 @@ Neue Einträge werden über „Eintrag erstellen“ angelegt. Ein Klick auf eine
 
 ## Zugriffsmodell
 
-Die erste Person erhält die Rolle Leitung. Unter Mitarbeiter kann die Leitung Zugänge, Dienstrollen, Bereichsrechte und Sonderrechte verwalten. Fallersteller und Leitung verwalten unter Fallzugriffe das Fallteam; Federführung und freigegebene Mitarbeiter können im Rahmen ihrer Bereichsrechte bearbeiten. Verknüpfte Einträge erfordern ebenfalls den Fallzugriff; zusätzliche Vertraulichkeit bleibt bestehen. Personenverknüpfungen werden nur für zugängliche Personen und Fälle angezeigt. Charaktere sind Verzeichniseinträge, keine getrennten Anmeldesitzungen.
+Der erste Zugang ist Master. Weitere Mitarbeiter erhalten ausschließlich einen Dienstgrad. Attorney General und Deputy Attorney General verwalten unter Personal die Dienstgradprofile und persönliche Rechteausnahmen; der Master behält Vollzugriff. Fallfreigaben und Vertraulichkeit gelten zusätzlich. Einrichtung, automatische Übernahme alter Accounts und Bedienung: [Dienstgradrechte](docs/DIENSTGRADRECHTE.md).
 
 ## Datenspeicherung
 
