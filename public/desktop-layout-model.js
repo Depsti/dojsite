@@ -1,6 +1,6 @@
 /* Shared validation for personal desktop layouts. App membership never grants access. */
 (function(root){
- const apps=['dashboard','cases','people','evidence','documents','requests','laws','calculator','hearings','tasks','knowledge','archive','team','audit','notebook','calendar','todos','references','mywork','search','drafts','textblocks','copnet'];
+ const apps=['dashboard','cases','people','evidence','documents','requests','laws','calculator','hearings','tasks','knowledge','archive','team','audit','notebook','calendar','todos','references','mywork','search','drafts','textblocks','copnet','meetingroom'];
  const clone=value=>JSON.parse(JSON.stringify(value));
  function normalize(value){
   if(!value||value.version!==1||!Array.isArray(value.items)||value.items.length>100)throw Error('Ungültige Desktop-Anordnung.');

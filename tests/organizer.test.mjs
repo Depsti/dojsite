@@ -26,7 +26,7 @@ test('Mehrere Zuständige benötigen Zuteilungsrechte und erhalten einen eigenen
  task=mutateOrganizer('todos','PATCH',task.id,{action:'complete',done:false,expectedUpdatedAt:task.updatedAt},lawyer,db).item;assert.equal(task.completedAt,'');assert.equal(task.createdAt,createdAt);
 });
 test('Kalender-Verwaltungsrecht ist unabhängig und verknüpfte Fälle bleiben geschützt',()=>{
- const db=fixture(),startAt=new Date(Date.now()+3600000).toISOString(),endAt=new Date(Date.now()+7200000).toISOString();const values={startAt,endAt,allTeam:true,attendees:[],location:'DOJ',status:'Geplant',caseId:''};
+ const db=fixture(),startAt=new Date(Date.now()+3600000).toISOString(),endAt=new Date(Date.now()+7200000).toISOString();const values={allowConflicts:true,startAt,endAt,allTeam:true,attendees:[],location:'DOJ',status:'Geplant',caseId:''};
  assert.throws(()=>create('events',values,lawyer,db),e=>e.status===403);
  const calendarUser={...lawyer,permissions:{calendarManage:true}};assert.ok(create('events',values,calendarUser,db).id);
  assert.throws(()=>create('events',{...values,endAt:startAt},master,db),/Ende|Terminende/);

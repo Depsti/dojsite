@@ -3,5 +3,6 @@
  function age(createdAt,completedAt='',now=Date.now()){const seconds=Math.max(0,Math.floor(((completedAt?Date.parse(completedAt):now)-Date.parse(createdAt))/1000));if(!Number.isFinite(seconds))return 'Zeit unbekannt';if(seconds<60)return 'weniger als 1 Minute';const minutes=Math.floor(seconds/60);if(minutes<60)return minutes+' Min.';const hours=Math.floor(minutes/60);if(hours<24)return hours+' Std. '+(minutes%60)+' Min.';return Math.floor(hours/24)+' Tage '+(hours%24)+' Std.';}
  function upcoming(events,now=Date.now(),hours=3){return events.filter(e=>{const start=Date.parse(e.startAt),end=e.endAt?Date.parse(e.endAt):start+3600000;return e.status==='Geplant'&&Number.isFinite(start)&&Number.isFinite(end)&&end>now&&start<=now+hours*3600000;}).sort((a,b)=>Date.parse(a.startAt)-Date.parse(b.startAt));}
  function onDay(event,key){const day=new Date(key+'T00:00:00'),next=new Date(day);next.setDate(next.getDate()+1);const start=Date.parse(event.startAt),end=event.endAt?Date.parse(event.endAt):start+3600000;return start<next.getTime()&&end>day.getTime();}
- const api={dateKey,age,upcoming,onDay};root.dojOrganizerTime=api;if(typeof module!=='undefined')module.exports=api;
+ function reminderStage(event,minutes,now=Date.now()){const left=(Date.parse(event.startAt)-now)/60000;if(!Number.isFinite(left)||!Array.isArray(minutes)||!minutes.length)return null;return [...minutes].sort((a,b)=>a-b).find(n=>left<=n)??null;}
+ const api={dateKey,age,upcoming,onDay,reminderStage};root.dojOrganizerTime=api;if(typeof module!=='undefined')module.exports=api;
 })(globalThis);

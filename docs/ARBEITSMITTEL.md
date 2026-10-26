@@ -46,3 +46,7 @@ Alle neuen Dateien und die geänderten Server-/Oberflächendateien gemeinsam auf
 Wichtige Dateien: `lib/organizer.mjs`, `public/organizer.js`, `public/organizer-time.js`, `public/organizer-reminders.js`, `public/organizer.css`. Die neue Berechtigung ist in `lib/access.mjs` und `public/permissions.js` eingebunden.
 
 Prüfungen: `npm.cmd test`, `npm.cmd run test:desktop`, `npm.cmd run test:chat`. Der vollständige lokale Browserlauf prüft auch die tatsächliche Speicherung, Privatsphäre, einzelne Erledigungen, Kalenderrecht, Terminerinnerung und Mobilansicht. Er greift nicht auf Produktivdaten zu.
+
+## Erweiterte Termine und Arbeitsräume
+
+Der Kalender bietet inzwischen Tages-/Wochenansichten, Konfliktprüfung, Einladungen, Verschieben und persönliche Erinnerungsabstände. Kalendertermine öffnen ihren eigenen Arbeitsraum mit verknüpften To-dos, Unterlagen, Notizen und Chat. Bedienung, Rechte und Betrieb: [TERMINE-ARBEITSRAUM.md](TERMINE-ARBEITSRAUM.md).
