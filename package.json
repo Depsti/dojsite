@@ -15,7 +15,8 @@
     "catalog:build": "node scripts/build-penalty-catalog.mjs",
     "test:ui": "node tests/ui-browser.mjs",
     "test:meetings": "node tests/meeting-browser.mjs",
-    "test:tickets": "node tests/tickets-browser.mjs"
+    "test:tickets": "node tests/tickets-browser.mjs",
+    "test:ticket-bot": "node tests/ticket-reader-integration.mjs"
   },
   "engines": {
     "node": ">=20"

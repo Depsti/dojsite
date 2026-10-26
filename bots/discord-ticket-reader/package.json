@@ -1,0 +1,18 @@
+{
+  "name": "doj-discord-ticket-reader",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24.17.0"
+  },
+  "scripts": {
+    "start": "node --env-file-if-exists=.env src/main.mjs",
+    "test": "node --test test/*.test.mjs",
+    "queue:retry": "node --env-file-if-exists=.env src/queue-admin.mjs retry",
+    "queue:status": "node --env-file-if-exists=.env src/queue-admin.mjs status"
+  },
+  "dependencies": {
+    "discord.js": "14.27.0"
+  }
+}

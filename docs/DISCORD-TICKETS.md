@@ -1,6 +1,6 @@
 # Discord-Tickets: WebApp und Bot-Anbindung
 
-Die WebApp ist vorbereitet. Es wurde kein Bot installiert, kein Discord-Server verändert und kein Produktiv-SQL ausgeführt.
+Die WebApp und der eigenständige Lesebot sind vorbereitet. Die [Bot-Einrichtung](../bots/discord-ticket-reader/README.md) beschreibt Discord Developer Portal, Railway-Service, Volume und Variablen. Es wurde noch keine Discord-Anmeldung bzw. Railway-Bereitstellung durch diese Implementierung ausgeführt.
 
 ## Bereitstellung
 
@@ -146,3 +146,7 @@ Nachrichtenspeicherung und Portalrevision sind zwei getrennte Schreibvorgänge. 
 - `npm.cmd run test:desktop` und `npm.cmd run test:ui`: bestehende Desktop- und Oberflächenfunktionen.
 
 Es werden keine Produktivdaten für diese Tests verwendet. Screenshots liegen unter `artifacts/chat-qa/discord-ticket*.png`.
+
+## Lesebot bereit
+
+Der ausführbare Bot liegt unter bots/discord-ticket-reader mit eigenem Paket, Lockdatei, Dockerfile, Railway-Konfiguration, dauerhafter SQLite-Warteschlange und Tests. [Schritt-für-Schritt-Anleitung](../bots/discord-ticket-reader/README.md). Für den Bot ist kein zusätzliches Supabase-SQL erforderlich.
