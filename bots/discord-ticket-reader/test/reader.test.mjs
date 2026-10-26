@@ -59,3 +59,16 @@ test('Heartbeat nur bei verbundener Quelle mit abgeschlossenem Erstabgleich',()=
 test('Discord-Schutzschranke verbietet sämtliche REST-Schreibmethoden ohne Netzwerkzugriff',async()=>{
  const {client}=discordAdapter(cfg,()=>{});try{for(const name of ['request','queueRequest'])for(const method of ['POST','PUT','PATCH','DELETE'])assert.throws(()=>client.rest[name]({method,fullRoute:'/channels/'+channelId}),/Schreibzugriff/);}finally{await client.destroy();}
 });
+import {DisplayResolver} from '../src/presentation.mjs';
+test('Server-Anzeigenamen und Erwähnungen werden gezielt aufgelöst und zwischengespeichert',async()=>{
+ let requests=0;const target='777777777777777777',role='888888888888888888',ch='999999999999999999',resolver=new DisplayResolver({guildId,getMember:async id=>{requests++;return {displayName:id===target?'Richter Beispiel':'Dr. Stark'};},getRole:()=>({name:'Staatsanwaltschaft'}),getChannel:()=>({name:'besprechung'})});const m=message(1);m.mentions={users:new Map([[target,{username:'OldUsername'}]])};m.content='<@'+target+'> <@&'+role+'> <#'+ch+'>';const e=await resolver.prepare(m);assert.equal(e.author.displayName,'Dr. Stark');assert.equal(e.author.username,'Mitarbeiter');assert.equal(e.mentions[0].name,'Richter Beispiel');assert.equal(e.mentions[1].name,'Staatsanwaltschaft');assert.equal(e.mentions[2].name,'besprechung');assert.equal(e.displayVersion,1);await resolver.prepare(m);assert.equal(requests,2);assert.equal(sourceFor({...channel,guild:{name:'Retro City'}},cfg).guildName,'Retro City');
+});
+test('Nicht auflösbare Erwähnungen und entfernte Mitglieder verhindern den Import nicht',async()=>{
+ const resolver=new DisplayResolver({guildId,getMember:async()=>{throw {code:10007};}}),m=message(1);m.content='<@777777777777777777>';const e=await resolver.prepare(m);assert.equal(e.author.name,'Mitarbeiter');assert.deepEqual(e.mentions,[]);await assert.rejects(resolver.prepare({...m,guildId:'999999999999999999'}),/nicht freigegeben/);
+});
+test('Display-Upgrade liest Altbestand einmal neu, bewahrt Queues und sendet gleich alte Metadaten nur bei Änderung',()=>{
+ const f=fixture();let q=f.q;try{q.finish(channelId,id(20));const e=messageEvent(message(1),guildId);q.capture(e);drain(q);q.db.prepare("delete from settings where key='display_schema'").run();q.close();q=new Queue(f.dir);assert.equal(q.channel(channelId).cursor,'0');assert.equal(q.channel(channelId).ready,0);const refreshed={...e,displayVersion:1,mentions:[],author:{...e.author,name:'Dr. Stark'}};assert.equal(q.capture(refreshed),true);assert.equal(q.capture(refreshed),false);q.finish(channelId,id(20));q.close();q=new Queue(f.dir);assert.equal(q.channel(channelId).cursor,id(20));assert.equal(q.stats().pending,1);}finally{q.close();remove(f.dir);}
+});
+test('Neue Anzeige-Payloads werden von einer alten WebApp nicht fälschlich quittiert',async()=>{
+ const f=fixture();try{f.q.finish(channelId,id(1));f.q.capture({...messageEvent(message(1),guildId),displayVersion:1,mentions:[]});const d=new Delivery(f.q,cfg,{fetcher:async()=>Response.json(ack)});await d.tick();assert.equal(f.q.stats().pending,1);f.q.retry();d.fetcher=async()=>Response.json({...ack,displayVersion:1});await d.tick();assert.equal(f.q.stats().pending,0);}finally{f.close();}
+});

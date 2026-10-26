@@ -150,3 +150,13 @@ Es werden keine Produktivdaten für diese Tests verwendet. Screenshots liegen un
 ## Lesebot bereit
 
 Der ausführbare Bot liegt unter bots/discord-ticket-reader mit eigenem Paket, Lockdatei, Dockerfile, Railway-Konfiguration, dauerhafter SQLite-Warteschlange und Tests. [Schritt-für-Schritt-Anleitung](../bots/discord-ticket-reader/README.md). Für den Bot ist kein zusätzliches Supabase-SQL erforderlich.
+
+## Anzeige-Update: Servernamen, Links und Erwähnungen
+
+Für eine bestehende Installation zuerst **supabase/discord-ticket-display.sql** einmal im Supabase SQL Editor ausführen. Danach Website und Bot mit den aktualisierten Dateien deployen. Das Basisskript supabase/discord-tickets.sql enthält das Update ebenfalls für Neuinstallationen. Es werden keine Nachrichten gelöscht und keine zusätzlichen öffentlichen Zugriffsrechte erteilt. Neue Railway-Variablen sind nicht nötig.
+
+Die Anzeige enthält den Discord-Servernamen sowie den serverbezogenen Anzeigenamen der Absender. HTTP-/HTTPS-Links, www-Adressen und einfache Markdown-Links werden klickbar, auch in Embed-Texten. Nutzererwähnungen erscheinen als @Anzeigename mit Link zum Discord-Profil; Rollen erscheinen als @Rollenname. Kanal-Erwähnungen werden nur mit Namen angezeigt, wenn das entsprechende importierte Ticket zugänglich ist. Unbekannte bzw. nicht zugängliche Verweise erhalten eine neutrale Anzeige. @everyone und @here bleiben reine Textmarkierungen und erzeugen keine Pings. Links öffnen einen neuen Tab; weitere Discord-Inhalte benötigen weiterhin die Discord-Anmeldung und dortige Rechte.
+
+Der Bot fragt nur die einzelnen beteiligten Mitglieder per lesender REST-Anfrage ab, keine vollständige Mitgliederliste. Die bisherigen Intents und Leserechte reichen; Server Members Intent, Administratorrechte und Schreibrechte werden nicht ergänzt. Namen werden bis zu zehn Minuten zwischengespeichert. Verlassene/nicht auflösbare Mitglieder fallen auf den bekannten globalen Anzeigenamen bzw. Benutzernamen zurück. Historische frühere Spitznamen können nicht rekonstruiert werden.
+
+Der erste Start des aktualisierten Bots setzt einmalig die Abgleich-Cursor zurück und liest vorhandene zugängliche Verläufe erneut. Die Warteschlange bleibt erhalten. Eine Prüfsumme verhindert unveränderte Wiederholungen. SQL aktualisiert bei gleicher Nachrichtenfassung ausschließlich die Anzeigedaten, nicht den ursprünglichen Text; Sequenz und Ungelesen-Zeit bleiben unverändert. Löschmarkierungen können nicht wiederhergestellt werden. Die neue WebApp bestätigt Anzeigeversion 1; solange ein alter Serverstand bzw. das SQL-Update fehlt, bleiben die Ereignisse beim Bot gespeichert und werden erneut versucht.

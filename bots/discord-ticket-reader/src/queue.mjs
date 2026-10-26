@@ -11,19 +11,21 @@ export class Queue {
    create index if not exists outbox_channel_order on outbox(channel_id,priority,sort_at,id);
    create table if not exists seen_messages(channel_id text not null,message_id text not null,version text not null,deleted integer not null default 0,primary key(channel_id,message_id));
    create table if not exists settings(key text primary key,value text not null);`);
+  this.tx(()=>{if(!this.db.prepare('pragma table_info(seen_messages)').all().some(c=>c.name==='fingerprint'))this.db.exec("alter table seen_messages add column fingerprint text not null default ''");if(!this.db.prepare("select 1 from settings where key='display_schema'").get()){this.db.exec("update channels set cursor='0',scan_before=null,scan_max=null,scan_base=null,ready=0");this.db.prepare("insert into settings(key,value) values('display_schema','1')").run();}});
  }
  tx(fn){if(this.depth)return fn();this.db.exec('begin immediate');this.depth++;try{const v=fn();this.db.exec('commit');return v;}catch(e){this.db.exec('rollback');throw e;}finally{this.depth--;}}
  channel(id){const row=this.db.prepare('select * from channels where id=?').get(id);return row?{...row,source:JSON.parse(row.source)}:null;}
  channels(){return this.db.prepare('select id from channels order by id').all().map(r=>this.channel(r.id));}
  capture(event){return this.tx(()=>{
   const cid=event.channelId,seen=event.messageId&&this.db.prepare('select * from seen_messages where channel_id=? and message_id=?').get(cid,event.messageId);
-  if(seen&&(seen.deleted||event.type==='message.upsert'&&seen.version>=event.changedAt))return false;
+  if(seen&&(seen.deleted||event.type==='message.upsert'&&seen.version>event.changedAt))return false;
   const payload=JSON.stringify(event),fingerprint=createHash('sha256').update(payload).digest('hex');
+  if(seen&&event.type==='message.upsert'&&seen.version===event.changedAt&&seen.fingerprint===fingerprint)return false;
   if(this.db.prepare('select 1 from outbox where fingerprint=?').get(fingerprint))return false;
   if(event.type==='heartbeat')this.db.prepare("delete from outbox where channel_id=? and priority=3").run(cid);
   if(Number(this.db.prepare('select count(*) n from outbox').get().n)>=this.maxQueue)throw Error('Warteschlange voll: BOT_MAX_QUEUE erhöhen oder Importfehler beheben.');
   this.db.prepare('insert into outbox(channel_id,payload,fingerprint,priority,sort_at) values(?,?,?,?,?)').run(cid,payload,fingerprint,{'ticket.upsert':0,'message.delete':1,'message.upsert':2,heartbeat:3}[event.type],event.createdAt||event.changedAt);
-  if(event.messageId)this.db.prepare('insert into seen_messages(channel_id,message_id,version,deleted) values(?,?,?,?) on conflict(channel_id,message_id) do update set version=excluded.version,deleted=excluded.deleted').run(cid,event.messageId,event.changedAt,event.type==='message.delete'?1:0);
+  if(event.messageId)this.db.prepare('insert into seen_messages(channel_id,message_id,version,deleted,fingerprint) values(?,?,?,?,?) on conflict(channel_id,message_id) do update set version=excluded.version,deleted=excluded.deleted,fingerprint=excluded.fingerprint').run(cid,event.messageId,event.changedAt,event.type==='message.delete'?1:0,fingerprint);
   return true;
  });}
  source(source,{force=false,at=Date.now()}={}){return this.tx(()=>{

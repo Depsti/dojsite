@@ -2,7 +2,7 @@
 
 Eigenständiger Lesebot für die vorbereitete Ticket-Schnittstelle der WebApp. Der bisherige Ticketbot wird nicht verändert. Dieser Service liest Discord-Daten und sendet sie ausschließlich an die WebApp. Discord-REST-Schreibmethoden sind zusätzlich im Code gesperrt.
 
-Der Bot ist implementiert und lokal getestet. Er ist noch nicht auf eurem Discord-Server angemeldet und wurde noch nicht nach Railway gepusht/deployt. Das bereits ausgeführte Ticket-SQL reicht aus; für diesen Bot sind keine weiteren SQL-Tabellen in Supabase erforderlich.
+Der Bot ist implementiert und lokal getestet. Zugangsdaten und Bereitstellung werden in Railway verwaltet. Für bestehende Installationen vor diesem Anzeige-Update einmal supabase/discord-ticket-display.sql ausführen und Website sowie Bot aktualisieren. Es werden keine weiteren Tabellen benötigt.
 
 ## 1. Discord-Anwendung erstellen
 
@@ -157,3 +157,7 @@ Geprüft: Konfiguration, Scopes, Nachrichtenmapping, dauerhafte Speicherung/Neus
 - [discord.js](https://discord.js.org/docs/packages/discord.js/main)
 - [Railway: Monorepos und Root Directory](https://docs.railway.com/deployments/monorepo)
 - [Railway: persistente Volumes](https://docs.railway.com/volumes)
+
+## Anzeigeversion 1
+
+Servername, Absender-Spitznamen, Nutzer-/Rollen-/Kanal-Erwähnungen und sichere Hyperlinks werden mit dem neuen WebApp-Stand unterstützt. Vor dem Deploy das SQL-Update supabase/discord-ticket-display.sql ausführen. Es sind keine neuen Variablen oder Gateway-Intents nötig. Der Bot liest einmal alle vorhandenen zugänglichen Verläufe erneut, um alte Anzeigen anzureichern; vorhandene Nachrichten und Warteschlangen bleiben erhalten. Einzelne Mitgliedernamen werden gezielt und lesend abgefragt und zehn Minuten gecacht. Nicht mehr auflösbare Namen werden durch bekannte globale Namen ersetzt. Profile/Links öffnen Discord; es werden keine Pings gesendet. Siehe docs/DISCORD-TICKETS.md im Repository.

@@ -1,9 +1,12 @@
+import {DisplayResolver} from './presentation.mjs';
+import {sourceFor} from './model.mjs';
 import {Client,Events,GatewayIntentBits,Partials,PermissionFlagsBits,ChannelType} from 'discord.js';
 export function discordAdapter(cfg,log){
  const client=new Client({intents:[GatewayIntentBits.Guilds,GatewayIntentBits.GuildMessages,GatewayIntentBits.MessageContent],partials:[Partials.Message,Partials.Channel]});
  // This integration only permits GET requests to Discord's REST API. Gateway login/heartbeats remain necessary.
  for(const name of ['request','queueRequest']){const original=client.rest[name].bind(client.rest);client.rest[name]=options=>{if(String(options.method||'GET').toUpperCase()!=='GET')throw Error('Discord-Schreibzugriff ist im Lesebot gesperrt.');return original(options);};}
- const adapter={client,ready:()=>client.isReady(),
+ const display=new DisplayResolver({guildId:cfg.guildId,getMember:async id=>{const guild=await client.guilds.fetch(cfg.guildId);return guild.members.fetch({user:id,force:true,cache:false});},getRole:id=>client.guilds.cache.get(cfg.guildId)?.roles.cache.get(id),getChannel:id=>{const ch=client.channels.cache.get(id);return ch&&adapter.canRead(ch)&&(sourceFor(ch,cfg)||cfg.parents.has(ch.id))?ch:null;}});
+ const adapter={client,prepare:m=>display.prepare(m),ready:()=>client.isReady(),
   canRead:ch=>!!ch.permissionsFor(client.user)?.has([PermissionFlagsBits.ViewChannel,PermissionFlagsBits.ReadMessageHistory]),
   channel:async id=>{const guild=await client.guilds.fetch(cfg.guildId);return guild.channels.fetch(id,{force:true});},
   message:(channel,id)=>channel.messages.fetch({message:id,force:true,cache:false}),

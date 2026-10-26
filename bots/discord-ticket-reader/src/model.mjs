@@ -7,7 +7,7 @@ export function sourceFor(channel,cfg){
  if(!thread&&![0,5].includes(channel.type))return null;
  const candidates=thread?[channel.parentId,channel.parent?.parentId]:[channel.parentId];
  const parentId=candidates.find(id=>cfg.parents.has(id)&&cfg.closedParents.has(id))||candidates.find(id=>cfg.parents.has(id));if(!parentId)return null;
- return {guildId:cfg.guildId,channelId:channel.id,parentId,title:clip(channel.name,200),sourceState:channel.archived||cfg.closedParents.has(parentId)?'closed':'active'};
+ return {guildId:cfg.guildId,guildName:clip(channel.guild?.name||'',100),channelId:channel.id,parentId,title:clip(channel.name,200),sourceState:channel.archived||cfg.closedParents.has(parentId)?'closed':'active'};
 }
 export function ticketEvent(source,at=Date.now()){return {type:'ticket.upsert',...source,changedAt:iso(at)};}
 export function messageEvent(message,guildId){

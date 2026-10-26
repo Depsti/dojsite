@@ -6,7 +6,7 @@ export class Reader {
  unavailable(id){const c=this.queue.channel(id);if(!c)return;this.queue.source({...c.source,sourceState:'unavailable'},{force:c.available===1});}
  async changed(channel){if(this.stopped)return;const s=this.source(channel);if(!s){if(this.queue.channel(channel.id))this.unavailable(channel.id);return;}if(!this.adapter.canRead(channel)){this.unavailable(channel.id);return;}return this.sync(channel);}
  async message(message,{refresh=false}={}){if(this.stopped||message.guildId!==this.cfg.guildId)return;const channel=message.channel||await this.adapter.channel(message.channelId);const s=this.source(channel);if(!s||!this.adapter.canRead(channel))return;
-  try{if(message.partial||refresh)message=await this.adapter.message(channel,message.id);this.queue.capture(messageEvent(message,this.cfg.guildId));}catch(e){if(Number(e?.code)===10008)this.queue.capture(deleteEvent(this.cfg.guildId,channel.id,message.id));else throw e;}
+  try{if(message.partial||refresh)message=await this.adapter.message(channel,message.id);this.queue.capture(this.adapter.prepare?await this.adapter.prepare(message):messageEvent(message,this.cfg.guildId));}catch(e){if(Number(e?.code)===10008)this.queue.capture(deleteEvent(this.cfg.guildId,channel.id,message.id));else throw e;}
   // New channels enter backfill before queued live messages are released.
   if(!this.queue.channel(channel.id)?.ready&&!this.scans.has(channel.id))this.sync(channel).catch(e=>this.log('Nachrichtenabgleich fehlgeschlagen.',{channelId:channel.id,code:Number(e?.code)||0}));
  }
@@ -20,7 +20,7 @@ export class Reader {
    const min=rows[0].id,max=rows.at(-1).id;
    if(c.scan_before&&!greater(c.scan_before,min))throw Error('Discord-Seitencursor schreitet nicht voran.');
    // The newest page is also refreshed below the cursor to catch recent offline edits.
-   const events=rows.filter(m=>!c.scan_before||greater(m.id,c.scan_base)).map(m=>messageEvent(m,this.cfg.guildId));
+   const events=[];for(const m of rows.filter(m=>!c.scan_before||greater(m.id,c.scan_base)))events.push(this.adapter.prepare?await this.adapter.prepare(m):messageEvent(m,this.cfg.guildId));
    this.queue.page(channel.id,events,min,max);c=this.queue.channel(channel.id);
    if(!greater(min,c.scan_base)||rows.length<100){this.queue.finish(channel.id,c.scan_max||c.cursor);this.log('Ticketabgleich abgeschlossen.',{channelId:channel.id});return;}
   }}catch(e){if(denied(e)){this.unavailable(channel.id);return;}throw e;}

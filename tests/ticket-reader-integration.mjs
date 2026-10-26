@@ -1,5 +1,5 @@
 // Vollständige lokale Prüfung: echter DOJ-HTTP-Server, PostgreSQL und Browser. Keine Produktivdaten.
-import assert from 'node:assert/strict';import {readFileSync,mkdirSync} from 'node:fs';import {once} from 'node:events';import {PGlite} from '@electric-sql/pglite';import {Queue} from '../bots/discord-ticket-reader/src/queue.mjs';import {Reader} from '../bots/discord-ticket-reader/src/reader.mjs';import {Delivery} from '../bots/discord-ticket-reader/src/delivery.mjs';import {mkdtempSync,rmSync} from 'node:fs';import {tmpdir} from 'node:os';import path from 'node:path';
+import assert from 'node:assert/strict';import {readFileSync,mkdirSync} from 'node:fs';import {once} from 'node:events';import {PGlite} from '@electric-sql/pglite';import {Queue} from '../bots/discord-ticket-reader/src/queue.mjs';import {Reader} from '../bots/discord-ticket-reader/src/reader.mjs';import {DisplayResolver} from '../bots/discord-ticket-reader/src/presentation.mjs';import {Delivery} from '../bots/discord-ticket-reader/src/delivery.mjs';import {mkdtempSync,rmSync} from 'node:fs';import {tmpdir} from 'node:os';import path from 'node:path';
 const pg=new PGlite(),realFetch=globalThis.fetch;let server,browser,queue,dir;
 const tables=new Set(['doj_portal_state','doj_sessions','doj_login_attempts','doj_case_messages','doj_case_chat_reads','doj_case_reactions','doj_direct_messages','doj_direct_reads','doj_direct_reactions','doj_ticket_messages']);
 function quote(name){if(!/^[a-z_]+$/.test(name))throw Error('Ungültiger Testbezeichner');return '"'+name+'"';}
@@ -29,11 +29,12 @@ try{
  dir=mkdtempSync(path.join(tmpdir(),'doj-reader-http-'));queue=new Queue(dir);
  const guildId=process.env.DOJ_DISCORD_TICKET_GUILD_ID,parentId='222222222222222222',channelId='333333333333333333';
  const cfg={guildId,parents:new Set([parentId]),closedParents:new Set(),secret:process.env.DOJ_DISCORD_TICKET_SECRET,endpoint:base+'/api/integrations/discord/tickets'};
- const channel={id:channelId,guildId,parentId,name:'Bot-Integrationstest',type:0,isThread:()=>false};
+ const channel={id:channelId,guildId,parentId,guild:{name:'Retro City'},name:'Bot-Integrationstest',type:0,isThread:()=>false};
  const first={id:'555555555555555555',guildId,channelId,channel,createdTimestamp:Date.now()-60000,content:'Über den Lesebot importiert',author:{id:'444444444444444444',username:'Beispiel'},attachments:new Map(),embeds:[]};const second={...first,id:'555555555555555556',createdTimestamp:first.createdTimestamp+1000,content:'Zweite Nachricht'};
- const reader=new Reader({ready:()=>true,canRead:()=>true,history:async()=>new Map([[second.id,second],[first.id,first]])},queue,cfg),delivery=new Delivery(queue,cfg,{fetcher:realFetch});
+ const resolver=new DisplayResolver({guildId,getMember:async()=>({displayName:'Dr. Test'})});
+ const reader=new Reader({prepare:m=>resolver.prepare(m),ready:()=>true,canRead:()=>true,history:async()=>new Map([[second.id,second],[first.id,first]])},queue,cfg),delivery=new Delivery(queue,cfg,{fetcher:realFetch});
  await reader.sync(channel);await delivery.tick();assert.equal(queue.stats().pending,0);
- const ticket=(await request('tickets','GET',undefined,master)).data.tickets[0];assert.equal(ticket.title,channel.name);let messages=(await request('tickets/'+ticket.id+'/messages','GET',undefined,master)).data.messages;assert.deepEqual(messages.map(m=>m.body),[first.content,second.content]);
+ const ticket=(await request('tickets','GET',undefined,master)).data.tickets[0];assert.equal(ticket.title,channel.name);assert.equal(ticket.guildName,'Retro City');let messages=(await request('tickets/'+ticket.id+'/messages','GET',undefined,master)).data.messages;assert.deepEqual(messages.map(m=>m.body),[first.content,second.content]);assert.equal(messages[0].author.displayName,'Dr. Test');
  // A versioned edit is acknowledged by the same real import route.
  await reader.message({...first,content:'Überarbeitete Nachricht',editedTimestamp:Date.now()});await delivery.tick();messages=(await request('tickets/'+ticket.id+'/messages','GET',undefined,master)).data.messages;assert.equal(messages.find(m=>m.message_id===first.id).body,'Überarbeitete Nachricht');
  reader.deleted(first);await delivery.tick();messages=(await request('tickets/'+ticket.id+'/messages','GET',undefined,master)).data.messages;assert.equal(messages.find(m=>m.message_id===first.id).body,'');assert.ok(messages.find(m=>m.message_id===first.id).deleted_at);
