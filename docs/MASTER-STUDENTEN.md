@@ -8,7 +8,7 @@ Bei einem leeren Portal ist der erste eingerichtete Zugang automatisch Master. F
 npm run master:setup -- Master
 ```
 
-Ein bestehender aktiver Zugang namens Master wird durch diesen ausschließlich serverseitigen Administrationsbefehl hochgestuft; sein Passwort bleibt erhalten. Falls der Name noch nicht existiert, wird ein neuer Master mit einem einmalig ausgegebenen Einmalpasswort erstellt. Ein bereits vorhandener anderer Master verhindert die Einrichtung über das Skript. Master können nicht über die Personalverwaltung angelegt oder als Dienstgrad ausgewählt werden. Der Master verwaltet alle Accounts. Attorney General und Deputy Attorney General verwalten Dienstgradprofile und reguläre Accounts einschließlich anderer Leitungsdienstgrade, aber keinen Master. Mindestens ein aktiver Master bleibt erhalten. Siehe [Dienstgradrechte](DIENSTGRADRECHTE.md).
+Ein bestehender aktiver Zugang namens Master wird durch diesen ausschließlich serverseitigen Administrationsbefehl hochgestuft; sein Passwort bleibt erhalten. Falls der Name noch nicht existiert, wird ein neuer Master mit einem einmalig ausgegebenen Einmalpasswort erstellt. Ein bereits vorhandener anderer Master verhindert die Einrichtung über das Skript. Master können nicht über die Personalverwaltung angelegt oder als Dienstgrad ausgewählt werden. Der Master verwaltet alle Accounts. Chief of Staff, Attorney General und Deputy Attorney General verwalten Dienstgradprofile und reguläre Accounts einschließlich anderer Leitungsdienstgrade, aber keinen Master. Mindestens ein aktiver Master bleibt erhalten. Siehe [Dienstgradrechte](DIENSTGRADRECHTE.md).
 
 Das Skript muss mit der Serverkonfiguration ausgeführt werden. Keine Supabase-Schlüssel im Browser hinterlegen.
 

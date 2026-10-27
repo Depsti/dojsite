@@ -1,10 +1,12 @@
 # Dienstgrade und vererbte Berechtigungen
 
+Chief of Staff steht in der Dienstgradliste ueber Attorney General und besitzt ebenfalls Leitungsbefugnisse. Der geschuetzte Masterstatus bleibt separat.
+
 ## Bedienung
 
-Unter **Personal → Dienstgradrechte** verwalten Attorney General, Deputy Attorney General und Master die zentralen Rechteprofile. Fuer jeden Dienstgrad gibt es Lese-, Anlege- und Bearbeitungsrechte je Bereich sowie Sonderrechte fuer Freigaben, Zuteilungen, Kalender, Tickets, Protokoll und Portaleinstellungen.
+Unter **Personal → Dienstgradrechte** verwalten Chief of Staff, Attorney General, Deputy Attorney General und Master die zentralen Rechteprofile. Fuer jeden Dienstgrad gibt es Lese-, Anlege- und Bearbeitungsrechte je Bereich sowie Sonderrechte fuer Freigaben, Zuteilungen, Kalender, Tickets, Protokoll und Portaleinstellungen.
 
-Neue Mitarbeiter erhalten nur noch einen Dienstgrad. Eine zweite Rollenauswahl existiert nicht mehr. Die Standardprofile geben den beiden obersten Dienstgraden Leitungsrechte, den regulaeren Staatsanwalts-Dienstgraden die bisherigen Staatsanwaltsrechte und Public Prosecutor Trainee zunaechst die bisherigen Referendarrechte. **Student** ist ein eigener Dienstgrad, damit das bisherige Einreichungsverfahren erhalten bleibt.
+Neue Mitarbeiter erhalten nur noch einen Dienstgrad. Eine zweite Rollenauswahl existiert nicht mehr. Die Standardprofile geben den drei obersten Dienstgraden Leitungsrechte, den regulaeren Staatsanwalts-Dienstgraden die bisherigen Staatsanwaltsrechte und Public Prosecutor Trainee zunaechst die bisherigen Referendarrechte. **Student** ist ein eigener Dienstgrad, damit das bisherige Einreichungsverfahren erhalten bleibt.
 
 In einer Personalakte gibt es fuer jedes Recht drei Einstellungen:
 
@@ -18,8 +20,8 @@ Profil-Aenderungen gelten serverseitig bei der naechsten Anfrage und erfordern k
 
 ## Feste Schutzregeln
 
-- Die Personal- und Profilverwaltung folgt ausschliesslich Attorney General/Deputy Attorney General sowie dem geschuetzten Masterstatus. Ein frei vergebenes Sonderrecht wie Portaleinstellungen macht niemanden zur Behoerdenleitung.
-- AG und Deputy duerfen regulaere Mitarbeiter einschliesslich anderer Leitungsdienstgrade verwalten. Der Master kann alle Accounts verwalten. Ausschliesslich der Master verwaltet einen Master-Account und setzt fremde Passwoerter direkt; die Behoerdenleitung stellt fuer andere regulaere Accounts bei Bedarf Einmalpasswoerter aus.
+- Die Personal- und Profilverwaltung folgt ausschliesslich Chief of Staff/Attorney General/Deputy Attorney General sowie dem geschuetzten Masterstatus. Ein frei vergebenes Sonderrecht wie Portaleinstellungen macht niemanden zur Behoerdenleitung.
+- Chief of Staff, AG und Deputy duerfen regulaere Mitarbeiter einschliesslich anderer Leitungsdienstgrade verwalten. Der Master kann alle Accounts verwalten. Ausschliesslich der Master verwaltet einen Master-Account und setzt fremde Passwoerter direkt; die Behoerdenleitung stellt fuer andere regulaere Accounts bei Bedarf Einmalpasswoerter aus.
 - Master ist ein geschuetzter Systemzugang mit Vollzugriff, kein auswaehlbarer Dienstgrad und keine frei vergebbare Rolle. Sein Passwort und seine ID bleiben bei der Umstellung unveraendert. Ueber die Personal-API kann kein weiterer Master erzeugt werden; mindestens ein aktiver Master bleibt erhalten.
 - Gesetzesinhalte bleiben ausschliesslich vom Master aenderbar, unabhaengig von Profilen und persoenlichen Ausnahmen.
 - Studenten behalten den bisherigen Vorlagemodus: neue Eintraege werden der Behoerdenleitung vorgelegt; bestehende fachliche Eintraege bleiben schreibgeschuetzt. Private persoenliche Arbeitsmittel behalten ihre eigenen Regeln.

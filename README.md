@@ -46,7 +46,7 @@ Neue Einträge werden über „Eintrag erstellen“ angelegt. Ein Klick auf eine
 
 ## Zugriffsmodell
 
-Der erste Zugang ist Master. Weitere Mitarbeiter erhalten ausschließlich einen Dienstgrad. Attorney General und Deputy Attorney General verwalten unter Personal die Dienstgradprofile und persönliche Rechteausnahmen; der Master behält Vollzugriff. Fallfreigaben und Vertraulichkeit gelten zusätzlich. Einrichtung, automatische Übernahme alter Accounts und Bedienung: [Dienstgradrechte](docs/DIENSTGRADRECHTE.md).
+Der erste Zugang ist Master. Weitere Mitarbeiter erhalten ausschließlich einen Dienstgrad. Chief of Staff, Attorney General und Deputy Attorney General verwalten unter Personal die Dienstgradprofile und persönliche Rechteausnahmen; der Master behält Vollzugriff. Fallfreigaben und Vertraulichkeit gelten zusätzlich. Einrichtung, automatische Übernahme alter Accounts und Bedienung: [Dienstgradrechte](docs/DIENSTGRADRECHTE.md).
 
 ## Datenspeicherung
 

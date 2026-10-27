@@ -45,7 +45,7 @@ Empfohlene Reihenfolge: zuerst SQL ausführen, danach den vollständigen Stand d
 
 Berechtigte Mitarbeiter wählen unter **Personal → Mitarbeiter → Befugnisse** einen Dienstgrad; auch bei neuen Zugängen ist die Auswahl vorhanden. Die bisherigen Dienstrollen und Bereichsrechte bestimmen weiterhin den Zugriff. Ein Dienstgrad allein erteilt keine zusätzlichen Rechte.
 
-Unterstützt werden Attorney General, Deputy Attorney General, Supervising District Attorney, Senior District Attorney, District Attorney, Assistant District Attorney und Public Prosecutor Trainee. Der Name erhält im Chat die zugehörige Farbe und der Dienstgrad wird daneben angezeigt. Änderungen gelten auch für die Darstellung vorhandener Nachrichten.
+Unterstützt werden Chief of Staff, Attorney General, Deputy Attorney General, Supervising District Attorney, Senior District Attorney, District Attorney, Assistant District Attorney und Public Prosecutor Trainee. Der Name erhält im Chat die zugehörige Farbe und der Dienstgrad wird daneben angezeigt. Änderungen gelten auch für die Darstellung vorhandener Nachrichten.
 
 ## 5. Prüfung nach Deployment
 

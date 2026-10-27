@@ -10,7 +10,7 @@ Im Desktop oder Startmenü die App **Eilverfahren** öffnen und **Protokoll anle
 
 ## Zugriff
 
-Mitarbeiter sehen ausschließlich ihre eigenen Protokolle. Attorney General, Deputy Attorney General und Master sehen alle, sofern das Bereichsleserecht besteht. Die Leitung liest fremde Protokolle; nur Ersteller und Master dürfen offene Protokolle bearbeiten. Abgeschlossene Protokolle sind auch für den Master unveränderbar. Die Nennung einer Begleitperson erteilt keinen Zugriff.
+Mitarbeiter sehen ausschließlich ihre eigenen Protokolle. Chief of Staff, Attorney General, Deputy Attorney General und Master sehen alle, sofern das Bereichsleserecht besteht. Die Leitung liest fremde Protokolle; nur Ersteller und Master dürfen offene Protokolle bearbeiten. Abgeschlossene Protokolle sind auch für den Master unveränderbar. Die Nennung einer Begleitperson erteilt keinen Zugriff.
 
 Unter **Personal → Dienstgradrechte** gibt es den Bereich **Eilverfahren** mit Lesen, Anlegen und Bearbeiten. Für das Anlegen werden alle drei Rechte benötigt. Standards: Staatsanwälte und Leitung dürfen anlegen/bearbeiten; Trainees und Studenten nicht. Persönliche Ausnahmen gelten wie in anderen Bereichen; Studenten bleiben ohne Bearbeitungsrechte.
 
