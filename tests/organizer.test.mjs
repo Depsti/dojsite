@@ -47,3 +47,19 @@ test('Erinnerungen beachten Zeitfenster, laufende und abgesagte Termine; Erledig
 });
 
 test('Mehrtägige Termine stehen an jedem betroffenen Kalendertag',()=>{const event={startAt:'2026-10-23T10:00:00',endAt:'2026-10-25T00:00:00'};assert.equal(time.onDay(event,'2026-10-23'),true);assert.equal(time.onDay(event,'2026-10-24'),true);assert.equal(time.onDay(event,'2026-10-25'),false);});
+
+
+test('Gemeinsame Checklisten erfordern jede persönliche Bestätigung; auch Master kann niemanden abhaken',()=>{
+ const db=fixture();let t=create('todos',{scope:'shared',assignees:[lawyer.id,other.id],dueAt:'',checklist:[{id:'one',title:'Unterlagen prüfen',completedBy:[other.id]},{id:'two',title:'Rückmeldung'}]},master,db);
+ assert.deepEqual(t.checklist[0].completedBy,[]);assert.equal(t.capabilities.completeAll,false);assert.throws(()=>mutateOrganizer('todos','PATCH',t.id,{action:'complete',all:true,done:true,expectedUpdatedAt:t.updatedAt},master,db),e=>e.status===403);
+ const mark=(user,itemId,done=true)=>{t=mutateOrganizer('todos','PATCH',t.id,{action:'complete',itemId,done,expectedUpdatedAt:t.updatedAt},user,db).item;};
+ mark(lawyer,'one');assert.equal(t.completedAt,'');mark(other,'one');assert.equal(t.completedAt,'');mark(lawyer,'two');assert.deepEqual(t.completedBy,[lawyer.id]);assert.equal(t.completedAt,'');mark(other,'two');assert.ok(t.completedAt);mark(lawyer,'one',false);assert.equal(t.completedAt,'');assert.deepEqual(t.checklist[0].completedBy,[other.id]);assert.throws(()=>mark(student,'two'),e=>[403,404].includes(e.status));
+});
+test('Checklisten prüfen IDs, behalten Haken nur für unveränderte Aufgaben und Zuständige',()=>{
+ const db=fixture();let t=create('todos',{scope:'shared',assignees:[lawyer.id,other.id],dueAt:'',checklist:[{id:'one',title:'Prüfen'}]},master,db);
+ t=mutateOrganizer('todos','PATCH',t.id,{action:'complete',itemId:'one',done:true,expectedUpdatedAt:t.updatedAt},lawyer,db).item;
+ t=mutateOrganizer('todos','PATCH',t.id,{...t,title:'Neuer Titel',description:'',dueAt:'',expectedUpdatedAt:t.updatedAt},master,db).item;assert.deepEqual(t.checklist[0].completedBy,[lawyer.id]);
+ t=mutateOrganizer('todos','PATCH',t.id,{...t,checklist:[{id:'one',title:'Inhalt geändert',completedBy:[lawyer.id,other.id]}],expectedUpdatedAt:t.updatedAt},master,db).item;assert.deepEqual(t.checklist[0].completedBy,[]);assert.equal(t.completedAt,'');
+ assert.throws(()=>create('todos',{scope:'shared',assignees:[master.id],dueAt:'',checklist:[{id:'same',title:'A'},{id:'same',title:'B'}]},master,db),/Aufgabenliste/);
+});
+test('Gemeinsame To-dos ohne Unteraufgaben haben weiterhin eigene Haken ohne Verwaltungs-Override',()=>{const db=fixture();let t=create('todos',{scope:'shared',assignees:[master.id,lawyer.id],dueAt:''},master,db);assert.throws(()=>mutateOrganizer('todos','PATCH',t.id,{action:'complete',all:true,done:true,expectedUpdatedAt:t.updatedAt},master,db),e=>e.status===403);t=mutateOrganizer('todos','PATCH',t.id,{action:'complete',done:true,expectedUpdatedAt:t.updatedAt},master,db).item;assert.equal(t.completedAt,'');assert.deepEqual(t.completedBy,[master.id]);});

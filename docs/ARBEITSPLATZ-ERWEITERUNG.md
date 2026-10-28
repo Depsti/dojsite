@@ -11,7 +11,7 @@
 | Strafberechnungen zur Akte | Im Rechner Fallakte wählen, Variante benennen und speichern. Der Server berechnet erneut und übernimmt keine vom Browser behaupteten Ergebnisse. |
 | Anträge vorausfüllen | Personen, Aktenzeichen, Sachverhalt und vorhandene Anlagen werden aus der Akte übernommen; Anlagen bleiben abwählbar. |
 | Globale Suche | Eigene Desktop-App; Strg+K öffnet die Suche. Durchsucht zugängliche Titel, Aktenzeichen und Beschreibungstexte, keine binären Anhänge. |
-| Textbausteine | Persönliche Kategorien und Bearbeitung; Einfügen am Cursor in Formularen mit Textfeldern. Platzhalter: `{{name}}`, `{{datum}}`, `{{aktenzeichen}}`, `{{falltitel}}`. |
+| Textbausteine | 48 gemeinsame Standardbausteine in acht Kategorien, Suche, persönliche Kopien und eigene Bausteine; Einfügen am Cursor in Formularen mit Textfeldern. Platzhalter: `{{name}}`, `{{datum}}`, `{{aktenzeichen}}`, `{{falltitel}}`. |
 | Discord-Verknüpfungen | Nachrichtenlink im ersten Akten-Schritt und beim Bearbeiten; in Fall- und Privatchats über „Discord-Link“ oder Einfügen in den Nachrichtentext. |
 | Digitale Verfahrensführung | In der Akte „Verfahrensführung & Prüfung“: fehlende Personen, Beweise, Terminplanung, offene Matrixfragen, zurückgegebene Anträge und unvollständige Berechnungen. |
 | Verhandlungsmodus | Tatvorwürfe, Beweis-/Dokumentverweise, übernommenes Strafmaß, gemeinsame Protokolle und getrennte persönliche Notizen. |
@@ -25,11 +25,11 @@
 
 ## Entwürfe und persönliche Daten
 
-Entwürfe, Textbausteine und Verlauf gehören ausschließlich zum angemeldeten Mitarbeiter. Auch Master erhalten über die API keine fremden persönlichen Inhalte. Entwürfe werden über die bestehende Datenbank gespeichert und sind damit geräteübergreifend verfügbar. Nach erfolgreicher Speicherung wird der zugehörige Entwurf entfernt. Alle Schritte eines Aktenassistenten verwenden eine gemeinsame Kennung.
+Entwürfe, eigene Textbausteine und Verlauf gehören ausschließlich zum angemeldeten Mitarbeiter. Zusätzlich steht allen Mitarbeitern ein unveränderbarer Grundbestand von 48 Standardbausteinen zur Verfügung. Auch Master erhalten über die API keine fremden persönlichen Inhalte. Entwürfe werden über die bestehende Datenbank gespeichert und sind damit geräteübergreifend verfügbar. Nach erfolgreicher Speicherung wird der zugehörige Entwurf entfernt. Alle Schritte eines Aktenassistenten verwenden eine gemeinsame Kennung.
 
 Entwürfe bestehender Datensätze werden nach Rechteentzug nicht mehr ausgeliefert. Bei einem zwischenzeitlich geänderten Eintrag ist vor dem Öffnen zum manuellen Vergleichen eine Bestätigung erforderlich. Ein Entwurf überschreibt nie automatisch einen bestehenden Datensatz.
 
-Grenzen: maximal 100 Entwürfe und 100 Textbausteine pro Person; maximal 250.000 Zeichen pro Entwurfsnutzlast. Dateianhänge werden aus der automatischen Sicherung herausgenommen und müssen nach einer Wiederherstellung erneut ausgewählt werden. Bei fehlgeschlagener Sicherung erscheint ein Hinweis im Formular; nicht gespeicherte letzte Eingaben sind dann nicht wiederherstellbar.
+Grenzen: maximal 100 Entwürfe und 100 persönliche Textbausteine pro Person; Standardbausteine zählen nicht zu diesem Limit; maximal 250.000 Zeichen pro Entwurfsnutzlast. Dateianhänge werden aus der automatischen Sicherung herausgenommen und müssen nach einer Wiederherstellung erneut ausgewählt werden. Bei fehlgeschlagener Sicherung erscheint ein Hinweis im Formular; nicht gespeicherte letzte Eingaben sind dann nicht wiederherstellbar.
 
 ## Einsichtsfassung und Schwärzung
 

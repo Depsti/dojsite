@@ -4,3 +4,7 @@
 .organizer-reminders header{position:relative;padding-right:50px}.organizer-reminders [data-reminder-collapse]{position:absolute;right:12px;top:12px;font-size:15px}
 
 .organizer-reminders .reminder-description{font-size:11px;line-height:1.6;color:#c5d2dd;margin:8px 0 0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
+
+.todo-checklist{margin:16px 0;border:1px solid var(--line,#d1dbe5);padding:12px;border-radius:5px}.todo-checklist-row{padding:12px 0;border-top:1px solid var(--line,#d1dbe5);overflow-wrap:anywhere}.todo-checklist-people{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px}.todo-checklist-people .check{margin:0}.todo-checklist input{accent-color:#b99555}.expedited-companions [hidden],[data-block-entry][hidden],[data-block-section][hidden]{display:none!important}
+
+.expedited-companions{min-width:0}.expedited-companions .check,.todo-checklist-people .check{min-width:0;overflow-wrap:anywhere}

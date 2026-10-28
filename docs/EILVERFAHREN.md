@@ -3,10 +3,12 @@
 Im Desktop oder Startmenü die App **Eilverfahren** öffnen und **Protokoll anlegen** wählen.
 
 - Pflichtfelder: Discord-Channellink zur Beweissicherung, Beginn, Geldstrafe und Hafteinheiten (jeweils auch 0).
-- Optional: Begleitpersonen, CopNet-Aktenzeichen, Notizen. Ein Ende ist erst beim Abschluss erforderlich.
+- Optional: Begleitpersonen per Mehrfachauswahl aus dem Mitarbeiterregister, CopNet-Aktenzeichen, Notizen. Neue Begleitpersonen müssen aktive Mitarbeiter sein; historische Angaben bleiben erhalten. Ein Ende ist erst beim Abschluss erforderlich.
 - **Entwurf speichern** ermöglicht spätere Änderungen. **Verbindlich abschließen** speichert das Protokoll mit Endzeit und sperrt weitere Änderungen.
 - Der Titel wird beim ersten Speichern automatisch vergeben, z. B. **Az. EV-GL-20261026-153045**. Kürzel aus dem Erstellernamen; Datum und Uhrzeit in Europe/Berlin. Gleichzeitige Vergaben erhalten bei Bedarf einen Suffix. Das Az. bleibt bei Änderungen erhalten.
 - Beginn und Ende im Formular verwenden die lokale Browser-Zeitzone; die Leseansicht zeigt Europe/Berlin. Auch Verfahren über Mitternacht sind möglich.
+
+Im Notizfeld können Standardbausteine und eigene Textbausteine am Cursor eingefügt werden.
 
 ## Zugriff
 
